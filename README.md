@@ -8,7 +8,7 @@ nvm install lts/hydrogen
 Ya estamos list@s para empezar. Instala las dependencias y empieza a hackear!
 
 ```bash
-yarn install
+yarn
 ```
 Para probar que todo este en orden:
 
