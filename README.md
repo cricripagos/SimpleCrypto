@@ -26,7 +26,7 @@ Apenas vas llegando y el aburrido del equipo ya puso reglas estrictas. Créeme e
       Ctrl + P >
       ext install esbenp.prettier-vscode
       
-      También lo puedes hacer manual usando:
+      También puedes formatear manual usando:
       
       ```bash
       yarn prettier
