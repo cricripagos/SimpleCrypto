@@ -35,5 +35,13 @@ Apenas vas llegando y el aburrido del equipo ya puso reglas estrictas. Créeme e
 
 3. Usamos pre-push para revisar que tu código no tenga errores. Cuando das un push, se ejecuta 'yarn build'. Esto nos va asegurar que cualquier rama en el repositorio, este lista y libre de conflictos con Vercel. TE VA A DAR ERROR si tu código no pasa las validaciones. Esto es porque si no lo revisas y resuelves tú, le tomará más tiempo a la persona que tenga que resolver el conflicto para poder integrarlo a producción.
 
-
-
+4. Claridad con los commits. Nos va a pasar mil veces tener que regresar a una versión anterior del código. Será mucho más fácil encontrar la versión si usamos prefijos en la descripción. Te dejo algunas convenciones:
+            build: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+            ci: Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
+            docs: Documentation only changes
+            feat: A new feature
+            fix: A bug fix
+            perf: A code change that improves performance
+            refactor: A code change that neither fixes a bug nor adds a feature
+            style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+            test: Adding missing tests or correcting existing tests
