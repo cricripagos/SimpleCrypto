@@ -31,7 +31,9 @@ Apenas vas llegando y el aburrido del equipo ya puso reglas estrictas. Créeme e
       ```bash
       yarn prettier
       ```
+2. Usamos pre-commit que te dará advertencias sobre las variables que declaraste y no estás usando. Cada que das commit se ejecuta en automático 'yarn lint'. 
 
+3. Usamos pre-push para revisar que tu código no tenga errores. Cuando das un push, se ejecuta 'yarn build'. Esto nos va asegurar que cualquier rama en el repositorio, este lista y libre de conflictos con Vercel. TE VA A DAR ERROR si tu código no pasa las validaciones. Esto es porque si no lo revisas y resuelves tú, le tomará más tiempo a la persona que tenga que resolver el conflicto para poder integrarlo a producción.
 
 
 
