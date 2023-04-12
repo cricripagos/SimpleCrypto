@@ -20,11 +20,17 @@ yarn dev
 
 Apenas vas llegando y el aburrido del equipo ya puso reglas estrictas. Créeme es por tu bien y en un par de días ya ni lo vas a notar.
 
-1. Para que en automático Visual Code estructure prolijo tu código, instala la extensión: Prettier - Code formatter.
+1. Para que en automático Visual Code estructure prolijo tu código cada que guardas tus avances, instala la extensión: Prettier - Code formatter.
 
       En Visual Code:
       Ctrl + P >
       ext install esbenp.prettier-vscode
+      
+      También lo puedes hacer manual usando:
+      
+      ```bash
+      yarn prettier
+      ```
 
 
 
