@@ -27,5 +27,8 @@
     "node": ">=14.0.0",
     "yarn": ">=1.22.0",
     "npm": "pecado usar npm"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3"
   }
 }
