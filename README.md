@@ -22,9 +22,9 @@ Apenas vas llegando y el aburrido del equipo ya puso reglas estrictas. Créeme e
 
 1. Para que en automático Visual Code estructure prolijo tu código, instala la extensión: Prettier - Code formatter.
 
-  En Visual Code:
-  Ctrl + P >
-  ext install esbenp.prettier-vscode
+      En Visual Code:
+      Ctrl + P >
+      ext install esbenp.prettier-vscode
 
 
 
