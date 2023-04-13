@@ -7,3 +7,5 @@
     }
   }
 }
+
+//Ejemplo: import {rochi} from '@lib/rochi'

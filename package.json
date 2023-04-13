@@ -10,6 +10,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.3",
     "@supabase/supabase-js": "^2.20.0",
     "@web3modal/ethereum": "^2.2.2",
     "@web3modal/react": "^2.2.2",
@@ -21,6 +22,7 @@
     "postcss": "8.4.21",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-redux": "^8.0.5",
     "tailwindcss": "3.3.1",
     "wagmi": "^0.12.10"
   },
@@ -30,6 +32,7 @@
     "npm": "pecado usar npm"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "husky": "^8.0.3"
   }
 }
