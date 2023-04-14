@@ -4,8 +4,10 @@ import {
   w3mProvider,
 } from "@web3modal/ethereum";
 import { Web3Button, Web3Modal } from "@web3modal/react";
+import { Provider } from 'react-redux';
 import { WagmiConfig, configureChains, createClient, useAccount } from "wagmi";
 import { arbitrum, mainnet, polygon } from "wagmi/chains";
+import { store } from "./store/store";
 
 const chains = [arbitrum, mainnet, polygon];
 const projectId = "8579dab459fd9bbe2b74a2a67b2ae920";
@@ -35,14 +37,15 @@ export const Address = () => {
 export default function App() {
   return (
     <>
+    <Provider store={store}>
       <WagmiConfig client={wagmiClient}>
-        {/*<HomePage />*/}
         lala return <Web3Button balance="show" icon="show" />
         <Pagar />
         <Address />
       </WagmiConfig>
 
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+    </Provider>
     </>
   );
 }

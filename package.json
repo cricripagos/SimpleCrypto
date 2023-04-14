@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "husky": "^8.0.3"
+    "husky": "^8.0.3",
+    "typescript": "5.0.4"
   }
 }

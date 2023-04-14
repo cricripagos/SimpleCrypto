@@ -1,20 +1,26 @@
-import { Web3Button } from "@web3modal/react";
 import { useRouter } from "next/router";
+import { Provider } from "react-redux";
+// import { PageWrapper } from "../components/components";
+import { PageWrapper } from "../components/components";
+import { store } from "../store/store";
+import { Step1 } from "./pagar";
 
 const Pagar = () => {
   const router = useRouter();
   const { merchant } = router.query;
   console.log(router.query);
+  
 
   // Fetch data or perform operations based on the dynamicSlug value
   // ...
 
   return (
-    <div>
-      <h1>Pagar: {merchant}</h1>
-      {/* Render your component or data here */}
-      <Web3Button balance="show" icon="show" />
-    </div>
+    <Provider store={store}>
+    <PageWrapper>
+      <Step1 />
+      
+    </PageWrapper>
+    </Provider>
   );
 };
 
