@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { erc20ABI } from 'wagmi';
-import { useNetwork, useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useNetwork, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { useGetBalance } from '../../lib/const/hooks/wagmiHooks';
 
 
@@ -13,7 +13,21 @@ const PagarHandler = ({ current_blockchain, token, chosen_blockchain, contract_a
         args: [beneficiary_address, amount],
         chainId: chain_id
     })
-    const { data, isLoading, isSuccess, write } = useContractWrite(config)
+    const { data, isLoading, isSuccess, write } = useContractWrite({...config,onSuccess(data) {
+        console.log('Se envio a la blockchain', data)
+      }})
+    console.log('data print',data)
+    const {dataWait, isErrorWait, isLoadingWait} = useWaitForTransaction({
+        hash: data?.hash,
+      })
+
+    useEffect(() => {   
+        console.log(dataWait, isErrorWait, isLoadingWait,data)
+      if (isLoadingWait) console.log('esperando respuesta')
+      if (dataWait!==undefined) console.log('la respuesta es:', dataWait)
+    }, [dataWait, isErrorWait, isLoadingWait,data])
+    
+    
     const handleClick = () => {
         console.log('ya va a armarse')
         write?.()

@@ -3,11 +3,9 @@ import { Web3Modal } from '@web3modal/react'
 import { configureChains, createClient, WagmiConfig } from 'wagmi'
 import { arbitrum, mainnet, polygon, polygonMumbai, bsc } from 'wagmi/chains'
 import { Web3Button } from '@web3modal/react'
-import PagarHandler from '@/components/PagarHandler'
 import { useNetwork, useAccount } from 'wagmi'
-import DebuggerBalances from '@/components/DebuggerBalances'
+import EvmFlowDemo from '@/components/EvmFlowDemo'
 
-//const chains = [arbitrum, mainnet, polygon]
 const chains = [arbitrum, mainnet, polygon, polygonMumbai, bsc]
 const projectId = '8579dab459fd9bbe2b74a2a67b2ae920'
 const { provider } = configureChains(chains, [w3mProvider({ projectId })])
@@ -22,8 +20,8 @@ import React, { useEffect } from 'react'
 
 
 export default function App() {
-  const current_blockchain = useNetwork()
-  const { address: payer_address, isConnecting, isDisconnected } = useAccount()
+  const current_blockchain = useNetwork('loading')
+  const { address, isConnecting, isDisconnected } = useAccount()
   useEffect(() => {
     if (current_blockchain.chain !== undefined) {
       console.log('elnetwork es', current_blockchain.chain.name)
@@ -32,21 +30,14 @@ export default function App() {
   return (
     <>
       <WagmiConfig client={wagmiClient}>
-        <PagarHandler
-          token='LINK'
-          chosen_blockchain='polygonMumbai'
-          contract_address='0x326C977E6efc84E512bB9C30f76E30c160eD06FB'
-          payer_address={null}
-          amount={1}
-          beneficiary_address={'0x92045e398081D9D54532088D7A8e18a2559C0085'}
-          current_blockchain
-          chain_id={80001}
-        />
-        {/*
-         */}
-        <br />
-        <br />
-        <DebuggerBalances {... { current_blockchain, payer_address }} />
+      <EvmFlowDemo 
+        token='LINK'
+        contract_address='0x326C977E6efc84E512bB9C30f76E30c160eD06FB'
+        payer_address={address}
+        amount={1}
+        beneficiary_address={'0x92045e398081D9D54532088D7A8e18a2559C0085'}
+        current_blockchain={current_blockchain.chain?.id}
+      />
         <Web3Button balance='show' icon='show' />
       </WagmiConfig>
 
