@@ -1,10 +1,8 @@
-import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
-import { Web3Modal } from '@web3modal/react'
-import { configureChains, createClient, WagmiConfig } from 'wagmi'
-import { arbitrum, mainnet, polygon, polygonMumbai, bsc } from 'wagmi/chains'
-import { Web3Button } from '@web3modal/react'
-import { useNetwork, useAccount } from 'wagmi'
 import EvmFlowDemo from '@/components/EvmFlowDemo'
+import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+import { Web3Button, Web3Modal } from '@web3modal/react'
+import { WagmiConfig, configureChains, createClient, useAccount, useNetwork } from 'wagmi'
+import { arbitrum, bsc, mainnet, polygon, polygonMumbai } from 'wagmi/chains'
 
 const chains = [arbitrum, mainnet, polygon, polygonMumbai, bsc]
 const projectId = '8579dab459fd9bbe2b74a2a67b2ae920'
@@ -16,7 +14,7 @@ const wagmiClient = createClient({
 })
 const ethereumClient = new EthereumClient(wagmiClient, chains)
 
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
 
 
