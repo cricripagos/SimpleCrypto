@@ -31,14 +31,12 @@ export default function App() {
   return (
     <>
       <WagmiConfig client={wagmiClient}>
-      <EvmFlowDemo 
-        token='LINK'
-        contract_address='0x326C977E6efc84E512bB9C30f76E30c160eD06FB'
-        payer_address={address}
-        amount={1}
-        beneficiary_address={'0x92045e398081D9D54532088D7A8e18a2559C0085'}
-        current_blockchain={current_blockchain.chain?.id}
-      />
+        <EvmFlowDemo
+          payer_address={address}
+          amount={1}
+          beneficiary_address={'0x92045e398081D9D54532088D7A8e18a2559C0085'}
+          current_blockchain={current_blockchain.chain?.id}
+        />
         <Web3Button balance='show' icon='show' />
 
       </WagmiConfig>
