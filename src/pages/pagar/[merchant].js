@@ -1,26 +1,32 @@
 import { useRouter } from "next/router";
-import { Provider } from "react-redux";
 // import { PageWrapper } from "../components/components";
+import { useSelector } from "react-redux";
 import { PageWrapper } from "../components/components";
-import { store } from "../store/store";
 import { Step1 } from "./pagar";
 
 const Pagar = () => {
   const router = useRouter();
   const { merchant } = router.query;
   console.log(router.query);
+  const {step} = useSelector(state => state.interactions)
+  const stepper = () => {
+    switch (step) {
+      case 1:
+        return <Step1/>;
+      case 2:
+        return <div>Step 2</div>;
+      case 3:
+        return <div>Step 3</div>;
+    }
+  }
   
-
-  // Fetch data or perform operations based on the dynamicSlug value
-  // ...
+  //TODO Fetch Merchant data
 
   return (
-    <Provider store={store}>
     <PageWrapper>
-      <Step1 />
+      {stepper()}
       
     </PageWrapper>
-    </Provider>
   );
 };
 

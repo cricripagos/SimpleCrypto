@@ -1,4 +1,6 @@
 import '@/styles/globals.css'
+import { Provider } from 'react-redux'
+import { store } from './store/store'
 // import localFont from '@next/font/local'
 
 // const surt = localFont({
@@ -9,7 +11,9 @@ import '@/styles/globals.css'
 export default function App({ Component, pageProps }) {
   return (
   <main>
+    <Provider store={store}>
     <Component {...pageProps} />
-    </main>
+    </Provider>
+  </main>
     )
 }
