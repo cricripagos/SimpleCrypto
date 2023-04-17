@@ -1,4 +1,4 @@
-import { Footer, InputComponent } from "@/pages/components/components"
+import { Footer, InputComponent, Layout } from "@/pages/components/components"
 import { setBtnDisabled } from "@/pages/store/reducers/interactions"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -20,10 +20,12 @@ function Step1() {
   })
 
   return (
+    <Layout>
     <div className="flex flex-col h-screen justify-between">
     <InputComponent />
     <Footer btn_msg='Continuar'/>
     </div>
+    </Layout>
   )
 }
 

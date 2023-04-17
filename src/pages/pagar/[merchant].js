@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 // import { PageWrapper } from "../components/components";
 import { useSelector } from "react-redux";
 import { PageWrapper } from "../components/components";
-import { Step1 } from "./pagar";
+import { Step1, Step2 } from "./pagar";
 
 const Pagar = () => {
   const router = useRouter();
@@ -14,7 +14,7 @@ const Pagar = () => {
       case 1:
         return <Step1/>;
       case 2:
-        return <div>Step 2</div>;
+        return <Step2/>;
       case 3:
         return <div>Step 3</div>;
     }
