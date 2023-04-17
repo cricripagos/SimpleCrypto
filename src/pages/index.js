@@ -19,6 +19,7 @@ const ethereumClient = new EthereumClient(wagmiClient, chains)
 import React, { useEffect } from 'react'
 
 
+
 export default function App() {
   const current_blockchain = useNetwork('loading')
   const { address, isConnecting, isDisconnected } = useAccount()
@@ -37,12 +38,10 @@ export default function App() {
           current_blockchain={current_blockchain.chain?.id}
         />
         <Web3Button balance='show' icon='show' />
+
       </WagmiConfig>
-
-
 
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
     </>
-  )
+  );
 }
-
