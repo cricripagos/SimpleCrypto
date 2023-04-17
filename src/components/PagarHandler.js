@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { erc20ABI } from 'wagmi';
-import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
-
+import { useEffect, useState } from 'react';
+import { erc20ABI, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 
 const PagarHandler = ({ current_blockchain, token, chosen_blockchain, contract_address, payer_address, amount, beneficiary_address, chain_id }) => {
     const [message, setMessage] = useState('');
@@ -9,7 +7,7 @@ const PagarHandler = ({ current_blockchain, token, chosen_blockchain, contract_a
         address: contract_address,
         abi: erc20ABI,
         functionName: 'transfer',
-        args: [beneficiary_address, amount],
+        args: [beneficiary_address, 1],
         chainId: chain_id
     })
     const { data, isLoading, isSuccess, write } = useContractWrite({
