@@ -1,45 +1,44 @@
-import {
-  EthereumClient,
-  w3mConnectors,
-  w3mProvider,
-} from "@web3modal/ethereum";
-import { Web3Button, Web3Modal } from "@web3modal/react";
-import { WagmiConfig, configureChains, createClient, useAccount } from "wagmi";
-import { arbitrum, mainnet, polygon } from "wagmi/chains";
+import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+import { Web3Modal } from '@web3modal/react'
+import { configureChains, createClient, WagmiConfig } from 'wagmi'
+import { arbitrum, mainnet, polygon, polygonMumbai, bsc } from 'wagmi/chains'
+import { Web3Button } from '@web3modal/react'
+import { useNetwork, useAccount } from 'wagmi'
+import EvmFlowDemo from '@/components/EvmFlowDemo'
 
-const chains = [arbitrum, mainnet, polygon];
-const projectId = "8579dab459fd9bbe2b74a2a67b2ae920";
-const { provider } = configureChains(chains, [w3mProvider({ projectId })]);
+const chains = [arbitrum, mainnet, polygon, polygonMumbai, bsc]
+const projectId = '8579dab459fd9bbe2b74a2a67b2ae920'
+const { provider } = configureChains(chains, [w3mProvider({ projectId })])
 const wagmiClient = createClient({
   autoConnect: true,
   connectors: w3mConnectors({ projectId, version: 1, chains }),
-  provider,
-});
-const ethereumClient = new EthereumClient(wagmiClient, chains);
+  provider
+})
+const ethereumClient = new EthereumClient(wagmiClient, chains)
 
-export const Erc20 = ({ address }) => {
-  return <div>Erc20 </div>;
-};
+import React, { useEffect } from 'react'
 
-const Pagar = () => {
-  return <div>index</div>;
-};
 
-export const Address = () => {
-  const { address, isConnecting, isDisconnected } = useAccount();
-  if (isConnecting) return <div>Connecting…</div>;
-  if (isDisconnected) return <div>Disconnected</div>;
-  return <div>{address}</div>;
-};
 
 export default function App() {
+  const current_blockchain = useNetwork('loading')
+  const { address, isConnecting, isDisconnected } = useAccount()
+  useEffect(() => {
+    if (current_blockchain.chain !== undefined) {
+      console.log('elnetwork es', current_blockchain.chain.name)
+    }
+  }, [current_blockchain])
   return (
     <>
       <WagmiConfig client={wagmiClient}>
-        {/*<HomePage />*/}
-        lala return <Web3Button balance="show" icon="show" />
-        <Pagar />
-        <Address />
+        <EvmFlowDemo
+          payer_address={address}
+          amount={1}
+          beneficiary_address={'0x92045e398081D9D54532088D7A8e18a2559C0085'}
+          current_blockchain={current_blockchain.chain?.id}
+        />
+        <Web3Button balance='show' icon='show' />
+
       </WagmiConfig>
 
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
