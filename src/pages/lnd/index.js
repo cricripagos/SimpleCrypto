@@ -1,4 +1,5 @@
 import { useState } from "react";
+var Promise = require("promise");
 
 const App = () => {
   const [amount, setAmount] = useState("");
@@ -9,16 +10,12 @@ const App = () => {
 
     setAmount(result);
   };
-  /*
+
   const sleep = (ms) => {
     const promise = new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
     return promise;
-  };
-*/
-  const sleep = (ms) => {
-    return setTimeout(ms);
   };
 
   const generateInvoice = async () => {
