@@ -11,6 +11,7 @@ const Button = ({text, filled, action}) => {
       dispatch(setStepForward())
     }
   }else {
+    console.log('Go back..')
     dispatch(setStepBackward())
   }
   }

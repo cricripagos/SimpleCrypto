@@ -11,7 +11,7 @@ const Footer = ({ btn_msg }) => {
         <p>{fiat_amount} ARS($)</p>
       </div>
       <div className='flex'>
-        {step > 1 &&
+        {step === 2 &&
           <Button filled={false} text='Volver' action='back' />}
         <Button filled={true} text={btn_msg} action='forward' />
       </div>

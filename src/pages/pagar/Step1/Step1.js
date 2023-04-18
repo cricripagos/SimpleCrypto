@@ -16,7 +16,7 @@ function Step1() {
     } else {
       dispatch(setBtnDisabled(true))
     }
-  })
+  }, [])
 
   return (
     <Layout>
