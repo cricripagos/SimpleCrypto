@@ -54,7 +54,7 @@ const App = ({ cliente }) => {
     }
 
     if (!response.ok) {
-      console.log(`Error: ${data}`);
+      console.log(`Error`);
       setIsProcessing(false);
 
       return;
