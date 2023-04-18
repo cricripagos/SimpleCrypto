@@ -2,31 +2,33 @@ import { useRouter } from "next/router";
 // import { PageWrapper } from "../components/components";
 import { useSelector } from "react-redux";
 import { PageWrapper } from "../components/components";
-import { Step1, Step2 } from "./pagar";
+import WagmiWrapper from "../components/WalletConnectComponents/WagmiWrapper";
+import { Step1, Step2, Step3 } from "./pagar";
 
 const Pagar = () => {
   const router = useRouter();
   const { merchant } = router.query;
-  console.log(router.query);
-  const {step} = useSelector(state => state.interactions)
+  const { step } = useSelector(state => state.interactions)
   const stepper = () => {
     switch (step) {
       case 1:
-        return <Step1/>;
+        return <Step1 />;
       case 2:
-        return <Step2/>;
+        return <Step2 />;
       case 3:
-        return <div>Step 3</div>;
+        return <Step3 />;
     }
   }
-  
+
   //TODO Fetch Merchant data
 
   return (
-    <PageWrapper>
-      {stepper()}
-      
-    </PageWrapper>
+    <WagmiWrapper>
+      <PageWrapper>
+        {stepper()}
+
+      </PageWrapper>
+    </WagmiWrapper>
   );
 };
 

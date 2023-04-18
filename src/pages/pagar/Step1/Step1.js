@@ -11,7 +11,6 @@ function Step1() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    console.log('fiat_amount', fiat_amount !== '')
     if (fiat_amount !== '') {
       dispatch(setBtnDisabled(false))
     } else {
@@ -21,10 +20,10 @@ function Step1() {
 
   return (
     <Layout>
-    <div className="flex flex-col h-screen justify-between">
-    <InputComponent />
-    <Footer btn_msg='Continuar'/>
-    </div>
+      <div className="flex flex-col h-screen justify-between">
+        <InputComponent />
+        <Footer btn_msg='Continuar' />
+      </div>
     </Layout>
   )
 }
