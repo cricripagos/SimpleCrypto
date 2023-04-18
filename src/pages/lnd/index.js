@@ -1,7 +1,7 @@
 import { useState } from "react";
 var Promise = require("promise");
 
-const App = () => {
+const App = ({ cliente }) => {
   const [amount, setAmount] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -39,8 +39,13 @@ const App = () => {
 
     await sleep(5000);
 
-    const data = await response.json();
-    console.log(data);
+    try {
+      const data = await response.json();
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+      console.log("chale");
+    }
 
     if (response.status === 503) {
       // Set the estimated_time property in state
