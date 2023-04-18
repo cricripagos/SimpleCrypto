@@ -1,4 +1,3 @@
-import EvmFlowDemo from "@/components/EvmFlowDemo";
 import {
   EthereumClient,
   w3mConnectors,
