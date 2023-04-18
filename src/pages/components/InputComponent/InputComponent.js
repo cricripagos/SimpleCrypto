@@ -15,7 +15,7 @@ const InputComponent = () => {
   }
 
   return (
-    <div className="flex bg-green-1 rounded-b-lg justify-center items-center flex-col py-7 px-7">
+    <div className="flex bg-green-1 rounded-b-lg justify-center items-center flex-col pb-5 px-7">
       <Header />
       <p className="text-stone-200 pt-10">Ingresar monto en pesos argentinos ($ARS)</p>
       <div className="flex flex-row content-center items-center py-3">
