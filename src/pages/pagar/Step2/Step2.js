@@ -1,5 +1,5 @@
 import Header from "@/pages/components/Header/Header"
-import { CryptoCard, Footer, Layout } from "@/pages/components/components"
+import { CryptoCard, Footer, Layout, WalletConnect } from "@/pages/components/components"
 
 const Step2 = () => {
   return (
@@ -9,7 +9,7 @@ const Step2 = () => {
             <Header/>
         </div>
         <div className="px-7">
-
+        <WalletConnect />
         <CryptoCard />
         </div>
         <Footer btn_msg='Continuar' />

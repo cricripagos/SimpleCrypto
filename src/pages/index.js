@@ -28,7 +28,6 @@ export default function App() {
   }, [current_blockchain])
   return (
     <>
-    <Provider store={store}>
       <WagmiConfig client={wagmiClient}>
         <EvmFlowDemo
           payer_address={address}
@@ -41,7 +40,6 @@ export default function App() {
       </WagmiConfig>
 
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
-    </Provider>
     </>
   );
 }
