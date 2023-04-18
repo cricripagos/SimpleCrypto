@@ -1,10 +1,23 @@
 import React from 'react'
 import { useGetBalances } from '@lib/hooks/useGetBalances'
 import { useEffect } from 'react'
+import { formatEther } from 'ethers/lib/utils.js'
 
 export const CardWrapper = ({ balanceData, contracts }) => {
+    console.log('aca', balanceData.data)
+    if (balanceData.data == undefined) return <div>Loading...</div>
     return (
-        <div>Wrapper</div>
+        <>
+            <div>Wrapper</div>
+            {balanceData.data.map((item, index) => (
+                <div key={index}>
+                    Este es el selector de {contracts[index].token} en {contracts[index].chain_id}
+                    <br />
+                    Holdings aca: {formatEther(item)}
+                    <br />
+                </div>
+            ))}
+        </>
     )
 }
 
