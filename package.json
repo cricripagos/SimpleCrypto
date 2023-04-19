@@ -13,6 +13,7 @@
     "@grpc/grpc-js": "^1.8.14",
     "@grpc/proto-loader": "^0.7.6",
     "@supabase/supabase-js": "^2.20.0",
+    "@ungap/weakset": "^0.2.1",
     "@web3modal/ethereum": "^2.2.2",
     "@web3modal/react": "^2.2.2",
     "autoprefixer": "10.4.14",

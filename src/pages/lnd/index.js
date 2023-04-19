@@ -28,23 +28,21 @@ const App = ({ cliente }) => {
 
     // Set loading has started
     setIsProcessing(true);
-
-    const response = await fetch("/api/hello", {
+    /*
+    const response = await fetch("/api/btcNodeInfo", {
       method: "POST",
       headers: {
         "Content-Type": "image/jpeg",
       },
       body: JSON.stringify({ amount }),
     });
-
-    await sleep(5000);
+*/
+    const response = await fetch("/api/btcNodeInfo");
 
     try {
       const data = await response.json();
-      console.log(data);
     } catch (e) {
       console.log(e);
-      console.log("chale");
     }
 
     if (response.status === 503) {
@@ -59,6 +57,9 @@ const App = ({ cliente }) => {
 
       return;
     }
+
+    await sleep(5000);
+    console.log("Invoice generated!");
 
     setAmount("");
     setIsProcessing(false);
