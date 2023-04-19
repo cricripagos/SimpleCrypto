@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     payment: {},
-    network: {},
+    networks: {},
 }
 
 export const optionsSlice = createSlice({
@@ -15,12 +15,12 @@ export const optionsSlice = createSlice({
         setPaymentOptions: (state, action) => {
             state.payment = action.payload
         },
-        setNetworkOptions: (state, action) => {
-            state.network = action.payload
+        setNetworksOptions: (state, action) => {
+            state.networks = action.payload
         }
     }
 })
 
-export const { setOptions, setPaymentOptions, setNetworkOptions } = optionsSlice.actions;
+export const { setOptions, setPaymentOptions, setNetworksOptions } = optionsSlice.actions;
 
 export default optionsSlice.reducer;

@@ -1,5 +1,5 @@
 import { setMerchant } from "@/pages/store/reducers/merchant";
-import { setNetworkOptions, setPaymentOptions } from "@/pages/store/reducers/options";
+import { setNetworksOptions, setPaymentOptions } from "@/pages/store/reducers/options";
 import { createClient } from "@supabase/supabase-js";
 import { useDispatch } from "react-redux";
 
@@ -41,7 +41,7 @@ export default function useSupabase() {
     const getNetworks = async () => {
         const promise = await supabase.from('networks').select().then(({ data, error }) => {
             if(data){
-                dispatch(setNetworkOptions(data))
+                dispatch(setNetworksOptions(data))
                 return data
             } else {
                 return error

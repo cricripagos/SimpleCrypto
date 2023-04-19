@@ -39,8 +39,6 @@ const EvmTokens = () => {
     const balanceData = useGetBalances({ contracts })
     const {payment} = useSelector(state => state.options)
     const [loading, setLoading] = useState(true)
-    console.log('Balance data', balanceData)
-    console.log('Contracts', contracts)
 
     useEffect(() => {
         if (balanceData.data !== undefined) {
@@ -57,7 +55,6 @@ const EvmTokens = () => {
             const contractIndex = contracts.findIndex(contract => contract.symbol === item.token)
             const balance =  balanceData.data[contractIndex]
             contract = {...contract, balance: balance}
-            console.log('Balance', formatEther(balance), contract)
             // const contract = {balance:1203, contract:'aaaa'}
             return item.evm === true && <CryptoCard {...item} {...contract}  />
           })}
