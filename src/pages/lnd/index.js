@@ -29,15 +29,8 @@ const App = ({ cliente }) => {
 
     // Set loading has started
     setIsProcessing(true);
-    /*
+
     const response = await fetch("/api/btcGenerateInvoice", {
-      method: "POST",
-      headers: {
-        "Content-Type": "aplication/json",
-      },
-      body: JSON.stringify({ amount }),
-    })*/
-    const fact = await fetch("/api/btcGenerateInvoice", {
       method: "POST",
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -45,33 +38,17 @@ const App = ({ cliente }) => {
         "Content-Type": "aplication/json",
       },
       body: JSON.stringify({ amount }),
-    })
-      .then((res) => {
-        try {
-          console.log("res", res);
-          res.json();
-        } catch (e) {
-          console.log(e);
-        }
-      })
-      .then((data) => {
-        console.log(data);
-        try {
-          const inv = {
-            invoice: data.payment_request,
-            hash: Buffer.from(data.r_hash).toString("hex"),
-          };
-          return inv;
-        } catch (e) {
-          return console.log(e);
-        }
-      });
-    setInvoice(fact.invoice);
-    console.log("Invoice: ", fact.invoice);
-    console.log("Hash: ", fact.hash);
+    });
+
+    try {
+      const data = await response.json();
+      setInvoice(data.paymentRequest);
+      console.log("Invoice generated!");
+    } catch (e) {
+      console.log(e);
+    }
 
     await sleep(10000);
-    console.log("Invoice generated!");
 
     setAmount("");
     setIsProcessing(false);
