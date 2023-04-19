@@ -10,11 +10,12 @@ import { setStepBackward, setStepForward } from "../store/reducers/interactions"
 import useSupabase, {supabase} from "@/helpers/hooks/useSupabase";
 import { avgPrice } from "@/helpers/quotes";
 import { setPaymentOptions } from "../store/reducers/options";
+import { setMerchant } from "../store/reducers/merchant";
 
 
-const Pagar = ({payment_options}) => {
+const Pagar = ({payment_options, merchant}) => {
   const router = useRouter();
-  const { merchant } = router.query;
+  // const { merchant } = router.query;
   const { step } = useSelector(state => state.interactions)
   const { address } = useAccount();
   const dispatch = useDispatch()
@@ -22,10 +23,10 @@ const Pagar = ({payment_options}) => {
   const [data, setData] = useState(false)
 
   const getData = async () => {
-    await getMerchant(merchant)
+    // await getMerchant(merchant)
     await getNetworks()
-    console.log('Payment options', payment_options)
     dispatch(setPaymentOptions(payment_options))
+    dispatch(setMerchant(merchant))
   }
 
   useEffect(() => {
@@ -68,19 +69,23 @@ const Pagar = ({payment_options}) => {
 
 export default Pagar;
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const slug = context.params.merchant;
   // Traemos los datos de la tabla payment_options
   // const data = await getPaymentMethods()
-  let { data } = await supabase.from("payment_options").select();
+  let payment_options= await supabase.from("payment_options").select();
+  let merchant = await supabase.from('merchants').select().eq('slug', slug)
 
 
-  for (const [idx, coin] of data.entries()) {
-    data[idx].price = await avgPrice(coin.symbol);
+  for (const [idx, coin] of payment_options.data.entries()) {
+    payment_options.data[idx].price = await avgPrice(coin.symbol);
   }
+
 
   return {
     props: {
-      payment_options: data,
+      payment_options: payment_options.data,
+      merchant: merchant.data[0]
     },
   };
 }

@@ -51,12 +51,11 @@ const EvmTokens = () => {
         <div className='w-full'>
             {loading ? <div>Loading...</div> :
             payment.map((item, index) => {
-            console.log('Payment item....')
             const contractIndex = contracts.findIndex(contract => contract.symbol === item.token)
             const balance =  balanceData.data[contractIndex]
-            contract = {...contract, balance: balance}
+            // contract = {...contract, balance: balance}
             // const contract = {balance:1203, contract:'aaaa'}
-            return item.evm === true && <CryptoCard {...item} {...contract}  />
+            return item.evm === true && <CryptoCard {...item}  />
           })}
             <CardWrapper balanceData={balanceData} contracts={contracts} />
         </div>
