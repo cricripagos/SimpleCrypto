@@ -5,7 +5,6 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: {
     appDir: true,
-    outputFileTracingRoot: path.join(__dirname, "../../"),
   },
   webpack(config) {
     config.experiments = { ...config.experiments, topLevelAwait: true };
@@ -14,6 +13,7 @@ const nextConfig = {
   serverRuntimeConfig: {
     PROJECT_ROOT: __dirname,
   },
+  output: "standalone",
 };
 
 module.exports = nextConfig;
