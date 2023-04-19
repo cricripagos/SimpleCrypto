@@ -20,6 +20,7 @@
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
     "ethers": "^5.7.2",
+    "fix-esm": "^1.0.1",
     "http2": "^3.3.7",
     "net": "^1.0.2",
     "next": "13.3.0",
