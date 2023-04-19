@@ -1,4 +1,11 @@
-import { lndClient } from "@lib/lndClient";
+//import { lndClient } from "@lib/lndClient";
+import { createLnRpc } from "@radar/lnrpc";
+
+const lndClient = await createLnRpc({
+  server: process.env.NEXT_PUBLIC_HOST_PORT,
+  tls: false,
+  macaroon: process.env.NEXT_PUBLIC_MACAROON,
+});
 
 export default async function generateInvoice(req, res) {
   const merchant = "Tule";
