@@ -46,7 +46,14 @@ const App = ({ cliente }) => {
       },
       body: JSON.stringify({ amount }),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        try {
+          console.log("res", res);
+          res.json();
+        } catch (e) {
+          console.log(e);
+        }
+      })
       .then((data) => {
         console.log(data);
         try {
