@@ -24,6 +24,7 @@ const Pagar = ({payment_options}) => {
   const getData = async () => {
     await getMerchant(merchant)
     await getNetworks()
+    console.log('Payment options', payment_options)
     dispatch(setPaymentOptions(payment_options))
   }
 

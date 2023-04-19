@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { formatEther } from 'ethers/lib/utils.js'
 import { useSelector } from 'react-redux'
@@ -38,17 +38,27 @@ const EvmTokens = () => {
     // si clickeas mandamos una variable a estado que cuando haces click en pagar pasa
     const balanceData = useGetBalances({ contracts })
     const {payment} = useSelector(state => state.options)
+    const [loading, setLoading] = useState(true)
     console.log('Balance data', balanceData)
     console.log('Contracts', contracts)
 
+    useEffect(() => {
+        if (balanceData.data !== undefined) {
+            console.log('Balance data exists', balanceData.data)
+            setLoading(false)
+        }
+    }, [balanceData])
+
     return (
         <div className='w-full'>
-            {payment.map((item, index) => {
-            const contract = contracts.find(contract => contract.symbol === item.token)
+            {loading ? <div>Loading...</div> :
+            payment.map((item, index) => {
+            let contract = contracts.find(contract => contract.token === item.symbol)
             const contractIndex = contracts.findIndex(contract => contract.symbol === item.token)
             const balance =  balanceData.data[contractIndex]
-            contract.balance = balance
-            console.log('Balance', formatEther(balance))
+            contract = {...contract, balance: balance}
+            console.log('Balance', formatEther(balance), contract)
+            // const contract = {balance:1203, contract:'aaaa'}
             return item.evm === true && <CryptoCard {...item} {...contract}  />
           })}
             <CardWrapper balanceData={balanceData} contracts={contracts} />
