@@ -15,6 +15,11 @@ export default async function generateInvoice(req, res) {
     if (err) {
       console.log("Error: " + err);
     }
-    res.json(response);
+    try {
+      console.log(response);
+      res.json(response);
+    } catch (e) {
+      console.log(e);
+    }
   });
 }

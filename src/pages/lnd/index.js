@@ -41,8 +41,11 @@ const App = ({ cliente }) => {
     });
 
     try {
+      console.log("Response client:", response);
       const data = await response.json();
-      setInvoice(data.paymentRequest);
+      if (data.paymentRequest) {
+        setInvoice(data.paymentRequest);
+      }
       console.log("Invoice generated!");
     } catch (e) {
       console.log(e);
