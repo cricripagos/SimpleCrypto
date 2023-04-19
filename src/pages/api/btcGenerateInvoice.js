@@ -13,14 +13,20 @@ const getCircularReplacer = () => {
     return value;
   };
 };
-
-export default async function getNodeInfo(req, res) {
+/*
+export default async function generateInvoice(req, res) {
+  const merchant = "Tule";
   //const merchant = JSON.parse(req.body).merchant;
-  //const input = JSON.parse(req.body).amount;
+  const amount = JSON.parse(req.body).amount;
 
-  //console.log("Procesando ", input, " satoshis");
+  console.log("Procesando ", amount, " satoshis");
+  let request = {
+    value: JSON.parse(req.body).amount,
+    memo: merchant,
+  };
 
-  const resp = await lndClient.getInfo({}, function (err, response) {
+  console.log("Request: ", request);
+  const resp = await lndClient.addInvoice(request, function (err, response) {
     if (err) {
       console.log("Error: " + err);
     }
@@ -30,4 +36,25 @@ export default async function getNodeInfo(req, res) {
   const info = JSON.stringify(await resp, getCircularReplacer());
 
   res.status(200).json(info);
+}
+*/
+
+export default async function generateInvoice(req, res) {
+  const merchant = "Tule";
+  //const merchant = JSON.parse(req.body).merchant;
+  const amount = JSON.parse(req.body).amount;
+
+  console.log("Procesando ", amount, " satoshis");
+  let request = {
+    value: JSON.parse(req.body).amount,
+    memo: merchant,
+  };
+
+  console.log("Request: ", request);
+  await lndClient.addInvoice(request, function (err, response) {
+    if (err) {
+      console.log("Error: " + err);
+    }
+    res.json(response);
+  });
 }

@@ -3,6 +3,7 @@ var Promise = require("promise");
 
 const App = ({ cliente }) => {
   const [amount, setAmount] = useState("");
+  const [invoice, setInvoice] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleChange = (event) => {
@@ -29,36 +30,34 @@ const App = ({ cliente }) => {
     // Set loading has started
     setIsProcessing(true);
     /*
-    const response = await fetch("/api/btcNodeInfo", {
+    const response = await fetch("/api/btcGenerateInvoice", {
       method: "POST",
       headers: {
-        "Content-Type": "image/jpeg",
+        "Content-Type": "aplication/json",
       },
       body: JSON.stringify({ amount }),
-    });
-*/
-    const response = await fetch("/api/btcNodeInfo");
+    })*/
+    const fact = await fetch("/api/btcGenerateInvoice", {
+      method: "POST",
+      headers: {
+        "Content-Type": "aplication/json",
+      },
+      body: JSON.stringify({ amount }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        const inv = {
+          invoice: data.payment_request,
+          hash: Buffer.from(data.r_hash).toString("hex"),
+        };
+        return inv;
+      });
+    setInvoice(fact.invoice);
+    console.log("Invoice: ", fact.invoice);
+    console.log("Hash: ", fact.hash);
 
-    try {
-      const data = await response.json();
-    } catch (e) {
-      console.log(e);
-    }
-
-    if (response.status === 503) {
-      // Set the estimated_time property in state
-      console.log("validando nodo");
-      return;
-    }
-
-    if (!response.ok) {
-      console.log(`Error`);
-      setIsProcessing(false);
-
-      return;
-    }
-
-    await sleep(5000);
+    await sleep(10000);
     console.log("Invoice generated!");
 
     setAmount("");
@@ -100,13 +99,26 @@ const App = ({ cliente }) => {
         </a>
       </div>
       <br></br>
-      <textarea
-        style={{ resize: "none" }}
-        rows="9"
-        cols="32"
-        value={amount}
-        readOnly
-      ></textarea>
+      {invoice.length > 0 ? (
+        <>
+          <a href={invoice}>
+            {/* Tweak to show a loading indicator */}
+            <div>
+              <p className="text-sky-500 hover:text-sky-600">
+                Click para pagar
+              </p>
+            </div>
+          </a>
+          <textarea
+            style={{ resize: "none" }}
+            rows="9"
+            cols="32"
+            value={invoice}
+            readOnly
+          ></textarea>
+        </>
+      ) : null}
+
       <br></br>
     </>
   );
