@@ -25,6 +25,17 @@ const App = ({ cliente }) => {
       return;
     }
 
+    // Create payment attempt
+    await fetch("/api/createPaymentAttempt", {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+        "Content-Type": "aplication/json",
+      },
+      body: JSON.stringify({ amount }),
+    });
+
     console.log("Generating invoice...");
 
     // Set loading has started
