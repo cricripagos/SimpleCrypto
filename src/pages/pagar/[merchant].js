@@ -7,21 +7,24 @@ import { Step1, Step2, Step3 } from "./pagar";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { setStepBackward, setStepForward } from "../store/reducers/interactions";
-import useSupabase from "@/helpers/hooks/useSupabase";
+import useSupabase, {supabase} from "@/helpers/hooks/useSupabase";
+import { avgPrice } from "@/helpers/quotes";
+import { setPaymentOptions } from "../store/reducers/options";
 
-const Pagar = () => {
+
+const Pagar = ({payment_options}) => {
   const router = useRouter();
   const { merchant } = router.query;
   const { step } = useSelector(state => state.interactions)
   const { address } = useAccount();
   const dispatch = useDispatch()
-  const {getMerchant, getPaymentMethods, getNetworks} = useSupabase()
+  const {getMerchant, getNetworks} = useSupabase()
   const [data, setData] = useState(false)
 
   const getData = async () => {
     await getMerchant(merchant)
-    await getPaymentMethods()
     await getNetworks()
+    dispatch(setPaymentOptions(payment_options))
   }
 
   useEffect(() => {
@@ -63,3 +66,20 @@ const Pagar = () => {
 };
 
 export default Pagar;
+
+export async function getServerSideProps() {
+  // Traemos los datos de la tabla payment_options
+  // const data = await getPaymentMethods()
+  let { data } = await supabase.from("payment_options").select();
+
+
+  for (const [idx, coin] of data.entries()) {
+    data[idx].price = await avgPrice(coin.symbol);
+  }
+
+  return {
+    props: {
+      payment_options: data,
+    },
+  };
+}

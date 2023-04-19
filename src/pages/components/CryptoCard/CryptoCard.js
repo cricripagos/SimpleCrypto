@@ -1,17 +1,20 @@
-import { setSelectedPaymentMethod } from "@/pages/store/reducers/order"
+import { setCryptoAmount, setSelectedPaymentMethod } from "@/pages/store/reducers/order"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
-const CryptoCard = ({logo_url, name, symbol, network, id}) => {
+const CryptoCard = ({logo_url, name, symbol, network, id, contract, balance, price}) => {
   console.log('CARD', logo_url)
-  const {payment_method} = useSelector(state => state.order)
+  const {payment_method, fiat_amount} = useSelector(state => state.order)
   const dispatch = useDispatch()
+
+  console.log(`For ${name} the contract is ${contract} and the balance ${balance} and the price ${price}`)
 
   const handleClick = () => {
     if(payment_method === id){
     dispatch(setSelectedPaymentMethod(null))
   } else {
     dispatch(setSelectedPaymentMethod(id))
+    dispatch(setCryptoAmount(fiat_amount/price))
   }
   }
 
@@ -23,7 +26,7 @@ const CryptoCard = ({logo_url, name, symbol, network, id}) => {
         </div>
         <div className="ml-3">
             <p>{name} ({symbol})</p>
-            <p>0000.9</p>
+            <p className="text-gray-400 ">{(fiat_amount/price).toFixed(10)}</p>
         </div>
         </div>
         <div>

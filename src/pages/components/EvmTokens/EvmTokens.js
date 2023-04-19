@@ -1,7 +1,9 @@
 import React from 'react'
-import { useGetBalances } from '@lib/hooks/useGetBalances'
 import { useEffect } from 'react'
 import { formatEther } from 'ethers/lib/utils.js'
+import { useSelector } from 'react-redux'
+import { CryptoCard } from '../components'
+import { useGetBalances } from '@/helpers/hooks/useGetBalances'
 
 export const CardWrapper = ({ balanceData, contracts }) => {
     console.log('aca', balanceData.data)
@@ -35,13 +37,22 @@ const EvmTokens = () => {
     // Disableo los que no tienen balance
     // si clickeas mandamos una variable a estado que cuando haces click en pagar pasa
     const balanceData = useGetBalances({ contracts })
+    const {payment} = useSelector(state => state.options)
+    console.log('Balance data', balanceData)
+    console.log('Contracts', contracts)
 
     return (
-        <>
-            <div>EvmTokens</div>
-            <div> selector de cada token...</div>
+        <div className='w-full'>
+            {payment.map((item, index) => {
+            const contract = contracts.find(contract => contract.symbol === item.token)
+            const contractIndex = contracts.findIndex(contract => contract.symbol === item.token)
+            const balance =  balanceData.data[contractIndex]
+            contract.balance = balance
+            console.log('Balance', formatEther(balance))
+            return item.evm === true && <CryptoCard {...item} {...contract}  />
+          })}
             <CardWrapper balanceData={balanceData} contracts={contracts} />
-        </>
+        </div>
     )
 }
 
