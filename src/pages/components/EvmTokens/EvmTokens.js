@@ -36,8 +36,8 @@ const EvmTokens = () => {
     // Muestro un boton por cada uno
     // Disableo los que no tienen balance
     // si clickeas mandamos una variable a estado que cuando haces click en pagar pasa
-    const balanceData = useGetBalances({ contracts })
     const {payment} = useSelector(state => state.options)
+    const balanceData = useGetBalances(payment)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -51,7 +51,7 @@ const EvmTokens = () => {
         <div className='w-full'>
             {loading ? <div>Loading...</div> :
             payment.map((item, index) => {
-            let contract = contracts.find(contract => contract.token === item.symbol)
+            console.log('Payment item....')
             const contractIndex = contracts.findIndex(contract => contract.symbol === item.token)
             const balance =  balanceData.data[contractIndex]
             contract = {...contract, balance: balance}

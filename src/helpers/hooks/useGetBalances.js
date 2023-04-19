@@ -6,9 +6,10 @@ import React from 'react'
 
 const useCustomRead = (contracts, address) => {
     const [res, setRes] = useState({ data: undefined, isError: undefined, isLoading: undefined })
+    console.log('Contracts2...', contracts)
     const contracts_to_read = contracts.map(contract => {
         return {
-            address: contract.contract,
+            address: contract.contract_address,
             abi: erc20ABI,
             functionName: 'balanceOf',
             args: [address],
@@ -19,11 +20,12 @@ const useCustomRead = (contracts, address) => {
     useEffect(() => {
         setRes({ data, isError, isLoading })
     }, [data, isError, isLoading])
+    console.log('res...', res)
     return res
 }
 
-export const useGetBalances = ({ contracts }) => {
-
+export const useGetBalances = (contracts ) => {
+    console.log('Contracts1...', contracts)
 
     //TODO cambiar estos 2 hooks de abajo por parametros, para optimizar (no es urgente)
     const { chain, chains } = useNetwork()
