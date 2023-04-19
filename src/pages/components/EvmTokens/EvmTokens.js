@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { formatEther } from 'ethers/lib/utils.js'
 
 export const CardWrapper = ({ balanceData, contracts }) => {
-    console.log('aca', balanceData.data)
     if (balanceData.data == undefined) return <div>Loading...</div>
     return (
         <>
