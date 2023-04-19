@@ -4,6 +4,7 @@ const initialState = {
     fiat_amount: '',
     crypto_amount: null,
     payment_method: null,
+    chosen_network: null,
 }
 
 export const orderSlice = createSlice({
@@ -18,10 +19,13 @@ export const orderSlice = createSlice({
         },
         setSelectedPaymentMethod: (state, action) => {
             state.payment_method = action.payload
+        },
+        setChosenNetwork: (state, action) => {
+            state.chosen_network = action.payload
         }
     }
 })
 
-export const { setFiatAmount, setCryptoAmount, setSelectedPaymentMethod } = orderSlice.actions;
+export const { setFiatAmount, setCryptoAmount, setSelectedPaymentMethod, setChosenNetwork } = orderSlice.actions;
 
 export default orderSlice.reducer;

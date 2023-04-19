@@ -6,7 +6,6 @@ import { CryptoCard } from '../components'
 import { useGetBalances } from '@/helpers/hooks/useGetBalances'
 
 export const CardWrapper = ({ balanceData, contracts }) => {
-    console.log('aca', balanceData.data)
     if (balanceData.data == undefined) return <div>Loading...</div>
     return (
         <>

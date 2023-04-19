@@ -1,8 +1,9 @@
 import React from 'react'
-import { Footer, InputComponent, Layout } from "@/pages/components/components"
+import { Footer, FooterPay, InputComponent, Layout } from "@/pages/components/components"
 import EvmTokens from '@/pages/components/EvmTokens/EvmTokens'
 import { Web3Button } from "@web3modal/react";
 import Header from '@/pages/components/Header/Header';
+
 
 const Step3 = () => {
     
@@ -15,7 +16,7 @@ const Step3 = () => {
             <div className="flex flex-col h-full justify-between overflow-scroll overflow-x-hidden overflow-y-scroll scrollbar-hide px-7" id='scrollbox'>
                 <Web3Button balance="show" icon="show" />
                 <EvmTokens />
-
+                <FooterPay btn_msg='Pagar' />
             </div>
             <Footer btn_msg='Pagar' />
         </div>

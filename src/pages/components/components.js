@@ -5,4 +5,5 @@ export { default as InputComponent } from './InputComponent/InputComponent';
 export { default as WalletConnect } from './WalletConnectComponents/WalletConnect';
 export { default as PageWrapper } from './Wrappers/PageWrapper';
 export {default as Spinner} from './Animations/Spinner';
+export { default as FooterPay } from './FooterPay/FooterPay';
 
