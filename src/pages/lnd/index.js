@@ -40,6 +40,8 @@ const App = ({ cliente }) => {
     const fact = await fetch("/api/btcGenerateInvoice", {
       method: "POST",
       headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
         "Content-Type": "aplication/json",
       },
       body: JSON.stringify({ amount }),
