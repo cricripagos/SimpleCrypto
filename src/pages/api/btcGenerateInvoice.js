@@ -46,7 +46,7 @@ export default async function generateInvoice(req, res) {
 
   console.log("Procesando ", amount, " satoshis");
   let request = {
-    value: JSON.parse(req.body).amount,
+    value: amount,
     memo: merchant,
   };
 
