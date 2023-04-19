@@ -1,5 +1,5 @@
 import { lndClient } from "@lib/lndClient";
-import WeakSet from "@ungap/weakset";
+import { WeakSet } from "core-js";
 
 const getCircularReplacer = () => {
   const seen = new WeakSet();
@@ -15,11 +15,6 @@ const getCircularReplacer = () => {
 };
 
 export default async function getNodeInfo(req, res) {
-  //const merchant = JSON.parse(req.body).merchant;
-  //const input = JSON.parse(req.body).amount;
-
-  //console.log("Procesando ", input, " satoshis");
-
   const resp = await lndClient.getInfo({}, function (err, response) {
     if (err) {
       console.log("Error: " + err);

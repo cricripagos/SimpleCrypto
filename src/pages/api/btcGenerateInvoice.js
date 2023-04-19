@@ -1,5 +1,5 @@
 import { lndClient } from "@lib/lndClient";
-import WeakSet from "@ungap/weakset";
+import { WeakSet } from "core-js";
 
 const getCircularReplacer = () => {
   const seen = new WeakSet();
