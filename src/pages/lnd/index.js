@@ -40,8 +40,6 @@ const App = ({ cliente }) => {
     const fact = await fetch("/api/btcGenerateInvoice", {
       method: "POST",
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
         "Content-Type": "aplication/json",
       },
       body: JSON.stringify({ amount }),
@@ -49,11 +47,15 @@ const App = ({ cliente }) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        const inv = {
-          invoice: data.payment_request,
-          hash: Buffer.from(data.r_hash).toString("hex"),
-        };
-        return inv;
+        try {
+          const inv = {
+            invoice: data.payment_request,
+            hash: Buffer.from(data.r_hash).toString("hex"),
+          };
+          return inv;
+        } catch (e) {
+          return console.log(e);
+        }
       });
     setInvoice(fact.invoice);
     console.log("Invoice: ", fact.invoice);
