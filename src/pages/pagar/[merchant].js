@@ -11,12 +11,13 @@ import useSupabase, {supabase} from "@/helpers/hooks/useSupabase";
 import { avgPrice } from "@/helpers/quotes";
 import { setPaymentOptions } from "../store/reducers/options";
 import { setMerchant } from "../store/reducers/merchant";
+import Toast from "../components/Toast/Toast";
 
 
 const Pagar = ({payment_options, merchant}) => {
   const router = useRouter();
   // const { merchant } = router.query;
-  const { step } = useSelector(state => state.interactions)
+  const { step, toast } = useSelector(state => state.interactions)
   const { address } = useAccount();
   const dispatch = useDispatch()
   const {getMerchant, getNetworks} = useSupabase()
@@ -60,8 +61,11 @@ const Pagar = ({payment_options, merchant}) => {
     <WagmiWrapper>
       <PageWrapper>
         {!data ? <Spinner size={2} color='text-green-1' /> :
-        stepper()
-} 
+        <div className="relative flex w-full">
+        {stepper()}
+        {toast.show && <Toast />}
+        </div>
+        } 
       </PageWrapper>
     </WagmiWrapper>
   );

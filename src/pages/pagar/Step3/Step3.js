@@ -1,11 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Footer, FooterPay, InputComponent, Layout } from "@/pages/components/components"
 import EvmTokens from '@/pages/components/EvmTokens/EvmTokens'
 import { Web3Button } from "@web3modal/react";
 import Header from '@/pages/components/Header/Header';
+import { useDispatch, useSelector } from 'react-redux';
+import { useAccount } from 'wagmi';
+import { setBtnDisabled } from '@/pages/store/reducers/interactions';
 
 
 const Step3 = () => {
+    const {payment_method} = useSelector(state => state.order)
+    const {address} = useAccount()
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (address !== undefined && payment_method !== null){
+            dispatch(setBtnDisabled(false))
+          } else {
+            dispatch(setBtnDisabled(true))
+          }
+    }, [payment_method, address])
     
     return (
         <Layout>
@@ -16,9 +30,8 @@ const Step3 = () => {
             <div className="flex flex-col h-full justify-between overflow-scroll overflow-x-hidden overflow-y-scroll scrollbar-hide px-7" id='scrollbox'>
                 <Web3Button balance="show" icon="show" />
                 <EvmTokens />
-                <FooterPay btn_msg='Pagar' />
             </div>
-            <Footer btn_msg='Pagar' />
+                <FooterPay btn_msg='Pagar' />
         </div>
         </Layout>
     )

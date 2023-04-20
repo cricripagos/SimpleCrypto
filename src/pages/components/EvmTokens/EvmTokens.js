@@ -39,9 +39,10 @@ const EvmTokens = () => {
     const balanceData = useGetBalances(payment)
     const [loading, setLoading] = useState(true)
 
+
     useEffect(() => {
         if (balanceData.data !== undefined) {
-            console.log('Balance data exists', balanceData.data)
+            console.log('Balance data exists', balanceData.data[0])
             setLoading(false)
         }
     }, [balanceData])
@@ -49,14 +50,15 @@ const EvmTokens = () => {
     return (
         <div className='w-full'>
             {loading ? <div>Loading...</div> :
-            payment.map((item, index) => {
-            const contractIndex = contracts.findIndex(contract => contract.symbol === item.token)
-            const balance =  balanceData.data[contractIndex]
+            payment.filter(method => method.evm == true).map((item, index) => {
+            
+            const balance = balanceData.data && balanceData.data[index]
+            const currency = {...item, balance: balance}
             // contract = {...contract, balance: balance}
             // const contract = {balance:1203, contract:'aaaa'}
-            return item.evm === true && <CryptoCard {...item}  />
+            return <CryptoCard {...currency}  key={index} />
           })}
-            <CardWrapper balanceData={balanceData} contracts={contracts} />
+            {/* <CardWrapper balanceData={balanceData} contracts={contracts} /> */}
         </div>
     )
 }
