@@ -63,7 +63,7 @@ const App = ({ cliente }) => {
         }
       });
     setInvoice(fact.invoice);
-
+    // Esperamos 10 segundos para simular que el pago se esta procesando
     await sleep(10000);
     console.log("Invoice generated!");
 
