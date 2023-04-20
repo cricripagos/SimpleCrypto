@@ -8,6 +8,7 @@ const App = ({ cliente }) => {
   const [amount, setAmount] = useState("");
   const [invoice, setInvoice] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [attempt, setAttempt] = useState("");
 
   const handleChange = (event) => {
     const result = event.target.value.replace(/\D/g, "");
@@ -23,11 +24,44 @@ const App = ({ cliente }) => {
   };
 
   const generateInvoice = async () => {
+    // Validamos el monto.
     if (amount.length == 0) {
       alert("Ingresa una cantidad");
       return;
     }
 
+    // Create payment attempt
+    const attemptUuid = await fetch("/api/createPaymentAttempt", {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+        "Content-Type": "aplication/json",
+      },
+      body: JSON.stringify({ amount }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        try {
+          const att = data[0].uuid;
+          return att;
+        } catch (e) {
+          return console.log(e);
+        }
+      });
+
+    /* La unica forma de actualizar el status del payment attempt
+    es teniendo el identificador a la mano. Si no lo hay, rechazamos
+    el pago.*/
+
+    if (attemptUuid) {
+      setAttempt(attemptUuid);
+    } else {
+      alert("Hubo un error al generar tu pago, vuelve a intentar.");
+      return;
+    }
+
+    // Get wallet provider
     let webln;
 
     try {
@@ -39,17 +73,6 @@ const App = ({ cliente }) => {
       console.log(webln);
       console.log(err.message);
     }
-
-    // Create payment attempt
-    await fetch("/api/createPaymentAttempt", {
-      method: "POST",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        "Content-Type": "aplication/json",
-      },
-      body: JSON.stringify({ amount }),
-    });
 
     console.log("Generating invoice...");
 
