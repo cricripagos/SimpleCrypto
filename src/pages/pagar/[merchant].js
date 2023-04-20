@@ -15,12 +15,11 @@ import Toast from "../components/Toast/Toast";
 
 
 const Pagar = ({payment_options, merchant}) => {
-  const router = useRouter();
   // const { merchant } = router.query;
   const { step, toast } = useSelector(state => state.interactions)
   const { address } = useAccount();
   const dispatch = useDispatch()
-  const {getMerchant, getNetworks} = useSupabase()
+  const { getNetworks} = useSupabase()
   const [data, setData] = useState(false)
 
   const getData = async () => {

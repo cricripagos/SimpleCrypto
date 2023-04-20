@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useSwitchNetwork, useNetwork, usePrepareContractWrite, useContractWrite, useWaitForTransaction, erc20ABI } from 'wagmi'
+import { useRouter } from 'next/router'
 
 const PayButton = ({ text }) => {
     const [chainOk, setChainOk] = useState(false)
@@ -19,6 +20,7 @@ const PayButton = ({ text }) => {
     // Este deberia cambiarse por hook a store, pero tambien se tiene que editar a medida que sucedan cosas para que se renderize en otro componente
     const [status, setStatus] = useState('')
     const dispatch = useDispatch()
+    const router = useRouter()
     //TODO cambiar variable de abajo por hook a store
     console.log(keys)
     const chosen_network = 80001
@@ -90,6 +92,7 @@ const PayButton = ({ text }) => {
     const { dataWait, isErrorWait, isLoadingWait } = useWaitForTransaction({
         hash: data?.hash,
         onSuccess(d) {
+            router.push('/success/000')
             dispatch(setToast({ message: 'La transaccion fue correctamente procesada con hash:' + d.transactionHash, status: 'success', loading: false, show: true}))
             // setStatus('La transaccion fue correctamente procesada con hash:' + d.transactionHash)
         },
