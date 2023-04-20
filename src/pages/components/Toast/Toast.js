@@ -15,11 +15,8 @@ const Toast = () => {
     }, [message])
 
   return (
-    <div className='absolute bottom-20 w-full my-5'>
-        <div>
-        </div>
-        
-        <div className={`shadow-sm rounded-md bg-white mx-3 p-3 flex items-center flex-row font-semibold ${chooseColor(status)}`}>
+    <div className='absolute bottom-20 w-full my-5 '>
+        <div className={`shadow-sm rounded-md mx-3 p-3 flex items-center flex-row  ${chooseColor(status)}`}>
             {loading &&
         <svg
     className={`animate-spin h-5 w-5 ${chooseColor(status)}`}
@@ -34,7 +31,7 @@ const Toast = () => {
         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
     />
 </svg>}
-            <p className={`${chooseColor(status)} text-wrap ml-3 w-3/4`}>{message}</p>
+            <p className={`${chooseColor(status)} text-wrap ml-3 ${loading ? 'w-3/4' : 'w-full'}`}>{message}</p>
         </div>
     </div>
   )

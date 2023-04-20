@@ -36,27 +36,42 @@ const EvmTokens = () => {
     // Disableo los que no tienen balance
     // si clickeas mandamos una variable a estado que cuando haces click en pagar pasa
     const {payment} = useSelector(state => state.options)
+    const {fiat_amount} = useSelector(state => state.order)
     const balanceData = useGetBalances(payment)
     const [loading, setLoading] = useState(true)
+    const [paymentInfo, setPaymentInfo] = useState(null)
 
+    // const payment_methods = payment.filter(method => method.evm == true)
+    // const sorted = payment_methods.sort((a) => console.log('aa', a.name, balanceData.data[a.id - 1]))
+    // console.log('Sorted', sorted)
 
     useEffect(() => {
         if (balanceData.data !== undefined) {
-            console.log('Balance data exists', balanceData.data[0])
+            const obj = payment.filter(method => method.evm == true).map((item, index) => {
+                const balance = balanceData.data && balanceData.data[index]
+                return { ...item, balance: balance }
+            })
+            setPaymentInfo(obj)
             setLoading(false)
         }
     }, [balanceData])
 
+    console.log('paymentInfo', paymentInfo)
+
+    // console.log('paymentInfo', paymentInfo.sort((a, b) => (formatEther(a.balance) < fiat_amount/a.price) - (formatEther(b.balance) < fiat_amount/b.price)))
+
+    // console.log('paymentInfo', paymentInfo.sort((a) => console.log( formatEther(a.balance) > fiat_amount/a.price)))
+
     return (
         <div className='w-full'>
             {loading ? <div>Loading...</div> :
-            payment.filter(method => method.evm == true).map((item, index) => {
+            paymentInfo.sort((a, b) => (formatEther(a.balance) < fiat_amount/a.price) - (formatEther(b.balance) < fiat_amount/b.price)).map((item, index) => {
             
-            const balance = balanceData.data && balanceData.data[index]
-            const currency = {...item, balance: balance}
+            // const balance = balanceData.data && balanceData.data[index]
+            // const currency = {...item, balance: balance}
             // contract = {...contract, balance: balance}
             // const contract = {balance:1203, contract:'aaaa'}
-            return <CryptoCard {...currency}  key={index} />
+            return <CryptoCard {...item}  key={index} />
           })}
             {/* <CardWrapper balanceData={balanceData} contracts={contracts} /> */}
         </div>

@@ -54,7 +54,7 @@ const PayButton = ({ text }) => {
         onError(error) {
             setChainOk(false)
             
-            dispatch(setToast({ message: `Estas en la network ${chain.name}. Al intentar pagar te solicitaremos cambiar a ${selectedMethod?.chain_id.toString()} para poder realizar el pago en el token seleccionado`, status: 'error', loading: false, show: true}))
+            dispatch(setToast({ message: `Estas en la network ${chain.name}. Al intentar pagar te solicitaremos cambiar a ${selectedMethod?.chain_id.toString()} para poder realizar el pago en el token seleccionado`, status: 'warning', loading: false, show: true}))
             // setStatus('Estas en la network' + chain.name + '. Al intentar pagar te solicitaremos cambiar a ' + selectedMethod?.chain_id.toString() + ' para poder realizar el pago en el token seleccionado')
         },
         onSuccess(data) {
@@ -96,7 +96,6 @@ const PayButton = ({ text }) => {
     })
     return (
         <>
-            <p className='text-xs'>Toast:{status}</p>
             <button className={`text-white px-7 font-semibold rounded-md ${btn_disabled ? 'bg-stone-400' : 'bg-green-1'}`} disabled={btn_disabled} onClick={handleClick}>
                 {text}
             </button>
@@ -115,6 +114,7 @@ const FooterPay = ({ btn_msg }) => {
                 <p>{fiat_amount} ARS($)</p>
             </div>
             <div className='flex'>
+                <Button text='Volver' filled={false} onClick={() => dispatch(setStepBackward())} />
                 <PayButton filled={true} text={btn_msg} />
             </div>
         </div>
