@@ -28,7 +28,6 @@ const App = ({ cliente }) => {
       txHash: attempt.transactionHash,
       userAddress: attempt.userAddress,
     };
-    console.log("payload", payload);
 
     await fetch("/api/updatePaymentAttempt", {
       method: "POST",
@@ -83,7 +82,9 @@ const App = ({ cliente }) => {
       webln = await requestProvider();
     } catch (err) {
       alert(
-        "No encontramos un proveedor de Lightning, instala una wallet compatible"
+        "No encontramos tu wallet de Lightning, \
+        escanea el codigo QR con tu wallet Lightning\
+        o copia y pega la factura para pagar."
       );
       console.log(err.message);
     }
@@ -144,11 +145,7 @@ const App = ({ cliente }) => {
         if (e.message == "User rejected") {
           attempt.paymentStatus = "rejected";
           updateAttempt(attempt);
-          setIsProcessing(false);
-          setAmount("");
-          setInvoice("");
           alert("El usuario cancelo la transacción");
-          return;
         }
       }
     }
@@ -197,11 +194,11 @@ const App = ({ cliente }) => {
       <br></br>
       {invoice.length > 0 ? (
         <>
-          <a href={"lightning://" + invoice}>
+          <a onClick={() => navigator.clipboard.writeText(invoice)}>
             {/* Tweak to show a loading indicator */}
             <div>
               <p className="text-sky-500 hover:text-sky-600">
-                Click para pagar
+                Click para copiar la factura
               </p>
             </div>
           </a>
@@ -211,6 +208,7 @@ const App = ({ cliente }) => {
             cols="32"
             value={invoice}
             readOnly
+            onClick={() => navigator.clipboard.writeText(invoice)}
           ></textarea>
           <div
             style={{

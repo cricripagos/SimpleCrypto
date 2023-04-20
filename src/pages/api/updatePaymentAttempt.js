@@ -19,8 +19,6 @@ export default async function updatePaymentAttempt(req, res) {
     attempt.user_address = userAddress;
   }
 
-  console.log("attempt", attempt);
-
   const { data, error } = await supabase
     .from("payment_attempts")
     .update(attempt)
