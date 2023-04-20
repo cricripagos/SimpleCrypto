@@ -9,6 +9,9 @@ const App = ({ cliente }) => {
   const [invoice, setInvoice] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [attempt, setAttempt] = useState("");
+  const [status, setStatus] = useState("pending");
+  const [txHash, setTxHash] = useState("");
+  const [address, setAddress] = useState("");
 
   const handleChange = (event) => {
     const result = event.target.value.replace(/\D/g, "");
@@ -21,6 +24,30 @@ const App = ({ cliente }) => {
       setTimeout(resolve, ms);
     });
     return promise;
+  };
+
+  const updateAttempt = async (
+    attemptUuid,
+    paymentStatus,
+    transactionHash,
+    userAddress
+  ) => {
+    const payload = {
+      attempt: attemptUuid,
+      status: paymentStatus,
+      txHash: transactionHash,
+      userAddress: userAddress,
+    };
+
+    await fetch("/api/updatePaymentAttempt", {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+        "Content-Type": "aplication/json",
+      },
+      body: JSON.stringify(payload),
+    });
   };
 
   const generateInvoice = async () => {
@@ -56,7 +83,10 @@ const App = ({ cliente }) => {
 
     if (attemptUuid) {
       setAttempt(attemptUuid);
+      updateAttempt(attempt, status, txHash, address);
     } else {
+      setStatus("failed");
+      updateAttempt(attempt, status, txHash, address);
       alert("Hubo un error al generar tu pago, vuelve a intentar.");
       return;
     }
@@ -103,8 +133,12 @@ const App = ({ cliente }) => {
 
     try {
       setInvoice(fact.invoice);
+      setTxHash(fact.hash);
+      updateAttempt(attempt, status, txHash, address);
     } catch (e) {
       alert("Hubo un error al generar tu pago, vuelve a intentar.");
+      setStatus("failed");
+      updateAttempt(attempt, status, txHash, address);
       return;
     }
 
@@ -115,9 +149,13 @@ const App = ({ cliente }) => {
       } catch (e) {
         console.log(e.message);
         if (e.message == "User rejected") {
+          setStatus("rejected");
+          updateAttempt(attempt, status, txHash, address);
           alert("El usuario cancelo la transacción");
           return;
         } else {
+          setStatus("failed");
+          updateAttempt(attempt, status, txHash, address);
           alert("Hubo un error al procesar tu pago, vuelve a intentar.");
           return;
         }
