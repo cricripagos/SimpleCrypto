@@ -1,11 +1,13 @@
 import { useState } from "react";
+import QRCode from "react-qr-code";
+import { requestProvider } from "webln";
+
 var Promise = require("promise");
 
 const App = ({ cliente }) => {
   const [amount, setAmount] = useState("");
-  const [invoice, setInvoice] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-
+  const [invoice, setInvoice] = useState("");
   const handleChange = (event) => {
     const result = event.target.value.replace(/\D/g, "");
 
@@ -19,14 +21,34 @@ const App = ({ cliente }) => {
     return promise;
   };
 
+  const updateAttempt = async (attempt) => {
+    const payload = {
+      attempt: attempt.attemptUuid,
+      status: attempt.paymentStatus,
+      txHash: attempt.transactionHash,
+      userAddress: attempt.userAddress,
+    };
+
+    await fetch("/api/updatePaymentAttempt", {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+        "Content-Type": "aplication/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  };
+
   const generateInvoice = async () => {
+    // Validamos el monto.
     if (amount.length == 0) {
       alert("Ingresa una cantidad");
       return;
     }
 
     // Create payment attempt
-    await fetch("/api/createPaymentAttempt", {
+    const attemptUuid = await fetch("/api/createPaymentAttempt", {
       method: "POST",
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -34,7 +56,38 @@ const App = ({ cliente }) => {
         "Content-Type": "aplication/json",
       },
       body: JSON.stringify({ amount }),
-    });
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        try {
+          const att = data[0].uuid;
+          return att;
+        } catch (e) {
+          return console.log(e);
+        }
+      });
+
+    /* La unica forma de actualizar el status del payment attempt
+    es teniendo el identificador a la mano. Si no lo hay, rechazamos
+    el pago.*/
+
+    if (!attemptUuid) {
+      alert("Hubo un error al generar tu pago, vuelve a intentar.");
+      return;
+    }
+
+    // Get wallet provider
+    let webln;
+    try {
+      webln = await requestProvider();
+    } catch (err) {
+      alert(
+        "No encontramos tu wallet de Lightning, \
+        escanea el codigo QR con tu wallet Lightning\
+        o copia y pega la factura para pagar."
+      );
+      console.log(err.message);
+    }
 
     console.log("Generating invoice...");
 
@@ -62,13 +115,46 @@ const App = ({ cliente }) => {
           return console.log(e);
         }
       });
+
+    const attempt = {
+      attemptUuid: attemptUuid,
+      paymentStatus: "pending",
+      transactionHash: "",
+      userAddress: "",
+    };
+
+    /* Si no se pudo generar la factura, rechazamos el pago. */
+    if (!fact.invoice || !fact.hash) {
+      attempt.paymentStatus = "failed";
+      updateAttempt(attempt);
+      setIsProcessing(false);
+      setAmount("");
+      alert("Hubo un error al generar tu pago, vuelve a intentar.");
+      return;
+    }
+
     setInvoice(fact.invoice);
+    attempt.transactionHash = fact.hash;
+
+    if (webln) {
+      try {
+        const sendPaymentResponse = await webln.sendPayment(fact.invoice);
+        console.log(sendPaymentResponse);
+      } catch (e) {
+        console.log(e.message);
+        if (e.message == "User rejected") {
+          attempt.paymentStatus = "rejected";
+          updateAttempt(attempt);
+          alert("El usuario cancelo la transacción");
+        }
+      }
+    }
     // Esperamos 10 segundos para simular que el pago se esta procesando
     await sleep(10000);
     console.log("Invoice generated!");
-
     setAmount("");
     setIsProcessing(false);
+    setInvoice("");
   };
 
   return (
@@ -108,11 +194,11 @@ const App = ({ cliente }) => {
       <br></br>
       {invoice.length > 0 ? (
         <>
-          <a href={invoice}>
+          <a onClick={() => navigator.clipboard.writeText(invoice)}>
             {/* Tweak to show a loading indicator */}
             <div>
               <p className="text-sky-500 hover:text-sky-600">
-                Click para pagar
+                Click para copiar la factura
               </p>
             </div>
           </a>
@@ -122,7 +208,23 @@ const App = ({ cliente }) => {
             cols="32"
             value={invoice}
             readOnly
+            onClick={() => navigator.clipboard.writeText(invoice)}
           ></textarea>
+          <div
+            style={{
+              height: "auto",
+              margin: "0 auto",
+              maxWidth: 200,
+              width: "100%",
+            }}
+          >
+            <QRCode
+              size={256}
+              style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+              value={"lightning://" + invoice}
+              viewBox={`0 0 256 256`}
+            />
+          </div>
         </>
       ) : null}
 
