@@ -1,6 +1,4 @@
 import { useState } from "react";
-import QRCode from "react-qr-code";
-import { requestProvider } from "webln";
 
 var Promise = require("promise");
 
@@ -26,18 +24,6 @@ const App = ({ cliente }) => {
     if (amount.length == 0) {
       alert("Ingresa una cantidad");
       return;
-    }
-
-    let webln;
-
-    try {
-      webln = await requestProvider();
-    } catch (err) {
-      alert(
-        "No encontramos un proveedor de Lightning, instala una wallet compatible"
-      );
-      console.log(webln);
-      console.log(err.message);
     }
 
     // Create payment attempt
@@ -77,30 +63,7 @@ const App = ({ cliente }) => {
           return console.log(e);
         }
       });
-
-    try {
-      setInvoice(fact.invoice);
-    } catch (e) {
-      alert("Hubo un error al generar tu pago, vuelve a intentar.");
-      return;
-    }
-
-    if (webln) {
-      try {
-        const sendPaymentResponse = await webln.sendPayment(fact.invoice);
-        console.log(sendPaymentResponse);
-      } catch (e) {
-        console.log(e.message);
-        if (e.message == "User rejected") {
-          alert("El usuario cancelo la transacción");
-          return;
-        } else {
-          alert("Hubo un error al procesar tu pago, vuelve a intentar.");
-          return;
-        }
-      }
-    }
-
+    setInvoice(fact.invoice);
     // Esperamos 10 segundos para simular que el pago se esta procesando
     await sleep(10000);
     console.log("Invoice generated!");
@@ -146,7 +109,7 @@ const App = ({ cliente }) => {
       <br></br>
       {invoice.length > 0 ? (
         <>
-          <a href={"lightning://" + invoice}>
+          <a href={invoice}>
             {/* Tweak to show a loading indicator */}
             <div>
               <p className="text-sky-500 hover:text-sky-600">
@@ -161,21 +124,6 @@ const App = ({ cliente }) => {
             value={invoice}
             readOnly
           ></textarea>
-          <div
-            style={{
-              height: "auto",
-              margin: "0 auto",
-              maxWidth: 200,
-              width: "100%",
-            }}
-          >
-            <QRCode
-              size={256}
-              style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-              value={"lightning://" + invoice}
-              viewBox={`0 0 256 256`}
-            />
-          </div>
         </>
       ) : null}
 
