@@ -6,13 +6,8 @@ var Promise = require("promise");
 
 const App = ({ cliente }) => {
   const [amount, setAmount] = useState("");
-  const [invoice, setInvoice] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [attempt, setAttempt] = useState("");
-  const [status, setStatus] = useState("pending");
-  const [txHash, setTxHash] = useState("");
-  const [address, setAddress] = useState("");
-
+  const [invoice, setInvoice] = useState("");
   const handleChange = (event) => {
     const result = event.target.value.replace(/\D/g, "");
 
@@ -26,18 +21,14 @@ const App = ({ cliente }) => {
     return promise;
   };
 
-  const updateAttempt = async (
-    attemptUuid,
-    paymentStatus,
-    transactionHash,
-    userAddress
-  ) => {
+  const updateAttempt = async (attempt) => {
     const payload = {
-      attempt: attemptUuid,
-      status: paymentStatus,
-      txHash: transactionHash,
-      userAddress: userAddress,
+      attempt: attempt.attemptUuid,
+      status: attempt.paymentStatus,
+      txHash: attempt.transactionHash,
+      userAddress: attempt.userAddress,
     };
+    console.log("payload", payload);
 
     await fetch("/api/updatePaymentAttempt", {
       method: "POST",
@@ -81,26 +72,19 @@ const App = ({ cliente }) => {
     es teniendo el identificador a la mano. Si no lo hay, rechazamos
     el pago.*/
 
-    if (attemptUuid) {
-      setAttempt(attemptUuid);
-      updateAttempt(attempt, status, txHash, address);
-    } else {
-      setStatus("failed");
-      updateAttempt(attempt, status, txHash, address);
+    if (!attemptUuid) {
       alert("Hubo un error al generar tu pago, vuelve a intentar.");
       return;
     }
 
     // Get wallet provider
     let webln;
-
     try {
       webln = await requestProvider();
     } catch (err) {
       alert(
         "No encontramos un proveedor de Lightning, instala una wallet compatible"
       );
-      console.log(webln);
       console.log(err.message);
     }
 
@@ -131,16 +115,25 @@ const App = ({ cliente }) => {
         }
       });
 
-    try {
-      setInvoice(fact.invoice);
-      setTxHash(fact.hash);
-      updateAttempt(attempt, status, txHash, address);
-    } catch (e) {
+    const attempt = {
+      attemptUuid: attemptUuid,
+      paymentStatus: "pending",
+      transactionHash: "",
+      userAddress: "",
+    };
+
+    /* Si no se pudo generar la factura, rechazamos el pago. */
+    if (!fact.invoice || !fact.hash) {
+      attempt.paymentStatus = "failed";
+      updateAttempt(attempt);
+      setIsProcessing(false);
+      setAmount("");
       alert("Hubo un error al generar tu pago, vuelve a intentar.");
-      setStatus("failed");
-      updateAttempt(attempt, status, txHash, address);
       return;
     }
+
+    setInvoice(fact.invoice);
+    attempt.transactionHash = fact.hash;
 
     if (webln) {
       try {
@@ -149,25 +142,22 @@ const App = ({ cliente }) => {
       } catch (e) {
         console.log(e.message);
         if (e.message == "User rejected") {
-          setStatus("rejected");
-          updateAttempt(attempt, status, txHash, address);
+          attempt.paymentStatus = "rejected";
+          updateAttempt(attempt);
+          setIsProcessing(false);
+          setAmount("");
+          setInvoice("");
           alert("El usuario cancelo la transacción");
-          return;
-        } else {
-          setStatus("failed");
-          updateAttempt(attempt, status, txHash, address);
-          alert("Hubo un error al procesar tu pago, vuelve a intentar.");
           return;
         }
       }
     }
-
     // Esperamos 10 segundos para simular que el pago se esta procesando
     await sleep(10000);
     console.log("Invoice generated!");
-
     setAmount("");
     setIsProcessing(false);
+    setInvoice("");
   };
 
   return (

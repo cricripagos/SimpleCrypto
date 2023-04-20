@@ -5,6 +5,10 @@ export default async function createPaymentAttempt(req, res) {
   const amount = JSON.parse(req.body).amount;
   const expiration_date = JSON.parse(req.body).expiration_date;
 
+  /* Usamos uuid como identificador unico para el intento de pago.
+    Esto nos permite idetificar el intento aunque se hayan creado
+    multiples intentos con el mismo monto y merchant al mismo tiempo. */
+
   const attempt = {
     fiat_total_amount: amount,
     payment_option: 1, // cambiar por el payment option id
