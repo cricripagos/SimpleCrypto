@@ -4,7 +4,7 @@ import { requestProvider } from "webln";
 
 var Promise = require("promise");
 
-const App = ({ cliente }) => {
+const App = ({ merchat }) => {
   const [amount, setAmount] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [invoice, setInvoice] = useState("");
@@ -132,6 +132,7 @@ const App = ({ cliente }) => {
       alert("Hubo un error al generar tu pago, vuelve a intentar.");
       return;
     }
+    console.log("Invoice generated!");
 
     setInvoice(fact.invoice);
     attempt.transactionHash = fact.hash;
@@ -151,7 +152,15 @@ const App = ({ cliente }) => {
     }
     // Esperamos 10 segundos para simular que el pago se esta procesando
     await sleep(10000);
-    console.log("Invoice generated!");
+    /*
+    Aqui se deberia hacer una consulta a la red de Lightning o Ethereum para
+    verificar si el pago fue exitoso. 
+    */
+    if (attempt.paymentStatus != "rejected") {
+      console.log("Payment processed!");
+      attempt.paymentStatus = "success";
+      updateAttempt(attempt);
+    }
     setAmount("");
     setIsProcessing(false);
     setInvoice("");
