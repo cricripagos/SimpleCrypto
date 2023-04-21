@@ -5,58 +5,40 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { useSwitchNetwork, useNetwork, usePrepareContractWrite, useContractWrite, useWaitForTransaction, erc20ABI } from 'wagmi'
 import { useRouter } from 'next/router'
+import { parseEther } from 'ethers/lib/utils.js'
 
 const PayButton = ({ text }) => {
     const [chainOk, setChainOk] = useState(false)
-    const {btn_disabled} = useSelector(state => state.interactions)
+    const { btn_disabled } = useSelector(state => state.interactions)
     const [triggerAfterSwitch, setTriggerAfterSwitch] = useState(false)
     //Payment method selected by user
-    const {payment_method, crypto_amount} = useSelector(state => state.order)
+    const { payment_method, crypto_amount } = useSelector(state => state.order)
+    console.log("chek store", payment_method, crypto_amount)
     //Existing payment options & merchant
-    const {payment} = useSelector(state => state.options)
-    const {keys} = useSelector(state => state.merchant)
+    const { payment } = useSelector(state => state.options)
+    const { keys } = useSelector(state => state.merchant)
     const selectedMethod = payment.find((item) => item.id === payment_method)
-    console.log('selected method: ', selectedMethod)
     // Este deberia cambiarse por hook a store, pero tambien se tiene que editar a medida que sucedan cosas para que se renderize en otro componente
     const [status, setStatus] = useState('')
     const dispatch = useDispatch()
     const router = useRouter()
     //TODO cambiar variable de abajo por hook a store
-    console.log(keys)
-    const chosen_network = 80001
-    const chosen_contract = '0x326C977E6efc84E512bB9C30f76E30c160eD06FB'
-    const amount = 1
     const beneficiary_address = '0x5139A3CBD90800Ca9783010B5d984363D6E77dc6'
-    // 
     const { chain, chains } = useNetwork()
     const { error, isLoading: isloadingNetwork, pendingChainId, switchNetwork } = useSwitchNetwork()
-
-    console.log('Crypto amount: ', crypto_amount)
-
-
-    // Este Hook me 
-    {/*useEffect(() => {
-        console.log('cambio el chain id: ', chain.id)
-        //Esto corre para actualizar si la network ya no matchea
-        if (chosen_network == chain.id) {
-            setChainOk(chosen_network == chain.id)
-        } else {
-            setStatus('Estas en la network' + chain.name + '. Al intentar pagar te solicitaremos cambiar a ' + chosen_network.toString() + ' para poder realizar el pago en el token seleccionado')
-            setChainOk(false)
-        }
-    },
-    [chain.id, chosen_network])*/}
     // Este Hook me mantiene actualizado lo que quiero hacer en el contrato
+    const formated_amount = crypto_amount ? parseEther(crypto_amount.toString().slice(0, 18).toString()) : 0
+    console.log("aca mirar", formated_amount.toString())
     const { config } = usePrepareContractWrite({
         address: selectedMethod?.contract_address,
         abi: erc20ABI,
         functionName: 'transfer',
-        args: [beneficiary_address, 10],
+        args: [beneficiary_address, formated_amount],
         chainId: selectedMethod?.chain_id,
         onError(error) {
             setChainOk(false)
-            
-            dispatch(setToast({ message: `Estas en la network ${chain.name}. Al intentar pagar te solicitaremos cambiar a ${selectedMethod?.chain_id.toString()} para poder realizar el pago en el token seleccionado`, status: 'warning', loading: false, show: true}))
+
+            dispatch(setToast({ message: `Estas en la network ${chain.name}. Al intentar pagar te solicitaremos cambiar a ${selectedMethod?.chain_id.toString()} para poder realizar el pago en el token seleccionado`, status: 'warning', loading: false, show: true }))
             // setStatus('Estas en la network' + chain.name + '. Al intentar pagar te solicitaremos cambiar a ' + selectedMethod?.chain_id.toString() + ' para poder realizar el pago en el token seleccionado')
         },
         onSuccess(data) {
@@ -67,7 +49,7 @@ const PayButton = ({ text }) => {
 
     const { data, isLoading: isLoadingPay, isSuccess: isSuccessPay, write } = useContractWrite({
         ...config, onSuccess(data) {
-            dispatch(setToast({ message: 'La transaccion esta en proceso', status: '', loading: true, show: true}))
+            dispatch(setToast({ message: 'La transaccion esta en proceso', status: '', loading: true, show: true }))
             // setStatus('La transaccion esta en proceso')
         }
     })
@@ -93,7 +75,7 @@ const PayButton = ({ text }) => {
         hash: data?.hash,
         onSuccess(d) {
             router.push('/success/000')
-            dispatch(setToast({ message: 'La transaccion fue correctamente procesada con hash:' + d.transactionHash, status: 'success', loading: false, show: true}))
+            dispatch(setToast({ message: 'La transaccion fue correctamente procesada con hash:' + d.transactionHash, status: 'success', loading: false, show: true }))
             // setStatus('La transaccion fue correctamente procesada con hash:' + d.transactionHash)
         },
     })
