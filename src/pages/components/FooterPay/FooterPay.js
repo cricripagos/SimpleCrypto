@@ -92,7 +92,7 @@ const PayButton = ({ text }) => {
     const { dataWait, isErrorWait, isLoadingWait } = useWaitForTransaction({
         hash: data?.hash,
         onSuccess(d) {
-            router.push('/success/000')
+            router.push(`/success/${d.transactionHash}`)
             dispatch(setToast({ message: 'La transaccion fue correctamente procesada con hash:' + d.transactionHash, status: 'success', loading: false, show: true}))
             // setStatus('La transaccion fue correctamente procesada con hash:' + d.transactionHash)
         },

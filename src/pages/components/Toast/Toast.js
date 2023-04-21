@@ -8,11 +8,11 @@ const Toast = () => {
     const {message, loading, status} = useSelector(state => state.interactions.toast)
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        setTimeout(() => {
-            dispatch(setToast({show: false, message: '', status: '', loading: false}))
-        }, 3000)
-    }, [message])
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         dispatch(setToast({show: false, message: '', status: '', loading: false}))
+    //     }, 3000)
+    // }, [message])
 
   return (
     <div className='absolute bottom-20 w-full my-5 '>
