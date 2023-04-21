@@ -4,6 +4,7 @@ export default async function checkInvoice(req, res) {
   const invoice = JSON.parse(req.body).invoice;
 
   let dataReturn = {};
+
   let stream = lndClient.subscribeInvoices({});
 
   stream.on("data", (data) => {
