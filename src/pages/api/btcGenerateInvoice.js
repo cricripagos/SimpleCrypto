@@ -1,6 +1,6 @@
 import { lndClient } from "@lib/lndClient";
 
-//test
+//test.
 export default async function generateInvoice(req, res) {
   const merchant = "Tule";
   //const merchant = JSON.parse(req.body).merchant;
