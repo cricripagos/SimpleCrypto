@@ -40,6 +40,22 @@ const App = ({ merchat }) => {
     });
   };
 
+  async function isInvoicePaid(payment_request) {
+    const dataInvoiceStream = await fetch("/api/btcCheckInvoice", {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+        "Content-Type": "aplication/json",
+      },
+      body: JSON.stringify(payment_request),
+    });
+
+    if (dataInvoiceStream.settled === true) {
+      return true;
+    }
+  }
+
   const generateInvoice = async () => {
     // Validamos el monto.
     if (amount.length == 0) {
