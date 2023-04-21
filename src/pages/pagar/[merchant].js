@@ -7,19 +7,19 @@ import { Step1, Step2, Step3 } from "./pagar";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { setStepBackward, setStepForward } from "../store/reducers/interactions";
-import useSupabase, {supabase} from "@/helpers/hooks/useSupabase";
+import useSupabase, { supabase } from "@/helpers/hooks/useSupabase";
 import { avgPrice } from "@/helpers/quotes";
 import { setPaymentOptions } from "../store/reducers/options";
 import { setMerchant } from "../store/reducers/merchant";
 import Toast from "../components/Toast/Toast";
 
 
-const Pagar = ({payment_options, merchant}) => {
+const Pagar = ({ payment_options, merchant }) => {
   // const { merchant } = router.query;
   const { step, toast } = useSelector(state => state.interactions)
   const { address } = useAccount();
   const dispatch = useDispatch()
-  const { getNetworks} = useSupabase()
+  const { getNetworks } = useSupabase()
   const [data, setData] = useState(false)
 
   const getData = async () => {
@@ -33,7 +33,7 @@ const Pagar = ({payment_options, merchant}) => {
     //Get intial data
     getData()
     setTimeout(() => {
-    setData(true)
+      setData(true)
     }, 3000)
   }, [])
 
@@ -50,7 +50,7 @@ const Pagar = ({payment_options, merchant}) => {
           return <Step2 />
         }
         if (address !== undefined) return <Step3 />
-        
+
     }
   }
 
@@ -60,11 +60,11 @@ const Pagar = ({payment_options, merchant}) => {
     <WagmiWrapper>
       <PageWrapper>
         {!data ? <Spinner size={2} color='text-green-1' /> :
-        <div className="relative flex w-full">
-        {stepper()}
-        {toast.show && <Toast />}
-        </div>
-        } 
+          <div className="relative flex w-full overflow-x-hidden">
+            {stepper()}
+            {toast.show && <Toast />}
+          </div>
+        }
       </PageWrapper>
     </WagmiWrapper>
   );
@@ -76,7 +76,7 @@ export async function getServerSideProps(context) {
   const slug = context.params.merchant;
   // Traemos los datos de la tabla payment_options
   // const data = await getPaymentMethods()
-  let payment_options= await supabase.from("payment_options").select();
+  let payment_options = await supabase.from("payment_options").select();
   let merchant = await supabase.from('merchants').select().eq('slug', slug)
 
 
