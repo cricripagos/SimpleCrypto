@@ -1,5 +1,5 @@
 import { lndClient } from "@lib/lndClient";
-
+// test
 export default async function checkInvoice(req, res) {
   const invoice = JSON.parse(req.body).invoice;
 
