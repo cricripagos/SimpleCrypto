@@ -258,7 +258,7 @@ const App = ({ merchat }) => {
             {/* Tweak to show a loading indicator */}
             <div>
               <p className="text-sky-500 hover:text-sky-600">
-                Click para copiar la factura
+                Click para abrir tu wallet
               </p>
             </div>
           </a>
