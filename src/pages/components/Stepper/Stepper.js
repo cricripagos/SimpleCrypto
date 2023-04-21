@@ -9,8 +9,8 @@ const Stepper = () => {
   return (
     <div className='flex'>
         {steps.map((step, index) => {
-            return <Step {...step} index={index}/>
-        })}
+            return <Step key={index} {...step} index={index}/>
+  })}
     </div>
   )
 }
