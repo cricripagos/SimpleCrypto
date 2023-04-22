@@ -7,6 +7,7 @@ var Promise = require("promise");
 const App = ({ merchat }) => {
   const [amount, setAmount] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isPaid, setIsPaid] = useState(false);
   const [invoice, setInvoice] = useState("");
   const handleChange = (event) => {
     const result = event.target.value.replace(/\D/g, "");
@@ -38,6 +39,37 @@ const App = ({ merchat }) => {
       },
       body: JSON.stringify(payload),
     });
+  };
+
+  const isInvoicePaid = async (payment_request) => {
+    const invoice = { invoice: payment_request };
+
+    const dataInvoiceStream = await fetch("/api/btcCheckInvoice", {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+        "Content-Type": "aplication/json",
+      },
+      body: JSON.stringify(invoice),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        try {
+          const inv = {
+            settled: data.settled,
+            address: Buffer.from(data.payment_addr).toString("hex"),
+          };
+          return inv;
+        } catch (e) {
+          return console.log(e);
+        }
+      });
+
+    if (dataInvoiceStream.settled === true) {
+      setIsPaid(true);
+      return dataInvoiceStream;
+    }
   };
 
   const generateInvoice = async () => {
@@ -81,11 +113,13 @@ const App = ({ merchat }) => {
     try {
       webln = await requestProvider();
     } catch (err) {
+      //El alert deberia ser un modal.
+      /*
       alert(
-        "No encontramos tu wallet de Lightning, \
-        escanea el codigo QR con tu wallet Lightning\
+        "No encontramos tu wallet de Lightning. \
+        Da click en el enlace\
         o copia y pega la factura para pagar."
-      );
+      );*/
       console.log(err.message);
     }
 
@@ -151,19 +185,30 @@ const App = ({ merchat }) => {
       }
     }
     // Esperamos 10 segundos para simular que el pago se esta procesando
-    await sleep(10000);
+    console.log("Waiting for payment to be processed...");
+    console.log(fact.invoice);
+    const confirm = await isInvoicePaid(fact.invoice);
+    console.log("Payment pro!");
+
+    //await sleep(50000);
     /*
     Aqui se deberia hacer una consulta a la red de Lightning o Ethereum para
     verificar si el pago fue exitoso. 
     */
-    if (attempt.paymentStatus != "rejected") {
+    if (confirm.settled == true) {
       console.log("Payment processed!");
       attempt.paymentStatus = "success";
+      attempt.userAddress = confirm.address;
+      console.log(attempt);
       updateAttempt(attempt);
     }
-    setAmount("");
+    // Esperamos 7 segundos para que el usuario vea que ya paso el pago
+
+    await sleep(7000);
     setIsProcessing(false);
     setInvoice("");
+    setIsPaid(false);
+    setAmount("");
   };
 
   return (
@@ -203,14 +248,21 @@ const App = ({ merchat }) => {
       <br></br>
       {invoice.length > 0 ? (
         <>
-          <a onClick={() => navigator.clipboard.writeText(invoice)}>
+          {isPaid ? (
+            <p className="text-green-500">Pagado</p>
+          ) : (
+            <p className="text-red-500">Pendiente</p>
+          )}
+          <br></br>
+          <a href={"lightning://" + invoice}>
             {/* Tweak to show a loading indicator */}
             <div>
               <p className="text-sky-500 hover:text-sky-600">
-                Click para copiar la factura
+                Click para abrir tu wallet
               </p>
             </div>
           </a>
+          <br></br>
           <textarea
             style={{ resize: "none" }}
             rows="9"
