@@ -2,11 +2,16 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@lib/*": ["lib/*"],
-      "@components/*": ["src/pages/components/*"],
+      "@/*": [
+        "./src/*"
+      ],
+      "@lib/*": [
+        "lib/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
     }
   }
 }
-
 //Ejemplo: import {rochi} from '@lib/rochi'

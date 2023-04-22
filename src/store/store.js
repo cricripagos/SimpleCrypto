@@ -6,7 +6,7 @@ import options from './reducers/options';
 
 
 //Para cada caso que queremos usar podemos crear un reducer. Por ejemplo por temas. Payment, User, etc
-export const store = configureStore({
+const store = configureStore({
     reducer: {
         order: order,
         interactions: interactions,
@@ -14,3 +14,5 @@ export const store = configureStore({
         options: options
     }
 })
+
+export default store

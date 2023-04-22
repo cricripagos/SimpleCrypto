@@ -1,5 +1,5 @@
-import { setMerchant } from "@/pages/store/reducers/merchant";
-import { setNetworksOptions, setPaymentOptions } from "@/pages/store/reducers/options";
+import { setMerchant } from "@/store/reducers/merchant";
+import { setNetworksOptions, setPaymentOptions } from "@/store/reducers/options";
 import { createClient } from "@supabase/supabase-js";
 import { useDispatch } from "react-redux";
 
@@ -15,7 +15,7 @@ export default function useSupabase() {
     const getMerchant = async (merchant) => {
         console.log('Getting merchant', merchant, supabase)
         const promise = await supabase.from('merchants').select().eq('slug', merchant).then(({ data, error }) => {
-            if(data){
+            if (data) {
                 dispatch(setMerchant(data))
                 return data[0]
             } else {
@@ -28,7 +28,7 @@ export default function useSupabase() {
 
     const getPaymentMethods = async (merchant) => {
         const promise = await supabase.from('payment_options').select().then(({ data, error }) => {
-            if(data){
+            if (data) {
                 dispatch(setPaymentOptions(data))
                 return data
             } else {
@@ -40,7 +40,7 @@ export default function useSupabase() {
 
     const getNetworks = async () => {
         const promise = await supabase.from('networks').select().then(({ data, error }) => {
-            if(data){
+            if (data) {
                 dispatch(setNetworksOptions(data))
                 return data
             } else {
@@ -51,9 +51,9 @@ export default function useSupabase() {
     }
 
 
-  return {
-    getMerchant,
-    getPaymentMethods,
-    getNetworks
-  }
+    return {
+        getMerchant,
+        getPaymentMethods,
+        getNetworks
+    }
 }

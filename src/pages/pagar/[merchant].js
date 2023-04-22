@@ -1,17 +1,17 @@
 import { useRouter } from "next/router";
 // import { PageWrapper } from "../components/components";
 import { useDispatch, useSelector } from "react-redux";
-import { PageWrapper, Spinner } from "../components/components";
-import WagmiWrapper from "../components/WalletConnectComponents/WagmiWrapper";
-import { Step1, Step2, Step3 } from "./pagar";
+import { PageWrapper, Spinner } from "@components/components";
+import WagmiWrapper from "@components/WalletConnectComponents/WagmiWrapper";
+import { Step1, Step2, Step3 } from "../../components/Pagar/pagar";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import { setStepBackward, setStepForward } from "../store/reducers/interactions";
+import { setStepBackward } from "@/store/reducers/interactions";
 import useSupabase, { supabase } from "@/helpers/hooks/useSupabase";
 import { avgPrice } from "@/helpers/quotes";
-import { setPaymentOptions } from "../store/reducers/options";
-import { setMerchant } from "../store/reducers/merchant";
-import Toast from "../components/Toast/Toast";
+import { setPaymentOptions } from "@/store/reducers/options";
+import { setMerchant } from "@/store/reducers/merchant";
+import Toast from "@components/Toast/Toast";
 
 
 const Pagar = ({ payment_options, merchant }) => {

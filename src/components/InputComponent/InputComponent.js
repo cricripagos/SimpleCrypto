@@ -1,9 +1,9 @@
-import { setFiatAmount } from "@/pages/store/reducers/order";
+import { setFiatAmount } from "@/store/reducers/order";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../Header/Header";
 
 const InputComponent = () => {
-  const {fiat_amount} = useSelector(state => state.order)
+  const { fiat_amount } = useSelector(state => state.order)
   const dispatch = useDispatch();
 
   const onChange = (e) => {
@@ -11,7 +11,7 @@ const InputComponent = () => {
     console.log('regex test', regex.test(e.target.value))
     if (e.target.value === '' || regex.test(e.target.value)) {
       dispatch(setFiatAmount(e.target.value))
-   }
+    }
   }
 
   return (
@@ -20,9 +20,9 @@ const InputComponent = () => {
       <p className="text-stone-200 pt-10">Ingresar monto en pesos argentinos ($ARS)</p>
       <div className="flex flex-row content-center items-center py-3">
         <p className="text-4xl pr-5 text-stone-200">ARS</p>
-        <input id="amount" placeholder="0000" value={fiat_amount} type='number' className="bg-transparent text-stone-200 placeholder:text-stone-400 text-6xl focus:border-transparent mt-3 focus:outline-none w-full" onChange={onChange} autoFocus={true}/>
-        </div>
-    </div> 
+        <input id="amount" placeholder="0000" value={fiat_amount} type='number' className="bg-transparent text-stone-200 placeholder:text-stone-400 text-6xl focus:border-transparent mt-3 focus:outline-none w-full" onChange={onChange} autoFocus={true} />
+      </div>
+    </div>
   )
 }
 

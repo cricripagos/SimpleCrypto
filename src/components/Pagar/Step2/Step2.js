@@ -1,16 +1,16 @@
-import Header from "@/pages/components/Header/Header"
-import { CryptoCard, Footer, Layout, WalletConnect } from "@/pages/components/components"
+import Header from "@components/Header/Header"
+import { CryptoCard, Footer, Layout, WalletConnect } from "@components/components"
 import { Web3Button } from "@web3modal/react";
 import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { setBtnDisabled, setStepBackward, setStepForward } from "@/pages/store/reducers/interactions"
+import { setBtnDisabled, setStepBackward, setStepForward } from "@/store/reducers/interactions"
 
 const Step2 = () => {
   const { address, isConnecting, isDisconnected } = useAccount();
   const dispatch = useDispatch()
-  const {payment} = useSelector(state => state.options)
-  const {payment_method} = useSelector(state => state.order)
+  const { payment } = useSelector(state => state.options)
+  const { payment_method } = useSelector(state => state.order)
   // Este booleano lo uso para que si vos ya tenes la wallet conectada de antes, 
   // no te pase al paso 3 de una, y que te de a vos la oportunidad para hacer click en continuar
   const [autoRedirect, setAutoRedirect] = useState(false)
@@ -27,11 +27,11 @@ const Step2 = () => {
 
   useEffect(() => {
     console.log('payment_method', address)
-    if (address !== undefined || payment_method !== null){
-    dispatch(setBtnDisabled(false))
-  } else {
-    dispatch(setBtnDisabled(true))
-  }
+    if (address !== undefined || payment_method !== null) {
+      dispatch(setBtnDisabled(false))
+    } else {
+      dispatch(setBtnDisabled(true))
+    }
   }, [payment_method, address])
 
   return (

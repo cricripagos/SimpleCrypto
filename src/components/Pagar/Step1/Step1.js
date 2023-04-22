@@ -1,5 +1,5 @@
-import { Footer, InputComponent, Layout } from "@/pages/components/components"
-import { setBtnDisabled } from "@/pages/store/reducers/interactions"
+import { Footer, InputComponent, Layout } from "@components/components"
+import { setBtnDisabled } from "@/store/reducers/interactions"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 

@@ -1,5 +1,5 @@
-import { supabase } from "@lib/hooks/useSupabase";
-import { avgPrice } from "@lib/utils/quotes";
+import { supabase } from "@/helpers/hooks/useSupabase";
+import { avgPrice } from "@/helpers/quotes";
 
 function App({ payment_options }) {
   return (

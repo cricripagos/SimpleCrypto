@@ -1,18 +1,18 @@
-import { setStepBackward, setStepForward } from "@/pages/store/reducers/interactions"
+import { setStepBackward, setStepForward } from "@/store/reducers/interactions"
 import { useDispatch, useSelector } from "react-redux"
 
-const Button = ({text, filled, action}) => {
-  const {btn_disabled, step} = useSelector(state => state.interactions)
+const Button = ({ text, filled, action }) => {
+  const { btn_disabled, step } = useSelector(state => state.interactions)
   const dispatch = useDispatch()
 
   const handleClick = () => {
-    if (action === 'forward'){
-    if(step !== 3){
-      dispatch(setStepForward())
+    if (action === 'forward') {
+      if (step !== 3) {
+        dispatch(setStepForward())
+      }
+    } else {
+      dispatch(setStepBackward())
     }
-  }else {
-    dispatch(setStepBackward())
-  }
   }
 
   return (

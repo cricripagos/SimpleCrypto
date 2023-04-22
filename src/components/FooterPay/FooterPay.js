@@ -1,5 +1,5 @@
 import Button from '../Buttons/Button'
-import { setStepBackward, setStepForward, setToast } from "@/pages/store/reducers/interactions"
+import { setStepBackward, setStepForward, setToast } from "@/store/reducers/interactions"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from 'react'
 import { useState } from 'react'
@@ -75,7 +75,7 @@ const PayButton = ({ text }) => {
         hash: data?.hash,
         onSuccess(d) {
             router.push(`/success/${d.transactionHash}`)
-            dispatch(setToast({ message: 'La transaccion fue correctamente procesada con hash:' + d.transactionHash, status: 'success', loading: false, show: true}))
+            dispatch(setToast({ message: 'La transaccion fue correctamente procesada con hash:' + d.transactionHash, status: 'success', loading: false, show: true }))
             // setStatus('La transaccion fue correctamente procesada con hash:' + d.transactionHash)
         },
     })
@@ -90,6 +90,7 @@ const PayButton = ({ text }) => {
 
 const FooterPay = ({ btn_msg }) => {
     const { fiat_amount } = useSelector(state => state.order)
+    const dispatch = useDispatch()
     const { step } = useSelector(state => state.interactions)
     //TODO agregar que si el usuario desconecta su wallet vuelve al paso anterior
     return (
