@@ -1,4 +1,4 @@
-import { lndClient } from "@lib/lndClient";
+import { lndClient } from "@/helpers/lndClient";
 import { WeakSet } from "core-js";
 
 const getCircularReplacer = () => {

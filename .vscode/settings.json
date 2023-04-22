@@ -1,8 +1,12 @@
 {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
-  }
+  "workbench.colorTheme": "Aylin Syntax",
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "svelte.enable-ts-plugin": true,
+  "editor.formatOnSave": true,
+  "[svelte]": {
+      "editor.defaultFormatter": "svelte.svelte-vscode"
+  },
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "terminal.integrated.enableMultiLinePasteWarning": false
+}

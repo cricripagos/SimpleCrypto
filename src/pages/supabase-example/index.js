@@ -1,6 +1,6 @@
 //import { supabase } from "@lib/hooks/useSupabase";
 
-import { supabase } from "@lib/hooks/useSupabase";
+import { supabase } from "@/helpers/hooks/useSupabase";
 
 function Page({ networks, merchants }) {
   return (

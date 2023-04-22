@@ -1,5 +1,5 @@
 import React from 'react'
-import PagarHandler from './PagarHandler'
+import PagarHandler from '../src/pages/components/WalletConnectComponents/PagarHandler'
 
 export const PagarLogic = ({ amount, current_blockchain, balance, beneficiary_address }) => {
     //check balance

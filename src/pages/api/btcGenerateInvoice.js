@@ -1,5 +1,6 @@
-import { lndClient } from "@lib/lndClient";
+import { lndClient } from "@/helpers/lndClient";
 
+//test.
 export default async function generateInvoice(req, res) {
   const merchant = "Tule";
   //const merchant = JSON.parse(req.body).merchant;

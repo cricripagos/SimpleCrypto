@@ -1,5 +1,5 @@
+import { useGetBalances } from '@/helpers/hooks/useGetBalances'
 import React, { useEffect, useState } from 'react'
-import { useGetBalance, useGetBalances } from '../../lib/const/hooks/wagmiHooks'
 
 
 
