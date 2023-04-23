@@ -20,7 +20,7 @@ function Step1() {
 
   return (
     <Layout>
-      <div className="flex flex-col h-screen justify-between">
+      <div className="flex flex-col h-screen">
         <InputComponent />
         <Footer btn_msg='Continuar' />
       </div>

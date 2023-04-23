@@ -27,7 +27,7 @@ const Step3 = () => {
         <div className="flex bg-green-1 rounded-b-lg justify-center items-center flex-col pb-5 px-7">
           <Header />
         </div>
-        <div className="flex flex-col h-full justify-between overflow-scroll overflow-x-hidden overflow-y-scroll scrollbar-hide px-7" id='scrollbox'>
+        <div className="flex flex-col h-full justify-between overflow-scroll overflow-x-hidden overflow-y-scroll scrollbar-hide px-7 mb-24 py-3" id='scrollbox'>
           <Web3Button balance="show" icon="show" />
           <EvmTokens />
         </div>

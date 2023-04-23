@@ -36,7 +36,7 @@ const Step2 = () => {
 
   return (
     <Layout>
-      <div className="flex flex-col h-screen justify-between">
+      <div className="flex flex-col h-screen ">
         <div className="flex bg-green-1 rounded-b-lg justify-center items-center flex-col pb-5 px-7">
           <Header />
         </div>
