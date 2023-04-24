@@ -14,11 +14,12 @@ const useCustomRead = (evm_contracts, address) => {
             functionName: 'balanceOf',
             args: [address],
             chainId: contract.chain_id
-    }
+        }
     })
     const { data, isError, isLoading } = useContractReads({ contracts: contracts_to_read })
+    const dataWithId = data.map((item, index) => [item, evm_contracts[index].id])
     useEffect(() => {
-        setRes({ data, isError, isLoading })
+        setRes({ dataWithId, isError, isLoading })
     }, [data, isError, isLoading])
     console.log('Cached balances...', res)
     return res
