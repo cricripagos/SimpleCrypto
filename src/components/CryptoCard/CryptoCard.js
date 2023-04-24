@@ -18,6 +18,9 @@ const CryptoCard = ({ logo_url, name, symbol, network, chain_id, id, contract, b
     } else {
       dispatch(setSelectedPaymentMethod(id))
       dispatch(setCryptoAmount(fiat_amount / price))
+      if (network){
+        dispatch(setChosenNetwork(network))
+      }
       // if (chain_id){
       //   dispatch(setChosenNetwork(chain_id))
       // }

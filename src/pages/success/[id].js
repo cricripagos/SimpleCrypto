@@ -12,11 +12,9 @@ const Success = () => {
   const order = useSelector((state) => state.order)
   const { payment, networks } = useSelector((state) => state.options)
 
-  {/*const method_chosen = payment?.find((method) => method.id === order.payment_method)
-  const network_chosen = networks?.find((network) => network.id === method_chosen.network)
+  console.log('order', order, networks)
 
-  console.log('order', order, method_chosen, network_chosen)
-console.log('slug', id)*/}
+  const chosen_network = networks ?? networks?.find((network) => network?.id === order?.chosen_network)
 
   const defaultOptions = {
     loop: false,
@@ -34,9 +32,11 @@ console.log('slug', id)*/}
   }, [])
 */}
 
-  {/*const navigateToExplorer = () => {
-    router.push(`${network_chosen.explorer}${id}`)
-  }*/}
+  const navigateToExplorer = () => {
+    router.push(`${chosen_network.explorer}${id}`)
+  }
+
+
 
   return (
     <PageWrapper>
@@ -50,7 +50,7 @@ console.log('slug', id)*/}
             />
             <p className='font-bold text-center'>Gracias por tu pago!</p>
             <p className='text-center mb-2'>Puedes ver tu transaccion en el escaner de la blockchain  </p>
-            <button className='bg-green-1 text-white p-2 rounded-md shadow-sm'  >
+            <button onClick={navigateToExplorer} className='bg-green-1 text-white p-2 rounded-md shadow-sm'  >
               Link al Scanner
             </button>
           </div>
