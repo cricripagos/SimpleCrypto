@@ -65,7 +65,7 @@ const EvmTokens = () => {
     return (
         <div className='w-full'>
             {loading ? <div>Loading...</div> :
-            paymentInfo.sort((a, b) => (formatEther(a.balance) < fiat_amount/a.price) - (formatEther(b.balance) < fiat_amount/b.price)).map((item, index) => {
+            paymentInfo.sort((a, b) => (formatEther(a?.balance) < fiat_amount/a?.price) - (formatEther(b?.balance) < fiat_amount/b?.price)).map((item, index) => {
             
             // const balance = balanceData.data && balanceData.data[index]
             // const currency = {...item, balance: balance}

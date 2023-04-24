@@ -17,6 +17,7 @@ const PayButton = ({ text }) => {
     //Existing payment options & merchant
     const { payment } = useSelector(state => state.options)
     const { keys } = useSelector(state => state.merchant)
+    console.log("chek store", payment, keys)
     const selectedMethod = payment.find((item) => item.id === payment_method)
     // Este deberia cambiarse por hook a store, pero tambien se tiene que editar a medida que sucedan cosas para que se renderize en otro componente
     const [status, setStatus] = useState('')
@@ -33,7 +34,7 @@ const PayButton = ({ text }) => {
         address: selectedMethod?.contract_address,
         abi: erc20ABI,
         functionName: 'transfer',
-        args: [beneficiary_address, formated_amount],
+        args: [keys?.key_evm, formated_amount],
         chainId: selectedMethod?.chain_id,
         onError(error) {
             setChainOk(false)

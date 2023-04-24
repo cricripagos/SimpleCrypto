@@ -19,7 +19,7 @@ export const interactionsSlice = createSlice({
         state.btn_disabled = action.payload
         },
         setStepForward: (state, action) => {
-        state.step += 1
+        state.step += action.payload ? action.payload : 1
         },
         setStepBackward: (state, action) => {
         state.step -= 1
