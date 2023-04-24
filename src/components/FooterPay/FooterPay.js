@@ -94,7 +94,7 @@ const FooterPay = ({ btn_msg }) => {
     const { step } = useSelector(state => state.interactions)
     //TODO agregar que si el usuario desconecta su wallet vuelve al paso anterior
     return (
-        <div className='bg-stone-100 py-5 px-7 flex flex-row justify-between fixed bottom-0 w-full'>
+        <div className='bg-stone-100 py-5 px-7 flex flex-row justify-between fixed bottom-0 w-full max-w-md'>
             <div>
                 <p className='font-bold'>Orden: #001</p>
                 <p>{fiat_amount} ARS($)</p>
