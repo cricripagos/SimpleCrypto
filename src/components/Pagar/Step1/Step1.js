@@ -11,7 +11,8 @@ function Step1() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (fiat_amount !== '') {
+    const amount = parseFloat(fiat_amount)
+    if (fiat_amount !== '' && fiat_amount !== 0) {
       dispatch(setBtnDisabled(false))
     } else {
       dispatch(setBtnDisabled(true))

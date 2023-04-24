@@ -10,7 +10,7 @@ const InputComponent = () => {
     const regex = /^-?\d*$/;
     console.log('regex test', regex.test(e.target.value))
     if (e.target.value === '' || regex.test(e.target.value)) {
-      dispatch(setFiatAmount(e.target.value))
+      dispatch(setFiatAmount(parseFloat(e.target.value)))
     }
   }
 
