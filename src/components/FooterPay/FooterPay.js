@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import { parseEther } from 'ethers/lib/utils.js'
 
 const PayButton = ({ text }) => {
-    const [chainOk, setChainOk] = useState(false)
+    const [chainOk, setChainOk] = useState(null)
     const { btn_disabled } = useSelector(state => state.interactions)
     const [triggerAfterSwitch, setTriggerAfterSwitch] = useState(false)
     //Payment method selected by user
@@ -85,12 +85,15 @@ const PayButton = ({ text }) => {
     console.log('la chain esta ok?', chainOk)
     return (
         <>
+        {chainOk === false ?
             <button className={`text-white px-7 font-semibold rounded-md ${chainOk ? 'bg-stone-400' : 'bg-green-1'}`} disabled={chainOk} onClick={handleNetworkChange}>
                 Cambiar Network
             </button>
+         :
             <button className={`text-white px-7 font-semibold rounded-md ${btn_disabled ? 'bg-stone-400' : 'bg-green-1'}`} disabled={btn_disabled} onClick={handleClick}>
                 {text}
             </button>
+            }
         </>
     )
 }
