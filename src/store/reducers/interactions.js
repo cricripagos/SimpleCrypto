@@ -29,10 +29,19 @@ export const interactionsSlice = createSlice({
             state.toast.message = action.payload.message
             state.toast.status = action.payload.status
             state.toast.loading = action.payload.loading
+        },
+        resetToast : (state, action) => {
+            state.toast = 
+            {
+                show: false,
+                message: '',
+                status: '',
+                loading: false
+            }
         }
     }
 })
 
-export const { setBtnDisabled, setStepForward, setStepBackward, setToast } = interactionsSlice.actions;
+export const { setBtnDisabled, setStepForward, setStepBackward, setToast, resetToast } = interactionsSlice.actions;
 
 export default interactionsSlice.reducer;

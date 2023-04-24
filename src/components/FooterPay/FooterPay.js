@@ -1,5 +1,5 @@
 import Button from '../Buttons/Button'
-import { setStepBackward, setStepForward, setToast } from "@/store/reducers/interactions"
+import { resetToast, setBtnDisabled, setStepBackward, setStepForward, setToast } from "@/store/reducers/interactions"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from 'react'
 import { useState } from 'react'
@@ -38,12 +38,14 @@ const PayButton = ({ text }) => {
         chainId: selectedMethod?.chain_id,
         onError(error) {
             setChainOk(false)
-
+            dispatch(setBtnDisabled(true))
             dispatch(setToast({ message: `Estas en la network ${chain.name}. Al intentar pagar te solicitaremos cambiar a ${selectedMethod?.chain_id.toString()} para poder realizar el pago en el token seleccionado`, status: 'warning', loading: false, show: true }))
             // setStatus('Estas en la network' + chain.name + '. Al intentar pagar te solicitaremos cambiar a ' + selectedMethod?.chain_id.toString() + ' para poder realizar el pago en el token seleccionado')
         },
         onSuccess(data) {
             setChainOk(selectedMethod?.chain_id == chain.id)
+            dispatch(setBtnDisabled(false))
+            dispatch(resetToast())
         },
     })
 
@@ -76,7 +78,6 @@ const PayButton = ({ text }) => {
         hash: data?.hash,
         onSuccess(d) {
             router.push(`/success/${d.transactionHash}`)
-            dispatch(setToast({ message: 'La transaccion fue correctamente procesada con hash:' + d.transactionHash, status: 'success', loading: false, show: true }))
             // setStatus('La transaccion fue correctamente procesada con hash:' + d.transactionHash)
         },
     })

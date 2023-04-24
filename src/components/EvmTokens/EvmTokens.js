@@ -56,11 +56,15 @@ const EvmTokens = () => {
         }
     }, [balanceData])
 
-    console.log('paymentInfo', paymentInfo)
+    console.log('paymentInfo', paymentInfo, balanceData)
 
     // console.log('paymentInfo', paymentInfo.sort((a, b) => (formatEther(a.balance) < fiat_amount/a.price) - (formatEther(b.balance) < fiat_amount/b.price)))
 
     // console.log('paymentInfo', paymentInfo.sort((a) => console.log( formatEther(a.balance) > fiat_amount/a.price)))
+
+    // useEffect(() => {
+
+    // }, [])
 
     return (
         <div className='w-full'>

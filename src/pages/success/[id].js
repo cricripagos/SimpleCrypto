@@ -11,10 +11,9 @@ const Success = () => {
   const { id } = router.query
   const order = useSelector((state) => state.order)
   const { payment, networks } = useSelector((state) => state.options)
+  const [network, setNetwork] = useState(null)
 
   console.log('order', order, networks)
-
-  const chosen_network = networks ?? networks?.find((network) => network?.id === order?.chosen_network)
 
   const defaultOptions = {
     loop: false,
@@ -32,8 +31,16 @@ const Success = () => {
   }, [])
 */}
 
+// useEffect(() => {
+//   const chosen_network = networks ?? networks.find((network) => network?.id === order?.chosen_network)
+//   setNetwork(chosen_network)
+// }, [order.chosen_network])
+
   const navigateToExplorer = () => {
+    const chosen_network = networks ? networks?.find((network) => network?.id === order?.chosen_network) : ''
+    if(chosen_network?.explorer){
     router.push(`${chosen_network.explorer}${id}`)
+  }
   }
 
 

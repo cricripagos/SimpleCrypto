@@ -13,8 +13,9 @@ const Step3 = () => {
   const { address } = useAccount()
   const dispatch = useDispatch()
 
+
   useEffect(() => {
-    if (address !== undefined && payment_method !== null) {
+    if (address !== undefined && payment_method !== null ) {
       dispatch(setBtnDisabled(false))
     } else {
       dispatch(setBtnDisabled(true))
