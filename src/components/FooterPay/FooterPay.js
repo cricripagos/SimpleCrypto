@@ -69,11 +69,7 @@ const PayButton = ({ text }) => {
         }
     }
     const handleClick = () => {
-        if (!chainOk) {
-            switchNetwork(selectedMethod?.chain_id)
-            setTriggerAfterSwitch(true)
-        } else {
-            //pagar
+        if (chainOk) {
             write?.()
         }
     }
