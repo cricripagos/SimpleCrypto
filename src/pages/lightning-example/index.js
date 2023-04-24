@@ -201,6 +201,15 @@ const App = ({ merchat }) => {
       attempt.userAddress = confirm.address;
       console.log(attempt);
       updateAttempt(attempt);
+      await fetch("/api/sendReceipt", {
+        method: "POST",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+          "Content-Type": "aplication/json",
+        },
+        body: JSON.stringify({ amount }),
+      });
     }
     // Esperamos 7 segundos para que el usuario vea que ya paso el pago
 
