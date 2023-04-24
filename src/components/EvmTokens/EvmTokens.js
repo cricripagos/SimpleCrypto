@@ -4,6 +4,7 @@ import { formatEther } from 'ethers/lib/utils.js'
 import { useSelector } from 'react-redux'
 import { CryptoCard } from '../components'
 import { useGetBalances } from '@/helpers/hooks/useGetBalances'
+import { FixedNumber } from 'ethers'
 
 
 const EvmTokens = () => {
@@ -16,13 +17,16 @@ const EvmTokens = () => {
     const [paymentInfo, setPaymentInfo] = useState(null)
     useEffect(() => {
         if (balanceData.dataWithId !== undefined) {
-            const obj = payment.map((item) => {
-                console.log(item)
-                //const balance = balanceData.data[index]
-                //console.log('ver ak', balanceData.data, item)
-                //return { ...item, balance: balance }
+            let temp_payments = payment.map((item) => {
+                const balance = balanceData.dataWithId.filter(balanceItem => balanceItem[1] === item.id)[0][0]
+                const amount_in_fn = FixedNumber.from((fiat_amount / item.price).toPrecision(6))
+                //TODO esta funcion enrealidad esta mal, hay que adaptar el balance para que se pase de wei a Eth. Creo que con formatEth sale
+                const enough_balance = balance.gt(amount_in_fn)
+                return { ...item, balance, enough_balance }
             })
-            setPaymentInfo(obj)
+            temp_payments.sort((a, b) => { return b.enough_balance - a.enough_balance })
+            console.log(temp_payments)
+            setPaymentInfo(temp_payments)
             setLoading(false)
         }
     }, [balanceData])
@@ -30,7 +34,7 @@ const EvmTokens = () => {
     return (
         <div className='w-full'>
             {loading ? <div>Loading...</div> :
-                paymentInfo.sort((a, b) => (formatEther(a?.balance) < fiat_amount / a?.price) - (formatEther(b?.balance) < fiat_amount / b?.price)).map((item, index) => {
+                paymentInfo?.map((item, index) => {
 
                     // const balance = balanceData.data && balanceData.data[index]
                     // const currency = {...item, balance: balance}
