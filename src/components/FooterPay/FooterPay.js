@@ -63,6 +63,11 @@ const PayButton = ({ text }) => {
             setTriggerAfterSwitch(false)
         }
     }, [chain.id, selectedMethod?.chain_id])
+    const handleNetworkChange = () => {
+        if (!chainOk) {
+            switchNetwork(selectedMethod?.chain_id)
+        }
+    }
     const handleClick = () => {
         if (!chainOk) {
             switchNetwork(selectedMethod?.chain_id)
@@ -81,8 +86,12 @@ const PayButton = ({ text }) => {
             // setStatus('La transaccion fue correctamente procesada con hash:' + d.transactionHash)
         },
     })
+    console.log('la chain esta ok?', chainOk)
     return (
         <>
+            <button className={`text-white px-7 font-semibold rounded-md ${chainOk ? 'bg-stone-400' : 'bg-green-1'}`} disabled={chainOk} onClick={handleNetworkChange}>
+                Cambiar Network
+            </button>
             <button className={`text-white px-7 font-semibold rounded-md ${btn_disabled ? 'bg-stone-400' : 'bg-green-1'}`} disabled={btn_disabled} onClick={handleClick}>
                 {text}
             </button>
