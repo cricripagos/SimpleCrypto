@@ -21,11 +21,11 @@ const PayButton = ({ text }) => {
     // Este deberia cambiarse por hook a store, pero tambien se tiene que editar a medida que sucedan cosas para que se renderize en otro componente
     const [status, setStatus] = useState('')
     //Create payment attempt
-    const {createPaymentAttempt} = useSupabase()
+    const {createPayment} = useSupabase()
     const dispatch = useDispatch()
     const router = useRouter()
-    const { chain, chains } = useNetwork()
-    const { error, isLoading: isloadingNetwork, pendingChainId, switchNetwork } = useSwitchNetwork()
+    const { chain } = useNetwork()
+    const { isLoading: isloadingNetwork, pendingChainId, switchNetwork } = useSwitchNetwork()
     // Este Hook me mantiene actualizado lo que quiero hacer en el contrato
     const formated_amount = crypto_amount ? parseEther(crypto_amount.toString().slice(0, 18).toString()) : 0
     const { config } = usePrepareContractWrite({
@@ -47,16 +47,26 @@ const PayButton = ({ text }) => {
         },
     })
 
+    const paymentCreation =  async (data) => {
+        console.log('data', data)
+        await createPayment(data)
+    }
+
 
     const { data, isLoading: isLoadingPay, isSuccess: isSuccessPay, write } = useContractWrite({
         ...config, onSuccess(data) {
+            console.log('data------', data.hash)
+            paymentCreation({
+                crypto_amount: crypto_amount,
+                payment_option: payment_method,
+                transaction_hash: data.hash,
+            })
             dispatch(setToast({ message: 'La transaccion esta en proceso', status: '', loading: true, show: true }))
             // setStatus('La transaccion esta en proceso')
         }
     })
     useEffect(() => {
         if (triggerAfterSwitch) {
-            // pagar
             write?.()
             setTriggerAfterSwitch(false)
         }
@@ -66,9 +76,8 @@ const PayButton = ({ text }) => {
             switchNetwork(selectedMethod?.chain_id)
         }
     }
-    const handleClick = () => {
+    const handleClick = async () => {
         if (chainOk) {
-            createPaymentAttempt()
             write?.()
         }
     }

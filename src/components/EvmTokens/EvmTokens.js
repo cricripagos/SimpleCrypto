@@ -17,7 +17,6 @@ const EvmTokens = () => {
     const [paymentInfo, setPaymentInfo] = useState(null)
     useEffect(() => {
         if (balanceData.dataWithId !== undefined) {
-            console.log('Balance data is...', balanceData.dataWithId)
             let temp_payments = payment.map((item) => {
                 const balance = balanceData.dataWithId.filter(balanceItem => balanceItem[1] === item.id)[0][0]
                 const balance_toNum = formatEther(balance)
@@ -29,7 +28,6 @@ const EvmTokens = () => {
                 return { ...item, balance, enough_balance }
             })
             temp_payments.sort((a, b) => { return b.enough_balance - a.enough_balance })
-            console.log(temp_payments)
             setPaymentInfo(temp_payments)
             setLoading(false)
         }

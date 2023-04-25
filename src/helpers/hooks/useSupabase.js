@@ -1,7 +1,8 @@
 import { setMerchant } from "@/store/reducers/merchant";
 import { setNetworksOptions, setPaymentOptions } from "@/store/reducers/options";
 import { createClient } from "@supabase/supabase-js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useAccount } from "wagmi";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -11,9 +12,11 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default function useSupabase() {
     const dispatch = useDispatch()
+    const {id} = useSelector(state => state.merchant)
+    const {fiat_amount} = useSelector(state => state.order)
+    const {address} = useAccount()
 
     const getMerchant = async (merchant) => {
-        console.log('Getting merchant', merchant, supabase)
         const promise = await supabase.from('merchants').select().eq('slug', merchant).then(({ data, error }) => {
             if (data) {
                 dispatch(setMerchant(data))
@@ -50,17 +53,20 @@ export default function useSupabase() {
         return promise
     }
 
-    const createPaymentAttempt = async () => {
-        const promise = await fetch('api/createPaymentAttempt', {
+    const createPayment = async ({crypto_amount, payment_option, transaction_hash}) => {
+        console.log('Creating payment attempt........', crypto_amount, fiat_amount, id, payment_option, address, transaction_hash)
+        const promise = await fetch('/api/createPaymentAttempt', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                amount: 1000,
-                merchant: 'test',
-                payment_method: 'lightning',
-                network: 'bitcoin'
+                crypto_amount: crypto_amount,
+                fiat_amount: fiat_amount,
+                merchant: id,
+                payment_option: payment_option,
+                user_address: address,
+                transaction_hash: transaction_hash,
             })
         }).then(res => { 
             console.log('Response is...', res)
@@ -68,6 +74,7 @@ export default function useSupabase() {
         }).catch(err => {
             console.log('Error is...', err)
         })
+        console.log('Promise is...', promise)
         return promise
     }
 
@@ -76,6 +83,6 @@ export default function useSupabase() {
         getMerchant,
         getPaymentMethods,
         getNetworks,
-        createPaymentAttempt
+        createPayment
     }
 }

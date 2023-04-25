@@ -13,7 +13,6 @@ const Success = () => {
   const { payment, networks } = useSelector((state) => state.options)
   const [network, setNetwork] = useState(null)
 
-  console.log('order', order, networks)
 
   const defaultOptions = {
     loop: false,

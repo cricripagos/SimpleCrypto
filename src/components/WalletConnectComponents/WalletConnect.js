@@ -7,11 +7,6 @@ const WalletConnect = () => {
     const { wagmiClient, ethereumClient, projectId } = useWagmiClient()
     const {address} = useAccount()
 
-    useEffect(() => {
-        console.log('Address is...', address)
-    }, [address])
-
-
   return (
     <div>
         <WagmiConfig client={wagmiClient}>
