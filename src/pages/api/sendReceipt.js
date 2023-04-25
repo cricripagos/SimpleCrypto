@@ -24,8 +24,6 @@ export default async function generateInvoice(req, res) {
     phone = "+5491154865055";
   }
 
-  console.log("phone", phone);
-
   const message =
     "Hola, " +
     merchant +
