@@ -1,8 +1,11 @@
 import { supabase } from "@/helpers/hooks/useSupabase";
 const { v4: uuidv4 } = require("uuid");
 export default async function createPaymentAttempt(req, res) {
+  console.log('Creating payment attempt....', req.body)
+  const body = JSON.parse(req.body)
   const merchant = JSON.parse(req.body).merchant;
   const amount = JSON.parse(req.body).amount;
+  const payment_option = JSON.parse(req.body).payment_option;
   const expiration_date = JSON.parse(req.body).expiration_date;
 
   /* Usamos uuid como identificador unico para el intento de pago.
@@ -11,7 +14,7 @@ export default async function createPaymentAttempt(req, res) {
 
   const attempt = {
     fiat_total_amount: amount,
-    payment_option: 1, // cambiar por el payment option id
+    payment_option: payment_option, // cambiar por el payment option id
     crypto_total_amount: amount, // cambiar por la crypto con la que se paga
     merchant: merchant ? merchant : 3, // cambiar por el merchant de la url
     uuid: uuidv4(), // Universally unique identifier https://en.wikipedia.org/wiki/Universally_unique_identifier

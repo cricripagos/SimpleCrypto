@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { useSwitchNetwork, useNetwork, usePrepareContractWrite, useContractWrite, useWaitForTransaction, erc20ABI } from 'wagmi'
 import { useRouter } from 'next/router'
 import { parseEther } from 'ethers/lib/utils.js'
+import useSupabase from '@/helpers/hooks/useSupabase'
 
 const PayButton = ({ text }) => {
     const [chainOk, setChainOk] = useState(null)
@@ -21,6 +22,8 @@ const PayButton = ({ text }) => {
     const selectedMethod = payment.find((item) => item.id === payment_method)
     // Este deberia cambiarse por hook a store, pero tambien se tiene que editar a medida que sucedan cosas para que se renderize en otro componente
     const [status, setStatus] = useState('')
+    //Create payment attempt
+    const {createPaymentAttempt} = useSupabase()
     const dispatch = useDispatch()
     const router = useRouter()
     //TODO cambiar variable de abajo por hook a store
@@ -70,6 +73,7 @@ const PayButton = ({ text }) => {
     }
     const handleClick = () => {
         if (chainOk) {
+            createPaymentAttempt()
             write?.()
         }
     }

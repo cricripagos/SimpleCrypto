@@ -50,10 +50,32 @@ export default function useSupabase() {
         return promise
     }
 
+    const createPaymentAttempt = async () => {
+        const promise = await fetch('api/createPaymentAttempt', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                amount: 1000,
+                merchant: 'test',
+                payment_method: 'lightning',
+                network: 'bitcoin'
+            })
+        }).then(res => { 
+            console.log('Response is...', res)
+            return res.json()
+        }).catch(err => {
+            console.log('Error is...', err)
+        })
+        return promise
+    }
+
 
     return {
         getMerchant,
         getPaymentMethods,
-        getNetworks
+        getNetworks,
+        createPaymentAttempt
     }
 }
