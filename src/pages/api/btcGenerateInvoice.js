@@ -2,13 +2,15 @@ import { lndClient } from "@/helpers/lndClient";
 
 //test.
 export default async function generateInvoice(req, res) {
-  const merchant = "Tule";
+  const body = JSON.parse(req.body)
+  console.log(body)
   //const merchant = JSON.parse(req.body).merchant;
-  const amount = JSON.parse(req.body).amount;
+  const crypto_amount = body.crypto_amount;
+  const merchant = body.merchant
 
-  console.log("Procesando ", amount, " satoshis");
+  console.log("Procesando ", crypto_amount, " satoshis");
   let request = {
-    value: amount,
+    value: crypto_amount,
     memo: merchant,
   };
 

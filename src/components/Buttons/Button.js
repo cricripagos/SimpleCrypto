@@ -7,7 +7,7 @@ const Button = ({ text, filled, action }) => {
   const {payment_method} = useSelector(state => state.order)
   const {payment} = useSelector(state => state.options)
   const payment_selected = payment[payment_method - 1]
-  const {generateInvoice} = usePayBTC()
+  const {generateAttempt} = usePayBTC()
 
   console.log('Method', payment[payment_method - 1])
 
@@ -23,9 +23,11 @@ const Button = ({ text, filled, action }) => {
           //RUN EVM functions
         } else {
           //RUN NON-EVM functions
+          if(payment_selected.symbol === 'BTC') {
+            generateAttempt()
+          }
           
           console.log('Its non- evm')
-          generateInvoice()
         }
       }
     } else {

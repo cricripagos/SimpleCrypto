@@ -5,6 +5,7 @@ const initialState = {
     crypto_amount: null,
     payment_method: null,
     chosen_network: null,
+    payment_process_id: null
 }
 
 export const orderSlice = createSlice({
@@ -22,7 +23,10 @@ export const orderSlice = createSlice({
         },
         setChosenNetwork: (state, action) => {
             state.chosen_network = action.payload
-        }
+        },
+        setPaymentProcessId: (state, action) => {
+            state.chosen_network = action.payload
+        } 
     }
 })
 
