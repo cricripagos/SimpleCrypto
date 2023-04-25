@@ -15,6 +15,12 @@ const App = ({ merchat }) => {
     setAmount(result);
   };
 
+  function getCurrentURL() {
+    const url = window.location.href;
+    const merchant = url.substr(url.lastIndexOf("/") + 1);
+    return merchant;
+  }
+
   const sleep = (ms) => {
     const promise = new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -201,6 +207,7 @@ const App = ({ merchat }) => {
       attempt.userAddress = confirm.address;
       console.log(attempt);
       updateAttempt(attempt);
+      const merchat = getCurrentURL();
       await fetch("/api/sendReceipt", {
         method: "POST",
         headers: {
@@ -208,7 +215,11 @@ const App = ({ merchat }) => {
           "Access-Control-Allow-Credentials": true,
           "Content-Type": "aplication/json",
         },
-        body: JSON.stringify({ amount }),
+        body: JSON.stringify({
+          amount: amount,
+          merchant: merchat,
+          txHash: fact.hash,
+        }),
       });
     }
     // Esperamos 7 segundos para que el usuario vea que ya paso el pago
