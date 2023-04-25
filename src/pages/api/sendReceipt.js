@@ -1,8 +1,9 @@
-export default async function generateInvoice(req, res) {
-  const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
-  const authToken = process.env.NEXT_PUBLIC_TWILIO_TOKEN;
-  const client = require("twilio")(accountSid, authToken);
+import { supabase } from "@/helpers/hooks/useSupabase";
+const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
+const authToken = process.env.NEXT_PUBLIC_TWILIO_TOKEN;
+const client = require("twilio")(accountSid, authToken);
 
+export default async function generateInvoice(req, res) {
   const amount = JSON.parse(req.body).amount;
   const merchant = JSON.parse(req.body).merchant;
   //const blockscan = JSON.parse(req.body).blockscan;
@@ -11,6 +12,19 @@ export default async function generateInvoice(req, res) {
 
   const blockscan = "https://blockstream.info/tx/";
   const payment_option = "satoshis";
+
+  const merchant_info = await supabase
+    .from("merchants")
+    .select("phone_number")
+    .eq("slug", merchant);
+
+  let phone = merchant_info?.data[0]?.phone_number;
+
+  if (phone == undefined) {
+    phone = "+5491154865055";
+  }
+
+  console.log("phone", phone);
 
   const message =
     "Hola, " +
@@ -29,7 +43,7 @@ export default async function generateInvoice(req, res) {
     .create({
       body: message,
       from: "whatsapp:+16319003288",
-      to: "whatsapp:+5215544944051",
+      to: "whatsapp:" + phone,
     })
     .then((message) => {
       console.log(message.sid);
