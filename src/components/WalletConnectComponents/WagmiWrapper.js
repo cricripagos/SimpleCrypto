@@ -19,15 +19,6 @@ const ethereumClient = new EthereumClient(wagmiClient, chains);
 
 
 const WagmiWrapper = ({ children }) => {
-  {/*const current_blockchain = useNetwork("loading");
-  const { address, isConnecting, isDisconnected } = useAccount();
-  useEffect(() => {
-    if (current_blockchain.chain !== undefined) {
-      console.log("elnetwork es", current_blockchain.chain.name);
-    }
-  }, [current_blockchain]);*/}
-
-
   return (
     <>
       <WagmiConfig client={wagmiClient}>
