@@ -11,22 +11,15 @@ const Step2 = () => {
   const dispatch = useDispatch()
   const { payment } = useSelector(state => state.options)
   const { payment_method } = useSelector(state => state.order)
-  // Este booleano lo uso para que si vos ya tenes la wallet conectada de antes, 
-  // no te pase al paso 3 de una, y que te de a vos la oportunidad para hacer click en continuar
   const [autoRedirect, setAutoRedirect] = useState(false)
-
-  console.log('payment', payment)
-
   useEffect(() => {
     if (address == undefined) setAutoRedirect(true)
     if (address !== undefined) {
-      console.log('Se conecto la wallet con address:', address)
       if (autoRedirect) dispatch(setStepForward())
     }
   }, [address])
 
   useEffect(() => {
-    console.log('payment_method', address)
     if (address !== undefined || payment_method !== null) {
       dispatch(setBtnDisabled(false))
     } else {

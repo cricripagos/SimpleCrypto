@@ -14,11 +14,9 @@ const PayButton = ({ text }) => {
     const [triggerAfterSwitch, setTriggerAfterSwitch] = useState(false)
     //Payment method selected by user
     const { payment_method, crypto_amount } = useSelector(state => state.order)
-    console.log("chek store", payment_method, crypto_amount)
     //Existing payment options & merchant
     const { payment } = useSelector(state => state.options)
     const { keys } = useSelector(state => state.merchant)
-    console.log("chek store", payment, keys)
     const selectedMethod = payment.find((item) => item.id === payment_method)
     // Este deberia cambiarse por hook a store, pero tambien se tiene que editar a medida que sucedan cosas para que se renderize en otro componente
     const [status, setStatus] = useState('')
@@ -26,13 +24,10 @@ const PayButton = ({ text }) => {
     const {createPaymentAttempt} = useSupabase()
     const dispatch = useDispatch()
     const router = useRouter()
-    //TODO cambiar variable de abajo por hook a store
-    const beneficiary_address = '0x5139A3CBD90800Ca9783010B5d984363D6E77dc6'
     const { chain, chains } = useNetwork()
     const { error, isLoading: isloadingNetwork, pendingChainId, switchNetwork } = useSwitchNetwork()
     // Este Hook me mantiene actualizado lo que quiero hacer en el contrato
     const formated_amount = crypto_amount ? parseEther(crypto_amount.toString().slice(0, 18).toString()) : 0
-    console.log("aca mirar", formated_amount.toString())
     const { config } = usePrepareContractWrite({
         address: selectedMethod?.contract_address,
         abi: erc20ABI,
@@ -86,17 +81,16 @@ const PayButton = ({ text }) => {
             // setStatus('La transaccion fue correctamente procesada con hash:' + d.transactionHash)
         },
     })
-    console.log('la chain esta ok?', chainOk)
     return (
         <>
-        {chainOk === false ?
-            <button className={`text-white px-7 font-semibold rounded-md ${chainOk ? 'bg-stone-400' : 'bg-green-1'}`} disabled={chainOk} onClick={handleNetworkChange}>
-                Cambiar Network
-            </button>
-         :
-            <button className={`text-white px-7 font-semibold rounded-md ${btn_disabled ? 'bg-stone-400' : 'bg-green-1'}`} disabled={btn_disabled} onClick={handleClick}>
-                {text}
-            </button>
+            {chainOk === false ?
+                <button className={`text-white px-7 font-semibold rounded-md ${chainOk ? 'bg-stone-400' : 'bg-green-1'}`} disabled={chainOk} onClick={handleNetworkChange}>
+                    Cambiar Network
+                </button>
+                :
+                <button className={`text-white px-7 font-semibold rounded-md ${btn_disabled ? 'bg-stone-400' : 'bg-green-1'}`} disabled={btn_disabled} onClick={handleClick}>
+                    {text}
+                </button>
             }
         </>
     )
