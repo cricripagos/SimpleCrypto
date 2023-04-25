@@ -1,9 +1,21 @@
 import { useSelector } from 'react-redux'
 import Button from '../Buttons/Button'
+import { useEffect, useState } from 'react'
 
 const Footer = ({ btn_msg }) => {
-  const { fiat_amount } = useSelector(state => state.order)
+  const { fiat_amount, payment_method } = useSelector(state => state.order)
+  const {payment} = useSelector(state => state.interactions)
   const { step } = useSelector(state => state.interactions)
+  const [continueText, setContinueText] = useState('Continuar')
+
+  useEffect(() => {
+    if(payment_method){
+      setContinueText('Pagar')
+    } else {
+      setContinueText('Continuar')
+    }
+  }, [payment_method])
+
   return (
     <div className='bg-stone-100 py-5 px-7 flex flex-row justify-between fixed bottom-0 w-full max-w-md'>
       <div>
@@ -13,7 +25,7 @@ const Footer = ({ btn_msg }) => {
       <div className='flex'>
         {step === 2 &&
           <Button filled={false} text='Volver' action='back' />}
-        <Button filled={true} text={btn_msg} action='forward' />
+        <Button filled={true} text={continueText} action='forward' />
       </div>
     </div>
   )

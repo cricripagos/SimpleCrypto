@@ -14,6 +14,7 @@ export default function useSupabase() {
     const dispatch = useDispatch()
     const {id} = useSelector(state => state.merchant)
     const {fiat_amount} = useSelector(state => state.order)
+    const {payment} = useSelector(state => state.options)
     const {address} = useAccount()
 
     const getMerchant = async (merchant) => {
@@ -54,7 +55,7 @@ export default function useSupabase() {
     }
 
     const createPayment = async ({crypto_amount, payment_option, transaction_hash}) => {
-        console.log('Creating payment attempt........', crypto_amount, fiat_amount, id, payment_option, address, transaction_hash)
+        const option = payment.find((option) => option.id === payment_option)
         const promise = await fetch('/api/createPaymentAttempt', {
             method: 'POST',
             headers: {
@@ -65,10 +66,10 @@ export default function useSupabase() {
                 fiat_amount: fiat_amount,
                 merchant: id,
                 payment_option: payment_option,
-                user_address: address,
+                user_address: option.evm ? address : null,
                 transaction_hash: transaction_hash,
             })
-        }).then(res => { 
+        }).then((res) => { 
             console.log('Response is...', res)
             return res.json()
         }).catch(err => {
@@ -83,6 +84,6 @@ export default function useSupabase() {
         getMerchant,
         getPaymentMethods,
         getNetworks,
-        createPayment
+        createPayment,
     }
 }

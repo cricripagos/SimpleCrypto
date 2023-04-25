@@ -42,7 +42,7 @@ const Step2 = () => {
           })}
 
         </div>
-        <Footer btn_msg='Continuar' />
+        <Footer />
       </div>
     </Layout>
   )

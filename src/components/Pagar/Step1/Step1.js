@@ -21,7 +21,7 @@ function Step1() {
     <Layout>
       <div className="flex flex-col h-screen relative">
         <InputComponent />
-        <Footer btn_msg='Continuar' />
+        <Footer />
       </div>
     </Layout>
   )

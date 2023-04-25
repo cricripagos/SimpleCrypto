@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require("uuid");
 
 
 export default async function createPaymentAttempt(req, res) {
-  console.log('Creating payment attempt....')
+  console.log('Creating payment attempt....', req.body)
   const body = req.body
   const merchant = body.merchant;
   const crypto_amount = body.crypto_amount;
@@ -12,8 +12,6 @@ export default async function createPaymentAttempt(req, res) {
   const expiration_date = body.expiration_date;
   const user_address = body.user_address;
   const transaction_hash = body.transaction_hash;
-
-  console.log('Body is...', body)
 
 
   /* Usamos uuid como identificador unico para el intento de pago.
@@ -29,6 +27,8 @@ export default async function createPaymentAttempt(req, res) {
     merchant: merchant, // cambiar por el merchant de la url
     uuid: uuidv4(), // Universally unique identifier https://en.wikipedia.org/wiki/Universally_unique_identifier
   };
+
+  console.log('Attempt is...', attempt)
 
   /*
   Si se envia una fecha de expiracion, se agrega al intento.
@@ -46,9 +46,9 @@ export default async function createPaymentAttempt(req, res) {
     .select("uuid");
 
   if (error) {
-    console.log(error);
+    console.log('There was an error in payment creation...', error);
     res.status(500).json(error);
   }
 
-  res.status(200).json(body);
+  res.status(200).json(data);
 }

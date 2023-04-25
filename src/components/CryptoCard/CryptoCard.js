@@ -11,7 +11,7 @@ const CryptoCard = ({ logo_url, name, symbol, network, chain_id, id, contract, b
   const { networks } = useSelector(state => state.options)
 
   const handleClick = () => {
-    if (!enough_balance) return
+    if (evm && !enough_balance) return
     if (payment_method === id) {
       dispatch(setSelectedPaymentMethod(null))
     } else {
@@ -25,7 +25,7 @@ const CryptoCard = ({ logo_url, name, symbol, network, chain_id, id, contract, b
 
 
   return (
-    <div className={`flex shadow-md ${!enough_balance && 'opacity-60'} rounded-md p-5 flex-row justify-between ring-2 my-3 w-full ${payment_method === id ? 'ring-gray-400 bg-gray-100' : 'ring-2 ring-gray-100'}`} onClick={handleClick}>
+    <div className={`flex shadow-md ${evm && !enough_balance && 'opacity-60'} rounded-md p-5 flex-row justify-between ring-2 my-3 w-full ${payment_method === id ? 'ring-gray-400 bg-gray-100' : 'ring-2 ring-gray-100'}`} onClick={handleClick}>
       <div className="flex flex-row items-center relative">
         <div className="bg-gray-200 h-12 w-12 rounded-md p-1">
           <img className="inline-block h-10 w-10 rounded-md" src={logo_url} />

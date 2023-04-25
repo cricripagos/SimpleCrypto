@@ -48,7 +48,6 @@ const PayButton = ({ text }) => {
     })
 
     const paymentCreation =  async (data) => {
-        console.log('data', data)
         await createPayment(data)
     }
 
