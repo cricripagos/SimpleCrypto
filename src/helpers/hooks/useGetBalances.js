@@ -23,7 +23,6 @@ const useCustomRead = (evm_contracts, address) => {
             setRes({ dataWithId, isError, isLoading })
         }
     }, [data, isError, isLoading])
-    console.log('Cached balances...', res)
     return res
 }
 

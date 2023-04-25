@@ -19,13 +19,15 @@ const EvmTokens = () => {
         if (balanceData.dataWithId !== undefined) {
             let temp_payments = payment.map((item) => {
                 const balance = balanceData.dataWithId.filter(balanceItem => balanceItem[1] === item.id)[0][0]
-                const amount_in_fn = FixedNumber.from((fiat_amount / item.price).toPrecision(6))
+                const balance_toNum = formatEther(balance)
+                const amount = (fiat_amount/item.price).toPrecision(6)
+                // const amount_in_fn = FixedNumber.from((fiat_amount / item.price).toPrecision(6))
                 //TODO esta funcion enrealidad esta mal, hay que adaptar el balance para que se pase de wei a Eth. Creo que con formatEth sale
-                const enough_balance = balance.gt(amount_in_fn)
+                const enough_balance = balance_toNum >= amount
+                // console.log(balance_toNum, amount, enough_balance)
                 return { ...item, balance, enough_balance }
             })
             temp_payments.sort((a, b) => { return b.enough_balance - a.enough_balance })
-            console.log(temp_payments)
             setPaymentInfo(temp_payments)
             setLoading(false)
         }
