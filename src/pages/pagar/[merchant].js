@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-// import { PageWrapper } from "../components/components";
+// import { PageWrapper } from "../components/components"
 import { useDispatch, useSelector } from "react-redux";
 import { PageWrapper, Spinner } from "@components/components";
 import WagmiWrapper from "@components/WalletConnectComponents/WagmiWrapper";
