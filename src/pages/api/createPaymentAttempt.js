@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require("uuid");
 
 
 export default async function createPaymentAttempt(req, res) {
-  console.log('Creating payment attempt....', req.body)
+  console.log('Creating payment attempt....', req.body,)
   const body = req.body
   const merchant = body.merchant;
   const crypto_amount = body.crypto_amount;

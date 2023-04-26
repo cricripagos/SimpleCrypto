@@ -1,6 +1,4 @@
 import { setChosenNetwork, setCryptoAmount, setSelectedPaymentMethod } from "@/store/reducers/order"
-import { BigNumber } from "ethers"
-import { formatEther } from "ethers/lib/utils.js"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Balance from "./Balance"
@@ -9,9 +7,10 @@ const CryptoCard = ({ logo_url, name, symbol, network, chain_id, id, contract, b
   const { payment_method, fiat_amount } = useSelector(state => state.order)
   const dispatch = useDispatch()
   const { networks } = useSelector(state => state.options)
+  const [comingSoon, setComingSoon] = useState(false)
 
   const handleClick = () => {
-    if (evm && !enough_balance) return
+    if ((evm && !enough_balance) || comingSoon) return
     if (payment_method === id) {
       dispatch(setSelectedPaymentMethod(null))
     } else {
@@ -22,10 +21,24 @@ const CryptoCard = ({ logo_url, name, symbol, network, chain_id, id, contract, b
       }
     }
   }
+  
+
+  useEffect(() => {
+    if (symbol === 'BCH'){
+      console.log('BCH')
+      setComingSoon(true)
+    }
+  }, [])
 
 
   return (
-    <div className={`flex shadow-md ${evm && !enough_balance && 'opacity-60'} rounded-md p-5 flex-row justify-between ring-2 my-3 w-full ${payment_method === id ? 'ring-gray-400 bg-gray-100' : 'ring-2 ring-gray-100'}`} onClick={handleClick}>
+    <div className="relative w-full">
+      {comingSoon && 
+      <div className="bg-gray-100 absolute z-20 top-3 left-0.5 p-4 w-1/4 rounded-full">
+          <p className="text-sm font-bold h-full text-center">Coming soon</p>
+          </div>
+          }
+    <div className={`flex shadow-md ${(evm && !enough_balance) || comingSoon && 'opacity-60'} rounded-md p-5 flex-row justify-between ring-2 my-3 w-full ${payment_method === id ? 'ring-gray-400 bg-gray-100' : 'ring-2 ring-gray-100'}`} onClick={handleClick}>
       <div className="flex flex-row items-center relative">
         <div className="bg-gray-200 h-12 w-12 rounded-md p-1">
           <img className="inline-block h-10 w-10 rounded-md" src={logo_url} />
@@ -43,6 +56,7 @@ const CryptoCard = ({ logo_url, name, symbol, network, chain_id, id, contract, b
         {balance && <Balance balance={enough_balance} />}
       </div>
 
+    </div>
     </div>
   )
 }

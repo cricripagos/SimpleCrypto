@@ -87,7 +87,9 @@ const App = ({ merchat }) => {
         "Access-Control-Allow-Credentials": true,
         "Content-Type": "aplication/json",
       },
-      body: JSON.stringify({ amount }),
+      body: JSON.stringify({ 
+        amount: amount, 
+        payment_option: 1 }),
     })
       .then((res) => res.json())
       .then((data) => {
