@@ -4,10 +4,11 @@ import { requestProvider } from "webln";
 import useSupabase from "./useSupabase";
 
 export default function usePayBTC() { 
-    const {createPayment} = useSupabase()
+    const {createPayment, updatePayment} = useSupabase()
     const {crypto_amount, payment_method} = useSelector(state => state.order)
     const {name} = useSelector(state => state.merchant)
     const [webln, setWebln] = useState()
+    const [userId, setUserId] = useState(false)
 
     const generateInvoice = async () => {
         const promise = await fetch("/api/btcGenerateInvoice", {
@@ -39,18 +40,41 @@ export default function usePayBTC() {
 
     const generateAttempt = async () => {
         console.log('Generating invoice........', crypto_amount, payment_method)
-        const attempt = await createPayment({crypto_amount: crypto_amount, payment_option: payment_method})
+        const {uuid} = await createPayment({crypto_amount: crypto_amount, payment_option: payment_method})
         const invoice = await generateInvoice()
 
-        console.log(attempt, invoice)
+        console.log(uuid, invoice)
         
-        if (!attempt[0].uuid) {
+
+
+        // ERROR HANDLERS
+        if (!uuid) {
+            //ERROR: en la creacion de la DB
             alert("Hubo un error al generar tu pago, vuelve a intentar.");
             return;
-          } else {
-            return attempt[0].uuid
-          }
-
+        }
+        if (!invoice.invoice || !invoice.hash) {
+            //ERROR: en la creaction de un invoice
+            const update = updatePayment({
+                attempt: uuid,
+                status: 'failed'
+            })
+            console.log(update)
+            alert("Hubo un error al generar tu pago, vuelve a intentar.");
+            return;
+        } else {
+            const wallet = await getWalletProvider().catch(e => alert("Debes conectarte desde tu celular"))
+            console.log('WALLET IS', wallet)
+            if(wallet){
+                try {
+                    const sendPaymentResponse = await wallet.sendPayment(invoice.invoice);
+                    console.log(sendPaymentResponse);
+                } catch (e){
+                    alert(e)
+                }
+                console.log('hola')
+            }
+        }
     }
 
     const getWalletProvider = async () => {
@@ -59,8 +83,8 @@ export default function usePayBTC() {
             return provider
         } catch (err) {
             console.log(err.message)
+            return err.message
         }
-        
     }
 
 

@@ -75,8 +75,28 @@ export default function useSupabase() {
         }).catch(err => {
             console.log('Error is...', err)
         })
-        console.log('Promise is...', promise)
-        return promise
+        console.log('Payment Promise is...', promise)
+        return promise[0]
+    }
+
+    const updatePayment = async (payload) => {
+        // const payload = {
+        //     attempt: uuid,
+        //     status: status,
+        //     txHash: attempt.transactionHash,
+        //     userAddress: attempt.userAddress,
+        //   };
+
+          const promise = await fetch("/api/updatePaymentAttempt", {
+            method: "POST",
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Credentials": true,
+              "Content-Type": "aplication/json",
+            },
+            body: JSON.stringify(payload),
+          })
+          return promise
     }
 
 
@@ -85,5 +105,6 @@ export default function useSupabase() {
         getPaymentMethods,
         getNetworks,
         createPayment,
+        updatePayment
     }
 }

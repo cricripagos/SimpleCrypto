@@ -1,4 +1,5 @@
-import { lndClient } from "@/helpers/lndClient";
+import { lndClient } from "@lib/lndClient";
+
 
 //test.
 export default async function generateInvoice(req, res) {
