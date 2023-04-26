@@ -8,7 +8,8 @@ const initialState = {
         message: '',
         status: '',
         loading: false
-    }
+    },
+    invoice: null
 }
 
 export const interactionsSlice = createSlice({
@@ -38,10 +39,13 @@ export const interactionsSlice = createSlice({
                 status: '',
                 loading: false
             }
+        },
+        setInvoice: (state, action) => {
+            state.invoice = action.payload
         }
     }
 })
 
-export const { setBtnDisabled, setStepForward, setStepBackward, setToast, resetToast } = interactionsSlice.actions;
+export const { setBtnDisabled, setStepForward, setStepBackward, setToast, resetToast, setInvoice } = interactionsSlice.actions;
 
 export default interactionsSlice.reducer;

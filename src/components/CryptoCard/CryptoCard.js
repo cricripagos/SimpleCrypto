@@ -32,13 +32,13 @@ const CryptoCard = ({ logo_url, name, symbol, network, chain_id, id, contract, b
 
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full my-3">
       {comingSoon && 
-      <div className="bg-gray-100 absolute z-20 top-3 left-0.5 p-4 w-1/4 rounded-full">
-          <p className="text-sm font-bold h-full text-center">Coming soon</p>
+      <div className="bg-green-2 absolute z-20 top-1 left-0.5 p-2 w-1/3 rounded-full drop-shadow-sm">
+          <p className="text-sm text-white leading-3 font-semibold h-full text-center">Coming soon</p>
           </div>
           }
-    <div className={`flex shadow-md ${(evm && !enough_balance) || comingSoon && 'opacity-60'} rounded-md p-5 flex-row justify-between ring-2 my-3 w-full ${payment_method === id ? 'ring-gray-400 bg-gray-100' : 'ring-2 ring-gray-100'}`} onClick={handleClick}>
+    <div className={`flex shadow-md ${(evm && !enough_balance) || comingSoon && 'opacity-60'} rounded-md p-5 flex-row justify-between ring-2 w-full ${payment_method === id ? 'ring-gray-400 bg-gray-100' : 'ring-2 ring-gray-100'}`} onClick={handleClick}>
       <div className="flex flex-row items-center relative">
         <div className="bg-gray-200 h-12 w-12 rounded-md p-1">
           <img className="inline-block h-10 w-10 rounded-md" src={logo_url} />

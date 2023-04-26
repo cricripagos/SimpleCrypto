@@ -1,5 +1,6 @@
+import { setInvoice } from "@/store/reducers/interactions";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { requestProvider } from "webln";
 import useSupabase from "./useSupabase";
 
@@ -7,6 +8,7 @@ export default function usePayBTC() {
     const {createPayment, updatePayment} = useSupabase()
     const {crypto_amount, payment_method} = useSelector(state => state.order)
     const {name} = useSelector(state => state.merchant)
+    const dispatch = useDispatch()
     const [webln, setWebln] = useState()
     const [userId, setUserId] = useState(false)
 
@@ -38,6 +40,16 @@ export default function usePayBTC() {
         return promise
     }
 
+    const getWalletProvider = async () => {
+        try {
+            const provider = requestProvider()
+            return provider
+        } catch (err) {
+            console.log(err.message)
+            return err.message
+        }
+    }
+
     const generateAttempt = async () => {
         console.log('Generating invoice........', crypto_amount, payment_method)
         const {uuid} = await createPayment({crypto_amount: crypto_amount, payment_option: payment_method})
@@ -63,27 +75,19 @@ export default function usePayBTC() {
             alert("Hubo un error al generar tu pago, vuelve a intentar.");
             return;
         } else {
-            const wallet = await getWalletProvider().catch(e => alert("Debes conectarte desde tu celular"))
+            const wallet = await getWalletProvider()
+            // const wallet = false
             console.log('WALLET IS', wallet)
             if(wallet){
                 try {
                     const sendPaymentResponse = await wallet.sendPayment(invoice.invoice);
                     console.log(sendPaymentResponse);
                 } catch (e){
-                    alert(e)
+                    alert('Error', e)
                 }
-                console.log('hola')
+            } else {
+                dispatch(setInvoice(invoice))
             }
-        }
-    }
-
-    const getWalletProvider = async () => {
-        try {
-            const provider = requestProvider()
-            return provider
-        } catch (err) {
-            console.log(err.message)
-            return err.message
         }
     }
 
