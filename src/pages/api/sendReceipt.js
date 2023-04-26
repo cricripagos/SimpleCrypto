@@ -3,7 +3,7 @@ const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
 const authToken = process.env.NEXT_PUBLIC_TWILIO_TOKEN;
 const client = require("twilio")(accountSid, authToken);
 
-export default async function generateInvoice(req, res) {
+export default async function sendReceipt(req, res) {
   const amount = JSON.parse(req.body).amount;
   const merchant = JSON.parse(req.body).merchant;
   //const blockscan = JSON.parse(req.body).blockscan;
