@@ -1,4 +1,4 @@
-// import { PageWrapper } from "../components/components";
+// import { PageWrapper } from "../components/components"
 import useSupabase, { supabase } from "@/helpers/hooks/useSupabase";
 import { avgPrice } from "@/helpers/quotes";
 import { setStepBackward } from "@/store/reducers/interactions";
