@@ -16,15 +16,9 @@ export default async function createPaymentAttempt(req, res) {
   const payment_option = body.payment_option
     ? body.payment_option
     : JSON.parse(req.body).payment_option;
-  const expiration_date = body.expiration_date
-    ? body.expiration_date
-    : JSON.parse(req.body).expiration_date;
-  const user_address = body.user_address
-    ? body.user_address
-    : JSON.parse(req.body).user_address;
-  const transaction_hash = body.transaction_hash
-    ? body.transaction_hash
-    : JSON.parse(req.body).transaction_hash;
+  const expiration_date = body.expiration_date ? body.expiration_date : null;
+  const user_address = body.user_address ? body.user_address : null;
+  const transaction_hash = body.transaction_hash ? body.transaction_hash : null;
 
   /* Usamos uuid como identificador unico para el intento de pago.
     Esto nos permite idetificar el intento aunque se hayan creado
