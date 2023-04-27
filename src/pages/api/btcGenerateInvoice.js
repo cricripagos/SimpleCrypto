@@ -10,6 +10,7 @@ export default async function generateInvoice(req, res) {
   const merchant = body.merchant
 
   console.log("Procesando ", crypto_amount, " satoshis");
+
   let request = {
     value: crypto_amount,
     memo: merchant,
@@ -20,6 +21,7 @@ export default async function generateInvoice(req, res) {
     if (err) {
       console.log("Error: " + err);
     }
+    console.log(response);
     res.json(response);
   });
 }

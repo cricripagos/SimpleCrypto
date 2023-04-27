@@ -4,11 +4,14 @@ const authToken = process.env.NEXT_PUBLIC_TWILIO_TOKEN;
 const client = require("twilio")(accountSid, authToken);
 
 export default async function sendReceipt(req, res) {
-  const amount = JSON.parse(req.body).amount;
+  const fiat_amount = JSON.parse(req.body).amount;
+  const crypto_amount = JSON.parse(req.body).amount;
   const merchant = JSON.parse(req.body).merchant;
   //const blockscan = JSON.parse(req.body).blockscan;
   //const payment_option = JSON.parse(req.body).payment_option;
   const txHash = JSON.parse(req.body).txHash;
+  const elapsed_time = "12 s";
+  const date = new Date().toJSON();
 
   const blockscan = "https://blockstream.info/tx/";
   const payment_option = "satoshis";
@@ -23,7 +26,7 @@ export default async function sendReceipt(req, res) {
   if (phone == undefined) {
     phone = "+5491154865055";
   }
-
+  /*
   const message =
     "Hola, " +
     merchant +
@@ -32,6 +35,27 @@ export default async function sendReceipt(req, res) {
     " " +
     payment_option +
     ".\nAcá puedes ver la transacción " +
+    blockscan +
+    txHash;
+*/
+  const message =
+    "Hola, " +
+    merchant +
+    ", acabas de recibir un pago en " +
+    payment_option +
+    " 🥳!" +
+    "\n____________________\n\n*Fecha:* " +
+    date +
+    "\n*Monto en Pesos:* " +
+    fiat_amount +
+    " $" +
+    "\n____________________\n*Monto en Crypto:* " +
+    crypto_amount +
+    " " +
+    payment_option +
+    "\n*Demora en procesamiento:* " +
+    elapsed_time +
+    "\n*Confirmacion de Transaccion:* " +
     blockscan +
     txHash;
 
