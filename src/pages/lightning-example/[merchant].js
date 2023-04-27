@@ -217,7 +217,7 @@ const App = () => {
       attempt.userAddress = confirm.address;
       console.log(attempt);
       updateAttempt(attempt);
-      const merchat = getCurrentURL();
+      const merchant = getCurrentURL();
       await fetch("/api/sendReceipt", {
         method: "POST",
         headers: {
@@ -227,7 +227,7 @@ const App = () => {
         },
         body: JSON.stringify({
           amount: amount,
-          merchant: merchat,
+          merchant: merchant,
           txHash: fact.hash,
         }),
       });

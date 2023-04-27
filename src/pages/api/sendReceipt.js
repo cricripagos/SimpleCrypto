@@ -5,7 +5,7 @@ const client = require("twilio")(accountSid, authToken);
 
 export default async function sendReceipt(req, res) {
   const fiat_amount = JSON.parse(req.body).amount;
-  const crypto_amount = JSON.parse(req.body).amount;
+  const crypto_amount = JSON.parse(req.body).crypto_amount;
   const merchant = JSON.parse(req.body).merchant;
   //const blockscan = JSON.parse(req.body).blockscan;
   //const payment_option = JSON.parse(req.body).payment_option;
