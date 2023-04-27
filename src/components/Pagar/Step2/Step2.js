@@ -1,4 +1,5 @@
 import Modal from "@/components/Modal/Modal";
+import usePayBTC from "@/helpers/hooks/usePayBTC";
 import { setBtnDisabled, setStepForward } from "@/store/reducers/interactions";
 import Header from "@components/Header/Header";
 import { CryptoCard, Footer, Layout } from "@components/components";
@@ -13,6 +14,7 @@ const Step2 = () => {
   const { payment } = useSelector(state => state.options)
   const { payment_method } = useSelector(state => state.order)
   const {invoice} = useSelector(state => state.interactions)
+  const {checkInvoice} = usePayBTC()
   const [autoRedirect, setAutoRedirect] = useState(false)
   useEffect(() => {
     if (address == undefined) setAutoRedirect(true)
@@ -28,6 +30,13 @@ const Step2 = () => {
       dispatch(setBtnDisabled(true))
     }
   }, [payment_method, address])
+
+  useEffect(() => {
+    if(invoice) {
+      //Run check invoice transaction
+      checkInvoice(invoice.invoice)
+    }
+  }, [invoice])
 
   return (
     <Layout>
