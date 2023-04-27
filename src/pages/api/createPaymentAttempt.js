@@ -1,18 +1,30 @@
 import { supabase } from "@/helpers/hooks/useSupabase";
 const { v4: uuidv4 } = require("uuid");
 
-
 export default async function createPaymentAttempt(req, res) {
-  console.log('Creating payment attempt....', req.body)
-  const body = req.body
-  const merchant = body.merchant;
-  const crypto_amount = body.crypto_amount;
-  const fiat_amount = body.fiat_amount;
-  const payment_option = body.payment_option;
-  const expiration_date = body.expiration_date;
-  const user_address = body.user_address;
-  const transaction_hash = body.transaction_hash;
-
+  console.log("Creating payment attempt....", req.body);
+  const body = req.body;
+  const merchant = body.merchant
+    ? body.merchant
+    : JSON.parse(req.body).merchant;
+  const crypto_amount = body.crypto_amount
+    ? body.crypto_amount
+    : JSON.parse(req.body).crypto_amount;
+  const fiat_amount = body.fiat_amount
+    ? body.fiat_amount
+    : JSON.parse(req.body).fiat_amount;
+  const payment_option = body.payment_option
+    ? body.payment_option
+    : JSON.parse(req.body).payment_option;
+  const expiration_date = body.expiration_date
+    ? body.expiration_date
+    : JSON.parse(req.body).expiration_date;
+  const user_address = body.user_address
+    ? body.user_address
+    : JSON.parse(req.body).user_address;
+  const transaction_hash = body.transaction_hash
+    ? body.transaction_hash
+    : JSON.parse(req.body).transaction_hash;
 
   /* Usamos uuid como identificador unico para el intento de pago.
     Esto nos permite idetificar el intento aunque se hayan creado
@@ -28,7 +40,7 @@ export default async function createPaymentAttempt(req, res) {
     uuid: uuidv4(), // Universally unique identifier https://en.wikipedia.org/wiki/Universally_unique_identifier
   };
 
-  console.log('Attempt is...', attempt)
+  console.log("Attempt is...", attempt);
 
   /*
   Si se envia una fecha de expiracion, se agrega al intento.
@@ -46,7 +58,7 @@ export default async function createPaymentAttempt(req, res) {
     .select("uuid");
 
   if (error) {
-    console.log('There was an error in payment creation...', error);
+    console.log("There was an error in payment creation...", error);
     res.status(500).json(error);
   }
 
