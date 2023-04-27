@@ -1,10 +1,9 @@
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Button from '../Buttons/Button'
-import { useEffect, useState } from 'react'
 
-const Footer = ({ btn_msg }) => {
+const Footer = () => {
   const { fiat_amount, payment_method } = useSelector(state => state.order)
-  const {payment} = useSelector(state => state.interactions)
   const { step } = useSelector(state => state.interactions)
   const [continueText, setContinueText] = useState('Continuar')
 

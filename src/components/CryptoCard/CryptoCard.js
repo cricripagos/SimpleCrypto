@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Balance from "./Balance"
 
-const CryptoCard = ({ logo_url, name, symbol, network, chain_id, id, contract, balance, price, evm, enough_balance }) => {
+const CryptoCard = ({ logo_url, name, symbol, network, id, balance, price, evm, enough_balance }) => {
   const { payment_method, fiat_amount } = useSelector(state => state.order)
   const dispatch = useDispatch()
   const { networks } = useSelector(state => state.options)
@@ -28,7 +28,9 @@ const CryptoCard = ({ logo_url, name, symbol, network, chain_id, id, contract, b
       console.log('BCH')
       setComingSoon(true)
     }
-  }, [])
+  }, [symbol])
+
+  console.log(symbol, (evm && !enough_balance) || comingSoon)
 
 
   return (
@@ -38,13 +40,13 @@ const CryptoCard = ({ logo_url, name, symbol, network, chain_id, id, contract, b
           <p className="text-sm text-white leading-3 font-semibold h-full text-center">Coming soon</p>
           </div>
           }
-    <div className={`flex shadow-md ${(evm && !enough_balance) || comingSoon && 'opacity-60'} rounded-md p-5 flex-row justify-between ring-2 w-full ${payment_method === id ? 'ring-gray-400 bg-gray-100' : 'ring-2 ring-gray-100'}`} onClick={handleClick}>
+    <div className={`flex shadow-md ${((evm && !enough_balance) || comingSoon) && 'opacity-60'} rounded-md p-5 flex-row justify-between ring-2 w-full ${payment_method === id ? 'ring-gray-400 bg-gray-100' : 'ring-2 ring-gray-100'}`} onClick={handleClick}>
       <div className="flex flex-row items-center relative">
         <div className="bg-gray-200 h-12 w-12 rounded-md p-1">
-          <img className="inline-block h-10 w-10 rounded-md" src={logo_url} />
+          <img className="inline-block h-10 w-10 rounded-md" src={logo_url} alt="Logo" />
         </div>
         <div className="absolute -top-1 -left-2">
-          {network && <img className="w-5 h-5" src={network && networks.find((net) => net.id === network).logo_url} />}
+          {network && <img className="w-5 h-5" src={network && networks.find((net) => net.id === network).logo_url} alt='Network logo' />}
         </div>
         <div className="ml-3">
           <p>{name}</p>

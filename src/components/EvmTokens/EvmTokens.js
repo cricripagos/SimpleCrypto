@@ -1,10 +1,8 @@
-import React, { useState } from 'react'
-import { useEffect } from 'react'
+import { useGetBalances } from '@/helpers/hooks/useGetBalances'
 import { formatEther } from 'ethers/lib/utils.js'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { CryptoCard } from '../components'
-import { useGetBalances } from '@/helpers/hooks/useGetBalances'
-import { FixedNumber } from 'ethers'
 
 
 const EvmTokens = () => {
@@ -15,6 +13,8 @@ const EvmTokens = () => {
     const balanceData = useGetBalances(payment)
     const [loading, setLoading] = useState(true)
     const [paymentInfo, setPaymentInfo] = useState(null)
+
+
     useEffect(() => {
         if (balanceData.dataWithId !== undefined) {
             let temp_payments = payment.map((item) => {

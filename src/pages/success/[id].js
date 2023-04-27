@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { PageWrapper, Spinner } from '@components/components'
-import Lottie from 'react-lottie';
-import animationData from '../../../public/lotties/check.json'
-import { useSelector } from 'react-redux';
+import { PageWrapper, Spinner } from '@components/components';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import Lottie from 'react-lottie';
+import { useSelector } from 'react-redux';
+import animationData from '../../../public/lotties/check.json';
 
 const Success = () => {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const { id } = router.query
   const order = useSelector((state) => state.order)
-  const { payment, networks } = useSelector((state) => state.options)
-  const [network, setNetwork] = useState(null)
+  const { networks } = useSelector((state) => state.options)
 
 
   const defaultOptions = {

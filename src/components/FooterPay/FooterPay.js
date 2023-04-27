@@ -1,12 +1,11 @@
-import Button from '../Buttons/Button'
-import { resetToast, setBtnDisabled, setStepBackward, setStepForward, setToast } from "@/store/reducers/interactions"
-import { useDispatch, useSelector } from "react-redux"
-import { useEffect } from 'react'
-import { useState } from 'react'
-import { useSwitchNetwork, useNetwork, usePrepareContractWrite, useContractWrite, useWaitForTransaction, erc20ABI } from 'wagmi'
-import { useRouter } from 'next/router'
-import { parseEther } from 'ethers/lib/utils.js'
 import useSupabase from '@/helpers/hooks/useSupabase'
+import { resetToast, setBtnDisabled, setStepBackward, setToast } from "@/store/reducers/interactions"
+import { parseEther } from 'ethers/lib/utils.js'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from "react-redux"
+import { erc20ABI, useContractWrite, useNetwork, usePrepareContractWrite, useSwitchNetwork, useWaitForTransaction } from 'wagmi'
+import Button from '../Buttons/Button'
 
 const PayButton = ({ text }) => {
     const [chainOk, setChainOk] = useState(null)
@@ -25,7 +24,7 @@ const PayButton = ({ text }) => {
     const dispatch = useDispatch()
     const router = useRouter()
     const { chain } = useNetwork()
-    const { isLoading: isloadingNetwork, pendingChainId, switchNetwork } = useSwitchNetwork()
+    const { isLoading: isloadingNetwork, switchNetwork } = useSwitchNetwork()
     // Este Hook me mantiene actualizado lo que quiero hacer en el contrato
     const formated_amount = crypto_amount ? parseEther(crypto_amount.toString().slice(0, 18).toString()) : 0
     const { config } = usePrepareContractWrite({
@@ -34,13 +33,13 @@ const PayButton = ({ text }) => {
         functionName: 'transfer',
         args: [keys?.key_evm, formated_amount],
         chainId: selectedMethod?.chain_id,
-        onError(error) {
+        onError() {
             setChainOk(false)
             dispatch(setBtnDisabled(true))
             dispatch(setToast({ message: `Estas en la network ${chain.name}. Al intentar pagar te solicitaremos cambiar a ${selectedMethod?.chain_id.toString()} para poder realizar el pago en el token seleccionado`, status: 'warning', loading: false, show: true }))
             // setStatus('Estas en la network' + chain.name + '. Al intentar pagar te solicitaremos cambiar a ' + selectedMethod?.chain_id.toString() + ' para poder realizar el pago en el token seleccionado')
         },
-        onSuccess(data) {
+        onSuccess() {
             setChainOk(selectedMethod?.chain_id == chain.id)
             dispatch(setBtnDisabled(false))
             dispatch(resetToast())
@@ -61,6 +60,7 @@ const PayButton = ({ text }) => {
                 transaction_hash: data.hash,
             })
             dispatch(setToast({ message: 'La transaccion esta en proceso', status: '', loading: true, show: true }))
+            console.log('Is success', isSuccessPay)
             // setStatus('La transaccion esta en proceso')
         }
     })
@@ -69,7 +69,7 @@ const PayButton = ({ text }) => {
             write?.()
             setTriggerAfterSwitch(false)
         }
-    }, [chain.id, selectedMethod?.chain_id])
+    }, [chain.id, selectedMethod?.chain_id, triggerAfterSwitch, write])
     const handleNetworkChange = () => {
         if (!chainOk) {
             switchNetwork(selectedMethod?.chain_id)
@@ -82,13 +82,15 @@ const PayButton = ({ text }) => {
     }
     useEffect(() => isloadingNetwork ? setStatus('Estamos esperando que aceptes la solicitud de cambio de Network en tu wallet') : undefined, [isloadingNetwork]);
     useEffect(() => isLoadingPay ? setStatus('Estamos esperando que firmes la transaccion en tu wallet') : undefined, [isLoadingPay]);
-    const { dataWait, isErrorWait, isLoadingWait } = useWaitForTransaction({
+    const { dataWait} = useWaitForTransaction({
         hash: data?.hash,
         onSuccess(d) {
             router.push(`/success/${d.transactionHash}`)
             // setStatus('La transaccion fue correctamente procesada con hash:' + d.transactionHash)
         },
     })
+    console.log('dataWait', dataWait)
+    console.log(status)
     return (
         <>
             {chainOk === false ?
@@ -107,7 +109,6 @@ const PayButton = ({ text }) => {
 const FooterPay = ({ btn_msg }) => {
     const { fiat_amount } = useSelector(state => state.order)
     const dispatch = useDispatch()
-    const { step } = useSelector(state => state.interactions)
     //TODO agregar que si el usuario desconecta su wallet vuelve al paso anterior
     return (
         <div className='bg-stone-100 py-5 px-7 flex flex-row justify-between fixed bottom-0 w-full max-w-md'>

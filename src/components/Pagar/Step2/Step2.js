@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useAccount } from "wagmi";
 
 const Step2 = () => {
-  const { address, isConnecting, isDisconnected } = useAccount();
+  const { address } = useAccount();
   const dispatch = useDispatch()
   const { payment } = useSelector(state => state.options)
   const { payment_method } = useSelector(state => state.order)
@@ -41,7 +41,7 @@ const Step2 = () => {
           <Web3Button balance="show" icon="show" />
           <p className="text-lg font-semibold py-3">Or pay with</p>
           {payment.map((item, index) => {
-            return item.evm === false && <CryptoCard {...item} />
+            return item.evm === false && <CryptoCard {...item} key={index} />
           })}
 
         </div>

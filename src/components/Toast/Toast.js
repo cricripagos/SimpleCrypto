@@ -1,12 +1,8 @@
-import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import chooseColor from './toast_functions'
-import { Spinner } from '../components'
-import { useDispatch, useSelector } from 'react-redux'
-import { setToast } from '@/store/reducers/interactions'
 
 const Toast = () => {
     const { message, loading, status } = useSelector(state => state.interactions.toast)
-    const dispatch = useDispatch()
 
     // useEffect(() => {
     //     setTimeout(() => {

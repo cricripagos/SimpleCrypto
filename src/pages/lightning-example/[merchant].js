@@ -4,7 +4,7 @@ import { requestProvider } from "webln";
 
 var Promise = require("promise");
 
-const App = ({ merchat }) => {
+const App = () => {
   const [amount, setAmount] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPaid, setIsPaid] = useState(false);

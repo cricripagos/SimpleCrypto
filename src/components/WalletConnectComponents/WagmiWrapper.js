@@ -1,10 +1,8 @@
 import { EthereumClient, w3mConnectors, w3mProvider } from "@web3modal/ethereum";
-import { Web3Button, Web3Modal } from "@web3modal/react";
-import { useEffect } from "react";
+import { Web3Modal } from "@web3modal/react";
 import {
-  configureChains, createClient,
-  useAccount, useNetwork,
-  WagmiConfig
+  WagmiConfig,
+  configureChains, createClient
 } from "wagmi";
 import { arbitrum, bsc, mainnet, polygon, polygonMumbai } from "wagmi/chains";
 const chains = [arbitrum, mainnet, polygon, polygonMumbai, bsc];

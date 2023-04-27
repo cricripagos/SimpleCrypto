@@ -22,7 +22,7 @@ export const interactionsSlice = createSlice({
         setStepForward: (state, action) => {
         state.step += action.payload ? action.payload : 1
         },
-        setStepBackward: (state, action) => {
+        setStepBackward: (state) => {
         state.step -= 1
         },
         setToast: (state, action) => {
@@ -31,7 +31,7 @@ export const interactionsSlice = createSlice({
             state.toast.status = action.payload.status
             state.toast.loading = action.payload.loading
         },
-        resetToast : (state, action) => {
+        resetToast : (state) => {
             state.toast = 
             {
                 show: false,

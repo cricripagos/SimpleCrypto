@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { erc20ABI, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 
-const PagarHandler = ({ current_blockchain, token, chosen_blockchain, contract_address, payer_address, amount, beneficiary_address, chain_id }) => {
+const PagarHandler = ({ contract_address, beneficiary_address, chain_id }) => {
     const [message, setMessage] = useState('');
     const { config } = usePrepareContractWrite({
         address: contract_address,
@@ -10,7 +10,7 @@ const PagarHandler = ({ current_blockchain, token, chosen_blockchain, contract_a
         args: [beneficiary_address, 1],
         chainId: chain_id
     })
-    const { data, isLoading, isSuccess, write } = useContractWrite({
+    const { data, write } = useContractWrite({
         ...config, onSuccess(data) {
             setMessage('La transaccion esta en proceso')
         }
@@ -22,13 +22,15 @@ const PagarHandler = ({ current_blockchain, token, chosen_blockchain, contract_a
         }
     }, [data?.hash])
 
-    const { dataWait, isErrorWait, isLoadingWait } = useWaitForTransaction({
+    const { dataWait } = useWaitForTransaction({
         hash: data?.hash,
         onSuccess(d) {
             setMessage('La transaccion fue correctamente procesada con hash:' + d.hash)
             console.log('Success del wait', d)
         },
     })
+
+    console.log('dataWait', dataWait)
 
 
 

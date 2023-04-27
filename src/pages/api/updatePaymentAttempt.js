@@ -1,5 +1,4 @@
 import { supabase } from "@/helpers/hooks/useSupabase";
-const { v4: uuidv4 } = require("uuid");
 
 export default async function updatePaymentAttempt(req, res) {
   const attemptUuid = JSON.parse(req.body).attempt;

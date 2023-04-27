@@ -30,7 +30,7 @@ export default function useSupabase() {
         return promise
     }
 
-    const getPaymentMethods = async (merchant) => {
+    const getPaymentMethods = async () => {
         const promise = await supabase.from('payment_options').select().then(({ data, error }) => {
             if (data) {
                 dispatch(setPaymentOptions(data))

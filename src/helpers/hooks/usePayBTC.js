@@ -1,5 +1,4 @@
 import { setInvoice } from "@/store/reducers/interactions";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { requestProvider } from "webln";
 import useSupabase from "./useSupabase";
@@ -9,8 +8,6 @@ export default function usePayBTC() {
     const {crypto_amount, payment_method} = useSelector(state => state.order)
     const {name} = useSelector(state => state.merchant)
     const dispatch = useDispatch()
-    const [webln, setWebln] = useState()
-    const [userId, setUserId] = useState(false)
 
     const generateInvoice = async () => {
         const promise = await fetch("/api/btcGenerateInvoice", {
