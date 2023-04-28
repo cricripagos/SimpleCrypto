@@ -8,13 +8,15 @@ export default async function sendReceipt(req, res) {
   const crypto_amount = JSON.parse(req.body).crypto_amount;
   const merchant = JSON.parse(req.body).merchant;
   //const blockscan = JSON.parse(req.body).blockscan;
-  //const payment_option = JSON.parse(req.body).payment_option;
+  const payment_option = JSON.parse(req.body).payment_option;
   const txHash = JSON.parse(req.body).txHash;
   const elapsed_time = "12 s";
   const date = new Date().toJSON();
 
-  const blockscan = "https://blockstream.info/tx/";
-  const payment_option = "satoshis";
+  const payment_method = await supabase
+    .from("payment_options")
+    .select("name, symbol, block_explorer")
+    .eq("id", payment_option);
 
   const merchant_info = await supabase
     .from("merchants")
@@ -26,7 +28,9 @@ export default async function sendReceipt(req, res) {
   if (phone == undefined) {
     phone = "+5491154865055";
   }
+
   /*
+  // Template receipt
   const message =
     "Hola, " +
     merchant +
@@ -38,11 +42,12 @@ export default async function sendReceipt(req, res) {
     blockscan +
     txHash;
 */
+  // Template receipt_v1
   const message =
     "Hola, " +
     merchant +
     ", acabas de recibir un pago en " +
-    payment_option +
+    payment_method?.data[0]?.name +
     " 🥳!" +
     "\n____________________\n\n*Fecha:* " +
     date +
@@ -52,14 +57,12 @@ export default async function sendReceipt(req, res) {
     "\n____________________\n*Monto en Crypto:* " +
     crypto_amount +
     " " +
-    payment_option +
+    payment_method?.data[0]?.symbol +
     "\n*Demora en procesamiento:* " +
     elapsed_time +
     "\n*Confirmacion de Transaccion:* " +
-    blockscan +
+    payment_method?.data[0]?.block_explorer +
     txHash;
-
-  console.log(message);
 
   client.messages
     .create({
