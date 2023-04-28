@@ -27,6 +27,7 @@ export default function usePayBTC() {
       .then((res) => res.json())
       .then((data) => {
         try {
+          console.log(data);
           const inv = {
             invoice: data.payment_request,
             hash: Buffer.from(data.r_hash).toString("hex"),
@@ -54,9 +55,11 @@ export default function usePayBTC() {
       .then((res) => res.json())
       .then((data) => {
         try {
+          console.log("entro aca ", data.json());
+          const d = data.json();
           const inv = {
-            settled: data.settled,
-            address: Buffer.from(data.payment_addr).toString("hex"),
+            settled: d.settled,
+            address: Buffer.from(d.payment_addr).toString("hex"),
           };
           return inv;
         } catch (e) {
