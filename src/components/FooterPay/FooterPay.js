@@ -120,8 +120,13 @@ const PayButton = ({ text }) => {
   useEffect(
     () =>
       isloadingNetwork
-        ? setStatus(
-            "Estamos esperando que aceptes la solicitud de cambio de Network en tu wallet"
+        ? dispatch(
+            setToast({
+              message: "Estamos esperando que aceptes la solicitud de cambio de Network en tu wallet",
+              status: "",
+              loading: true,
+              show: true,
+            })
           )
         : undefined,
     [isloadingNetwork]
