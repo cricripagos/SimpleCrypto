@@ -4,13 +4,13 @@ export default function useWhatsApp() {
   const { fiat_amount, crypto_amount, payment_method } = useSelector(
     (state) => state.order
   );
-  const { name } = useSelector((state) => state.merchant);
+  const { slug } = useSelector((state) => state.merchant);
 
   const sendReceipt = async (transaction_hash) => {
     const receipt = {
       amount: fiat_amount,
       crypto_amount: crypto_amount,
-      merchant: name,
+      merchant: slug,
       txHash: transaction_hash,
       payment_option: payment_method,
     };
