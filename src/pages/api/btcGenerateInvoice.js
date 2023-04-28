@@ -20,7 +20,6 @@ export default async function generateInvoice(req, res) {
     if (err) {
       console.log("Error: " + err);
     }
-    console.log(response);
     res.json(response);
   });
 }
