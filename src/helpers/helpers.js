@@ -8,13 +8,13 @@ export const asyncCallWithTimeout = async (asyncPromise, timeLimit) => {
 
     const timeoutPromise = new Promise((_resolve, reject) => {
         timeoutHandle = setTimeout(
-            () => reject(new Error("fail")),
+            () => reject(new Error("Te has exedido del tiempo para realizar tu transacción")),
             timeLimit
         );
     });
 
     return Promise.race([asyncPromise, timeoutPromise]).then(result => {
-        clearTimeout(timeoutHandle);
+        // clearTimeout(timeoutHandle);
         return result;
     })
 }

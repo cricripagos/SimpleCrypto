@@ -74,6 +74,7 @@ export default function usePayBTC() {
 
     if (dataInvoiceStream.settled === true) {
       //setIsPaid(true);
+      router.push(`/success/${dataInvoiceStream.address}`); 
       return dataInvoiceStream;
     } else {
       return false

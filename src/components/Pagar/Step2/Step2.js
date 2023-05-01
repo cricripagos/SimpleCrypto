@@ -1,3 +1,4 @@
+import Modal from "@/components/Modal/Modal";
 import { asyncCallWithTimeout } from "@/helpers/helpers";
 import usePayBTC from "@/helpers/hooks/usePayBTC";
 import { setBtnDisabled, setBtnLoading, setStepForward, setToast } from "@/store/reducers/interactions";
@@ -37,17 +38,26 @@ const Step2 = () => {
     try {
       //MODIFICAR el numero en base al timepo que se quiere "esperar" una respuesta del usuario
     const i = await asyncCallWithTimeout( checkInvoice(invoice.invoice), 20000)
+    // const i = await checkInvoice(invoice.invoice)
     console.log('Invoice is, ', i)
     if (i) {
       //Successfully Paid
       console.log('Successfully paid', i)
       router.push(`/success/${i.address}`);
+      dispatch(setToast(
+        {
+          message: "Successfully paid",
+          status: "success",
+          loading: false,
+          show: true,
+        }
+      ))
     } else {
       //Not paid
       
       dispatch(setToast(
         {
-          message: "Hubo un error, tu transaccion, no ha sido pagada (Not paid)",
+          message: "Hubo un error, tu transaccion, no ha sido pagada (Not paid) ",
           status: "error",
           loading: false,
           show: true,
@@ -58,7 +68,7 @@ const Step2 = () => {
   catch(e){
     dispatch(setToast(
       {
-        message: "Te has exedido del tiempo para realizar tu transacción",
+        message: `${e.message}`,
         status: "error",
         loading: false,
         show: true,
@@ -67,6 +77,10 @@ const Step2 = () => {
     dispatch(setBtnDisabled(false))
     dispatch(setBtnLoading(false))
   }
+
+
+
+
   }
 
 
@@ -80,7 +94,7 @@ const Step2 = () => {
   return (
     <Layout>
       <div className="flex flex-col h-screen relative">
-        {/* {invoice && <Modal />} */}
+        {invoice && <Modal />}
         <div className="flex bg-green-1 rounded-b-lg justify-center items-center flex-col pb-5 px-7">
           <Header />
         </div>
