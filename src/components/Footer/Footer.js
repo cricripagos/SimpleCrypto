@@ -19,6 +19,15 @@ const Footer = () => {
     }
   }, [payment_method, btn_loading])
 
+
+  useEffect(() => {
+    if (step >= 2 && payment_method) {
+      setContinueText('Pagar')
+    } else {
+      setContinueText('Continuar')
+    }
+  }, [step])
+
   return (
     <div className='bg-stone-100 py-5 px-7 flex flex-row justify-between fixed bottom-0 w-full max-w-md'>
       <div>

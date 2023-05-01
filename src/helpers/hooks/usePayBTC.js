@@ -41,7 +41,10 @@ export default function usePayBTC() {
   };
 
   const checkInvoice = async (payment_request) => {
+    console.log('Running Check invoice')
     const invoice = { invoice: payment_request };
+
+    
 
     const dataInvoiceStream = await fetch("/api/btcCheckInvoice", {
       method: "POST",
@@ -55,21 +58,25 @@ export default function usePayBTC() {
       .then((res) => res.json())
       .then((data) => {
         try {
-          console.log("entro aca ", data.json());
-          const d = data.json();
+          console.log("entro aca ", data);
+          const d = data
           const inv = {
             settled: d.settled,
             address: Buffer.from(d.payment_addr).toString("hex"),
           };
           return inv;
         } catch (e) {
-          return console.log(e);
+          return console.log('There was an error', e);
         }
       });
+
+      console.log('dataInvoiceStream is', dataInvoiceStream)
 
     if (dataInvoiceStream.settled === true) {
       //setIsPaid(true);
       return dataInvoiceStream;
+    } else {
+      return false
     }
   };
 
@@ -112,7 +119,8 @@ export default function usePayBTC() {
       dispatch(setBtnLoading(false));
       return;
     } else {
-      const wallet = await getWalletProvider();
+      // const wallet = await getWalletProvider();
+      const wallet = false;
       console.log("WALLET IS", wallet);
       if (wallet) {
         try {

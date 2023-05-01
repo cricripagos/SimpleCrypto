@@ -15,6 +15,7 @@ function Step1() {
     }
   }, [fiat_amount])
 
+
   return (
     <Layout>
       <div className="flex flex-col h-screen relative">

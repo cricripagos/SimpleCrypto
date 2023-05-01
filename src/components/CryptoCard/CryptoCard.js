@@ -23,8 +23,12 @@ const CryptoCard = ({
   const { networks } = useSelector((state) => state.options);
   const [comingSoon, setComingSoon] = useState(false);
 
+  console.log('Cards are,', name, id)
+
   const handleClick = () => {
+    console.log("PAYMENT METHOD", payment_method);
     if ((evm && !enough_balance) || comingSoon) return;
+    console.log('ID IS', id)
     if (payment_method === id) {
       dispatch(setSelectedPaymentMethod(null));
     } else {
