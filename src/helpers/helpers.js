@@ -1,20 +1,24 @@
 import { parseEther } from "ethers/lib/utils.js";
-export const ethToWei=()=>{
-    return parseEther('1')
-}
+var Promise = require("promise");
+export const ethToWei = () => {
+  return parseEther("1");
+};
 
 export const asyncCallWithTimeout = async (asyncPromise, timeLimit) => {
-    let timeoutHandle;
+  let timeoutHandle;
 
-    const timeoutPromise = new Promise((_resolve, reject) => {
-        timeoutHandle = setTimeout(
-            () => reject(new Error("Te has exedido del tiempo para realizar tu transacción")),
-            timeLimit
-        );
-    });
+  const timeoutPromise = new Promise((_resolve, reject) => {
+    timeoutHandle = setTimeout(
+      () =>
+        reject(
+          new Error("Te has exedido del tiempo para realizar tu transacción")
+        ),
+      timeLimit
+    );
+  });
 
-    return Promise.race([asyncPromise, timeoutPromise]).then(result => {
-        // clearTimeout(timeoutHandle);
-        return result;
-    })
-}
+  return Promise.race([asyncPromise, timeoutPromise]).then((result) => {
+    // clearTimeout(timeoutHandle);
+    return result;
+  });
+};
