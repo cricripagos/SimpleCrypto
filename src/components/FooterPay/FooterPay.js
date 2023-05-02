@@ -33,7 +33,7 @@ const PayButton = ({ text }) => {
   // Este deberia cambiarse por hook a store, pero tambien se tiene que editar a medida que sucedan cosas para que se renderize en otro componente
   const [status, setStatus] = useState("");
   //Create payment attempt
-  const { createPayment } = useSupabase();
+  const { createPayment, updatePayment } = useSupabase();
   const { sendReceipt } = useWhatsApp();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -71,10 +71,6 @@ const PayButton = ({ text }) => {
     },
   });
 
-  const paymentCreation = async (data) => {
-    await createPayment(data);
-  };
-
   const {
     data,
     isLoading: isLoadingPay,
@@ -82,13 +78,15 @@ const PayButton = ({ text }) => {
     write,
   } = useContractWrite({
     ...config,
-    onSuccess(data) {
+    async onSuccess(data) {
       console.log("data------", data.hash);
-      paymentCreation({
+      const { uuid } = await createPayment({
         crypto_amount: crypto_amount,
         payment_option: payment_method,
         transaction_hash: data.hash,
       });
+      // Agregamos el identificador
+      data.uuid = uuid;
       dispatch(
         setToast({
           message: "La transaccion esta en proceso",
@@ -122,7 +120,8 @@ const PayButton = ({ text }) => {
       isloadingNetwork
         ? dispatch(
             setToast({
-              message: "Estamos esperando que aceptes la solicitud de cambio de Network en tu wallet",
+              message:
+                "Estamos esperando que aceptes la solicitud de cambio de Network en tu wallet",
               status: "",
               loading: true,
               show: true,
@@ -138,9 +137,14 @@ const PayButton = ({ text }) => {
         : undefined,
     [isLoadingPay]
   );
+
   const { dataWait } = useWaitForTransaction({
     hash: data?.hash,
-    onSuccess(d) {
+    async onSuccess(d) {
+      await updatePayment({
+        attempt: data.uuid,
+        status: "success",
+      });
       sendReceipt(d.transactionHash);
 
       router.push(`/success/${d.transactionHash}`);
