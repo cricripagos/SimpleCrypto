@@ -14,7 +14,9 @@ const Button = ({ text, filled, action }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    setPaymentSelected(payment.find(item => item.id === payment_method))
+    if (payment_method){
+    setPaymentSelected(payment?.find(item => item.id === payment_method))
+  }
   }, [payment_method])
 
   const handleClick = () => {

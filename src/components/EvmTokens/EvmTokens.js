@@ -2,7 +2,7 @@ import { useGetBalances } from '@/helpers/hooks/useGetBalances'
 import { formatEther } from 'ethers/lib/utils.js'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { CryptoCard } from '../components'
+import { CryptoCard, Spinner } from '../components'
 
 
 const EvmTokens = () => {
@@ -35,7 +35,11 @@ const EvmTokens = () => {
 
     return (
         <div className='w-full'>
-            {loading ? <div>Loading...</div> :
+            {loading ?
+            <div className='flex justify-center py-10'> 
+            <Spinner /> 
+            </div>
+            :
                 paymentInfo?.map((item, index) => {
 
                     // const balance = balanceData.data && balanceData.data[index]
