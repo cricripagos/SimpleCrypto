@@ -1,4 +1,3 @@
-//import { lndClient } from "@lib/lndClient";
 import { lndClient } from "@/helpers/lndClient";
 
 //test.
