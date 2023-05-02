@@ -11,7 +11,7 @@ const loaderOptions = {
   oneofs: true,
 };
 const packageDefinition = protoLoader.loadSync(
-  path.join(process.cwd(), "./lightning.proto"),
+  path.join(process.cwd(), "src/helpers/lightning.proto"),
   loaderOptions
 );
 
