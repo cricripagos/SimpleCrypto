@@ -1,4 +1,3 @@
-import Modal from "@/components/Modal/Modal";
 import { asyncCallWithTimeout } from "@/helpers/helpers";
 import usePayBTC from "@/helpers/hooks/usePayBTC";
 import useSupabase from "@/helpers/hooks/useSupabase";
@@ -109,7 +108,7 @@ const Step2 = () => {
   return (
     <Layout>
       <div className="flex flex-col h-screen relative">
-        {invoice && <Modal />}
+        {/*invoice && <Modal />*/}
         <div className="flex bg-green-1 rounded-b-lg justify-center items-center flex-col pb-5 px-7">
           <Header />
         </div>
