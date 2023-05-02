@@ -1,6 +1,7 @@
 import Modal from "@/components/Modal/Modal";
 import { asyncCallWithTimeout } from "@/helpers/helpers";
 import usePayBTC from "@/helpers/hooks/usePayBTC";
+import useSupabase from "@/helpers/hooks/useSupabase";
 import useWhatsApp from "@/helpers/hooks/useWhatsApp";
 import {
   setBtnDisabled,
@@ -24,6 +25,7 @@ const Step2 = () => {
   const { invoice } = useSelector((state) => state.interactions);
   const { checkInvoice } = usePayBTC();
   const { sendReceipt } = useWhatsApp();
+  const { updatePayment } = useSupabase();
   const router = useRouter();
   const [autoRedirect, setAutoRedirect] = useState(false);
   useEffect(() => {
@@ -44,17 +46,24 @@ const Step2 = () => {
   const awaitInvoice = async () => {
     try {
       //MODIFICAR el numero en base al timepo que se quiere "esperar" una respuesta del usuario
+      const uuid = invoice.uuid;
       const i = await asyncCallWithTimeout(
         checkInvoice(invoice.invoice),
         20000
       );
+
       // const i = await checkInvoice(invoice.invoice)
       console.log("Invoice is, ", i);
       if (i) {
         //Successfully Paid
         console.log("Successfully paid", i);
         sendReceipt(i.address);
-        //router.push(`/success/${i.address}`);
+        await updatePayment({
+          attempt: uuid,
+          status: "success",
+          userAddress: i.address,
+        });
+        router.push(`/success/${i.address}`);
         dispatch(
           setToast({
             message: "Successfully paid",

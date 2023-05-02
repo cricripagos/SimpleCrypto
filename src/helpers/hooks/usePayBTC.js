@@ -72,7 +72,7 @@ export default function usePayBTC() {
 
     if (dataInvoiceStream.settled === true) {
       //setIsPaid(true);
-      router.push(`/success/${dataInvoiceStream.address}`);
+      //router.push(`/success/${dataInvoiceStream.address}`);
       return dataInvoiceStream;
     } else {
       return false;
@@ -107,6 +107,9 @@ export default function usePayBTC() {
       setBtnLoading(false);
       return;
     }
+
+    invoice.uuid = uuid;
+
     if (!invoice.invoice || !invoice.hash) {
       //ERROR: en la creaction de un invoice
       const update = updatePayment({
