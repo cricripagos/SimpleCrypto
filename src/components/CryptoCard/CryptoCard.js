@@ -10,6 +10,7 @@ import Balance from "./Balance";
 const CryptoCard = ({
   logo_url,
   name,
+  decimals,
   symbol,
   network,
   id,
@@ -22,8 +23,6 @@ const CryptoCard = ({
   const dispatch = useDispatch();
   const { networks } = useSelector((state) => state.options);
   const [comingSoon, setComingSoon] = useState(false);
-
-  console.log('Cards are,', name, id)
 
   const handleClick = () => {
     console.log("PAYMENT METHOD", payment_method);
@@ -42,12 +41,12 @@ const CryptoCard = ({
 
   useEffect(() => {
     if (symbol === "BCH") {
-      console.log("BCH");
       setComingSoon(true);
     }
   }, [symbol]);
-
-  console.log(symbol, (evm && !enough_balance) || comingSoon);
+  if(balance){
+    console.log('Debugging:', symbol, 'Balance:', balance.toString(), enough_balance, 'Decimals:', decimals);
+  }
 
   return (
     <div className="relative w-full my-3">
