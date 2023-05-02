@@ -1,5 +1,5 @@
 import { useGetBalances } from '@/helpers/hooks/useGetBalances'
-import { formatEther } from 'ethers/lib/utils.js'
+import { formatUnits } from 'ethers/lib/utils.js'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { CryptoCard, Spinner } from '../components'
@@ -19,7 +19,7 @@ const EvmTokens = () => {
         if (balanceData.dataWithId !== undefined) {
             let temp_payments = payment.map((item) => {
                 const balance = balanceData.dataWithId.filter(balanceItem => balanceItem[1] === item.id)[0][0]
-                const balance_toNum = formatEther(balance)
+                const balance_toNum = formatUnits(balance, item.decimals)
                 const amount = (fiat_amount/item.price).toPrecision(6)
                 // const amount_in_fn = FixedNumber.from((fiat_amount / item.price).toPrecision(6))
                 //TODO esta funcion enrealidad esta mal, hay que adaptar el balance para que se pase de wei a Eth. Creo que con formatEth sale

@@ -6,7 +6,7 @@ import {
   setStepBackward,
   setToast,
 } from "@/store/reducers/interactions";
-import { parseEther } from "ethers/lib/utils.js";
+import { parseUnits } from "ethers/lib/utils.js";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,8 +41,9 @@ const PayButton = ({ text }) => {
   const { isLoading: isloadingNetwork, switchNetwork } = useSwitchNetwork();
   // Este Hook me mantiene actualizado lo que quiero hacer en el contrato
   const formated_amount = crypto_amount
-    ? parseEther(crypto_amount.toString().slice(0, 18).toString())
-    : 0;
+  ? parseUnits(crypto_amount.toString().slice(0, selectedMethod?.decimals), selectedMethod?.decimals)
+  : 0;
+  console.log(selectedMethod, formated_amount.toString())
   const { config } = usePrepareContractWrite({
     address: selectedMethod?.contract_address,
     abi: erc20ABI,
