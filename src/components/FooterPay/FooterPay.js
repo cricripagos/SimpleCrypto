@@ -121,28 +121,25 @@ const PayButton = ({ text }) => {
       write?.();
     }
   };
-  useEffect(
-    () =>
-      isloadingNetwork
-        ? dispatch(
-            setToast({
-              message:
-                "Estamos esperando que aceptes la solicitud de cambio de Network en tu wallet",
-              status: "",
-              loading: true,
-              show: true,
-            })
-          )
-        : undefined,
-    [isloadingNetwork]
-  );
-  useEffect(
-    () =>
-      isLoadingPay
-        ? setStatus("Estamos esperando que firmes la transaccion en tu wallet")
-        : undefined,
-    [isLoadingPay]
-  );
+  useEffect(() => {
+    if (isloadingNetwork) {
+      dispatch(
+        setToast({
+          message:
+            "Estamos esperando que aceptes la solicitud de cambio de Network en tu wallet",
+          status: "",
+          loading: true,
+          show: true,
+        })
+      );
+    }
+  }, [isloadingNetwork]);
+
+  useEffect(() => {
+    if (isLoadingPay) {
+      setStatus("Estamos esperando que firmes la transaccion en tu wallet");
+    }
+  }, [isLoadingPay]);
 
   const { dataWait } = useWaitForTransaction({
     hash: data?.hash,
