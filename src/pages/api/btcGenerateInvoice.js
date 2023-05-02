@@ -2,17 +2,17 @@ import { lndClient } from "@/helpers/lndClient";
 
 //test.
 export default async function generateInvoice(req, res) {
-  const merchant = "Tule";
+  const body = JSON.parse(req.body);
+  console.log(body);
   //const merchant = JSON.parse(req.body).merchant;
-  const amount = JSON.parse(req.body).amount;
+  const crypto_amount = body.crypto_amount * 100000000; // 1 BTC = 100000000 satoshis
+  const merchant = body.merchant;
 
-  const destination =
-    "035e4ff418fc8b5554c5d9eea66396c227bd429a3251c8cbc711002ba215bfc226@170.75.163.209:9735";
-  console.log("Procesando ", amount, " satoshis");
+  console.log("Procesando ", crypto_amount, " satoshis");
+
   let request = {
-    value: amount,
+    value: crypto_amount,
     memo: merchant,
-    destination: destination,
   };
 
   console.log("Request: ", request);
@@ -20,7 +20,6 @@ export default async function generateInvoice(req, res) {
     if (err) {
       console.log("Error: " + err);
     }
-    console.log(response);
     res.json(response);
   });
 }

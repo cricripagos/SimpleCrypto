@@ -1,11 +1,9 @@
 import useWagmiClient from "@/helpers/hooks/useWagmi"
 import { Web3Button, Web3Modal } from "@web3modal/react"
-import { useEffect } from "react"
-import { WagmiConfig, useAccount } from "wagmi"
+import { WagmiConfig } from "wagmi"
 
 const WalletConnect = () => {
     const { wagmiClient, ethereumClient, projectId } = useWagmiClient()
-    const {address} = useAccount()
 
   return (
     <div>

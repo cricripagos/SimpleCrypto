@@ -7,13 +7,28 @@ export const avgPrice = async (symbol) => {
     .then((response) => response.json())
     .then((data) => {
       const keys = Object.keys(data);
+      const trustedKeys = [
+        "bitex",
+        "ripio",
+        "satoshiTango",
+        "buenbit",
+        "bitso",
+        "fiwind",
+        "binance",
+        "lemoncash",
+        "belo",
+      ];
       let sumAsk = 0;
+      let trustedExchanges = 0;
 
       for (const key of keys) {
-        sumAsk += data[key].ask;
+        if (trustedKeys.includes(key)) {
+          sumAsk += data[key].ask;
+          trustedExchanges += 1;
+        }
       }
 
-      const averageAsk = sumAsk / keys.length;
+      const averageAsk = sumAsk / trustedExchanges;
       return averageAsk;
     });
   return quote;

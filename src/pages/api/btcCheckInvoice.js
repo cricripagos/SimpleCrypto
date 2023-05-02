@@ -1,4 +1,4 @@
-import { lndClient } from "@lib/lndClient";
+import { lndClient } from "@/helpers/lndClient";
 
 export default async function checkInvoice(req, res) {
   const invoice = JSON.parse(req.body).invoice;
@@ -21,6 +21,8 @@ export default async function checkInvoice(req, res) {
 
   stream.on("close", () => {
     console.log("### CLOSE");
-    res.json(dataReturn);
+    return res.json(dataReturn);
   });
+  //console.log(dataReturn);
+  //res.status(200).send(dataReturn);
 }

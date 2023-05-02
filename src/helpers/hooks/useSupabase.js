@@ -30,7 +30,7 @@ export default function useSupabase() {
         return promise
     }
 
-    const getPaymentMethods = async (merchant) => {
+    const getPaymentMethods = async () => {
         const promise = await supabase.from('payment_options').select().then(({ data, error }) => {
             if (data) {
                 dispatch(setPaymentOptions(data))
@@ -59,7 +59,9 @@ export default function useSupabase() {
         const promise = await fetch('/api/createPaymentAttempt', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
             },
             body: JSON.stringify({
                 crypto_amount: crypto_amount,
@@ -75,8 +77,28 @@ export default function useSupabase() {
         }).catch(err => {
             console.log('Error is...', err)
         })
-        console.log('Promise is...', promise)
-        return promise
+        console.log('Payment Promise is...', promise)
+        return promise[0]
+    }
+
+    const updatePayment = async (payload) => {
+        // const payload = {
+        //     attempt: uuid,
+        //     status: status,
+        //     txHash: attempt.transactionHash,
+        //     userAddress: attempt.userAddress,
+        //   };
+
+          const promise = await fetch("/api/updatePaymentAttempt", {
+            method: "POST",
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Credentials": true,
+              "Content-Type": "aplication/json",
+            },
+            body: JSON.stringify(payload),
+          })
+          return promise
     }
 
 
@@ -85,5 +107,6 @@ export default function useSupabase() {
         getPaymentMethods,
         getNetworks,
         createPayment,
+        updatePayment
     }
 }

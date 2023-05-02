@@ -1,8 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNetwork, useAccount } from "wagmi";
-import { erc20ABI } from "wagmi";
-import { useContractReads } from "wagmi";
-import React from 'react'
+import { useEffect, useState } from "react";
+import { erc20ABI, useAccount, useContractReads } from "wagmi";
 
 const useCustomRead = (evm_contracts, address) => {
     const [res, setRes] = useState({ data: undefined, isError: undefined, isLoading: undefined })
@@ -31,8 +28,7 @@ export const useGetBalances = (contracts) => {
 
 
     //TODO cambiar estos 2 hooks de abajo por parametros, para optimizar (no es urgente)
-    const { chain, chains } = useNetwork()
-    const { address, isConnecting, isDisconnected } = useAccount();
+    const { address } = useAccount();
     const r = useCustomRead(evm_contracts, address)
 
     return r

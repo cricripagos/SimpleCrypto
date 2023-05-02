@@ -4,7 +4,7 @@ import { requestProvider } from "webln";
 
 var Promise = require("promise");
 
-const App = ({ merchat }) => {
+const App = () => {
   const [amount, setAmount] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
@@ -93,7 +93,15 @@ const App = ({ merchat }) => {
         "Access-Control-Allow-Credentials": true,
         "Content-Type": "aplication/json",
       },
-      body: JSON.stringify({ amount }),
+      body: JSON.stringify({
+        merchant: 3,
+        fiat_amount: amount,
+        crypto_amount: amount,
+        payment_option: 2,
+        expiration_date: null,
+        userAddress: null,
+        transactionHash: null,
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -134,6 +142,8 @@ const App = ({ merchat }) => {
     // Set loading has started
     setIsProcessing(true);
 
+    const mer = getCurrentURL();
+
     const fact = await fetch("/api/btcGenerateInvoice", {
       method: "POST",
       headers: {
@@ -141,7 +151,7 @@ const App = ({ merchat }) => {
         "Access-Control-Allow-Credentials": true,
         "Content-Type": "aplication/json",
       },
-      body: JSON.stringify({ amount }),
+      body: JSON.stringify({ crypto_amount: amount, merchant: mer }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -207,7 +217,7 @@ const App = ({ merchat }) => {
       attempt.userAddress = confirm.address;
       console.log(attempt);
       updateAttempt(attempt);
-      const merchat = getCurrentURL();
+      const merchant = getCurrentURL();
       await fetch("/api/sendReceipt", {
         method: "POST",
         headers: {
@@ -217,7 +227,7 @@ const App = ({ merchat }) => {
         },
         body: JSON.stringify({
           amount: amount,
-          merchant: merchat,
+          merchant: merchant,
           txHash: fact.hash,
         }),
       });

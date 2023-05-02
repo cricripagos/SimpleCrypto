@@ -1,20 +1,32 @@
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Button from '../Buttons/Button'
-import { useEffect, useState } from 'react'
 
-const Footer = ({ btn_msg }) => {
+const Footer = () => {
   const { fiat_amount, payment_method } = useSelector(state => state.order)
-  const {payment} = useSelector(state => state.interactions)
-  const { step } = useSelector(state => state.interactions)
+  const { step, btn_loading } = useSelector(state => state.interactions)
   const [continueText, setContinueText] = useState('Continuar')
 
   useEffect(() => {
     if(payment_method){
+      if(btn_loading){
+        setContinueText('Cargando...')
+      } else {
+      setContinueText('Pagar')
+      }
+    } else {
+      setContinueText('Continuar')
+    }
+  }, [payment_method, btn_loading])
+
+
+  useEffect(() => {
+    if (step >= 2 && payment_method) {
       setContinueText('Pagar')
     } else {
       setContinueText('Continuar')
     }
-  }, [payment_method])
+  }, [step])
 
   return (
     <div className='bg-stone-100 py-5 px-7 flex flex-row justify-between fixed bottom-0 w-full max-w-md'>

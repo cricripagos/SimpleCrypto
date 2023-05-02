@@ -1,22 +1,40 @@
 import { supabase } from "@/helpers/hooks/useSupabase";
 const { v4: uuidv4 } = require("uuid");
+
 export default async function createPaymentAttempt(req, res) {
-  const merchant = JSON.parse(req.body).merchant;
-  const amount = JSON.parse(req.body).amount;
-  const crypto_amount = JSON.parse(req.body).crypto_amount;
-  const expiration_date = JSON.parse(req.body).expiration_date;
+  console.log("Creating payment attempt....", req.body);
+  const body = req.body;
+  const merchant = body.merchant
+    ? body.merchant
+    : JSON.parse(req.body).merchant;
+  const crypto_amount = body.crypto_amount
+    ? body.crypto_amount
+    : JSON.parse(req.body).crypto_amount;
+  const fiat_amount = body.fiat_amount
+    ? body.fiat_amount
+    : JSON.parse(req.body).fiat_amount;
+  const payment_option = body.payment_option
+    ? body.payment_option
+    : JSON.parse(req.body).payment_option;
+  const expiration_date = body.expiration_date ? body.expiration_date : null;
+  const user_address = body.user_address ? body.user_address : null;
+  const transaction_hash = body.transaction_hash ? body.transaction_hash : null;
 
   /* Usamos uuid como identificador unico para el intento de pago.
     Esto nos permite idetificar el intento aunque se hayan creado
     multiples intentos con el mismo monto y merchant al mismo tiempo. */
 
   const attempt = {
-    fiat_total_amount: amount,
-    payment_option: 1, // cambiar por el payment option id
-    crypto_total_amount: crypto_amount ? crypto_amount : amount, // cambiar por la crypto con la que se paga
-    merchant: merchant ? merchant : 3, // cambiar por el merchant de la url
+    fiat_total_amount: fiat_amount,
+    payment_option: payment_option, // cambiar por el payment option id
+    crypto_total_amount: crypto_amount, // cambiar por la crypto con la que se paga
+    user_address: user_address,
+    transaction_hash: transaction_hash,
+    merchant: merchant, // cambiar por el merchant de la url
     uuid: uuidv4(), // Universally unique identifier https://en.wikipedia.org/wiki/Universally_unique_identifier
   };
+
+  console.log("Attempt is...", attempt);
 
   /*
   Si se envia una fecha de expiracion, se agrega al intento.
@@ -34,10 +52,9 @@ export default async function createPaymentAttempt(req, res) {
     .select("uuid");
 
   if (error) {
-    console.log(error);
+    console.log("There was an error in payment creation...", error);
     res.status(500).json(error);
   }
 
   res.status(200).json(data);
 }
-
