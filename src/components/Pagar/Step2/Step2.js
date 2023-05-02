@@ -54,7 +54,7 @@ const Step2 = () => {
         //Successfully Paid
         console.log("Successfully paid", i);
         sendReceipt(i.address);
-        router.push(`/success/${i.address}`);
+        //router.push(`/success/${i.address}`);
         dispatch(
           setToast({
             message: "Successfully paid",
