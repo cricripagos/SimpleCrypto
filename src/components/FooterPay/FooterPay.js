@@ -49,19 +49,25 @@ const PayButton = ({ text }) => {
     functionName: "transfer",
     args: [keys?.key_evm, formated_amount],
     chainId: selectedMethod?.chain_id,
-    onError() {
-      setChainOk(false);
-      dispatch(setBtnDisabled(true));
-      dispatch(
-        setToast({
-          message: `Estas en la network ${
-            chain.name
-          }. Al intentar pagar te solicitaremos cambiar a ${selectedMethod?.chain_id.toString()} para poder realizar el pago en el token seleccionado`,
-          status: "warning",
-          loading: false,
-          show: true,
-        })
-      );
+    onError(error) {
+      const e = error?.message;
+      const chainError = "Chain mismatch";
+      if (e.includes(chainError)) {
+        setChainOk(false);
+        dispatch(setBtnDisabled(true));
+        dispatch(
+          setToast({
+            message: `Estas en la network ${
+              chain.name
+            }. Al intentar pagar te solicitaremos cambiar a ${selectedMethod?.chain_id.toString()} para poder realizar el pago en el token seleccionado`,
+            status: "warning",
+            loading: false,
+            show: true,
+          })
+        );
+      } else {
+        console.log("otro error", error.message);
+      }
       // setStatus('Estas en la network' + chain.name + '. Al intentar pagar te solicitaremos cambiar a ' + selectedMethod?.chain_id.toString() + ' para poder realizar el pago en el token seleccionado')
     },
     onSuccess() {
@@ -115,28 +121,25 @@ const PayButton = ({ text }) => {
       write?.();
     }
   };
-  useEffect(
-    () =>
-      isloadingNetwork
-        ? dispatch(
-            setToast({
-              message:
-                "Estamos esperando que aceptes la solicitud de cambio de Network en tu wallet",
-              status: "",
-              loading: true,
-              show: true,
-            })
-          )
-        : undefined,
-    [isloadingNetwork]
-  );
-  useEffect(
-    () =>
-      isLoadingPay
-        ? setStatus("Estamos esperando que firmes la transaccion en tu wallet")
-        : undefined,
-    [isLoadingPay]
-  );
+  useEffect(() => {
+    if (isloadingNetwork) {
+      dispatch(
+        setToast({
+          message:
+            "Estamos esperando que aceptes la solicitud de cambio de Network en tu wallet",
+          status: "",
+          loading: true,
+          show: true,
+        })
+      );
+    }
+  }, [isloadingNetwork]);
+
+  useEffect(() => {
+    if (isLoadingPay) {
+      setStatus("Estamos esperando que firmes la transaccion en tu wallet");
+    }
+  }, [isLoadingPay]);
 
   const { dataWait } = useWaitForTransaction({
     hash: data?.hash,
