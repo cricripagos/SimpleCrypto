@@ -1,4 +1,4 @@
-import { lndClient } from "@lib/lndClient";
+import { lndClient } from "@/helpers/lndClient";
 
 export default async function checkInvoice(req, res) {
   const invoice = JSON.parse(req.body).invoice;
