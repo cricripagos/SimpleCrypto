@@ -19,12 +19,13 @@ const EvmTokens = () => {
   const [paymentInfo, setPaymentInfo] = useState(null);
 
   useEffect(() => {
+    console.log("BALANCE DATA", balanceData);
     if (balanceData.dataWithId !== undefined) {
       let temp_payments = payment.map((item) => {
         const balance = balanceData.dataWithId.filter(
           (balanceItem) => balanceItem[1] === item.id
         )[0][0];
-        const balance_toNum = formatUnits(balance, item.decimals);
+        const balance_toNum = balance ? formatUnits(balance, item.decimals) : 0;
         const amount = (fiat_amount / item.price).toPrecision(6);
         // const amount_in_fn = FixedNumber.from((fiat_amount / item.price).toPrecision(6))
         //TODO esta funcion enrealidad esta mal, hay que adaptar el balance para que se pase de wei a Eth. Creo que con formatEth sale
