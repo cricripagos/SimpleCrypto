@@ -68,8 +68,6 @@ export default function usePayBTC() {
         }
       });
 
-    console.log("dataInvoiceStream is", dataInvoiceStream);
-
     if (dataInvoiceStream.settled === true) {
       //setIsPaid(true);
       //router.push(`/success/${dataInvoiceStream.address}`);
@@ -123,7 +121,6 @@ export default function usePayBTC() {
     } else {
       // const wallet = await getWalletProvider();
       const wallet = false;
-      console.log("WALLET IS", wallet);
       if (wallet) {
         try {
           const sendPaymentResponse = await wallet.sendPayment(invoice.invoice);

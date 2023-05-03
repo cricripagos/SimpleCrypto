@@ -81,8 +81,6 @@ export async function getServerSideProps(context) {
     payment_options.data[idx].price = await avgPrice(coin.symbol);
   }
 
-  console.log(payment_options.data);
-
   return {
     props: {
       payment_options: payment_options.data,

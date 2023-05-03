@@ -22,12 +22,13 @@ const CryptoCard = ({
   const { payment_method, fiat_amount } = useSelector((state) => state.order);
   const dispatch = useDispatch();
   const { networks } = useSelector((state) => state.options);
+  console.log("NETWORKS", networks);
   const [comingSoon, setComingSoon] = useState(false);
 
   const handleClick = () => {
     console.log("PAYMENT METHOD", payment_method);
     if ((evm && !enough_balance) || comingSoon) return;
-    console.log('ID IS', id)
+    console.log("ID IS", id);
     if (payment_method === id) {
       dispatch(setSelectedPaymentMethod(null));
     } else {
@@ -44,8 +45,16 @@ const CryptoCard = ({
       setComingSoon(true);
     }
   }, [symbol]);
-  if(balance){
-    console.log('Debugging:', symbol, 'Balance:', balance.toString(), enough_balance, 'Decimals:', decimals);
+  if (balance) {
+    console.log(
+      "Debugging:",
+      symbol,
+      "Balance:",
+      balance.toString(),
+      enough_balance,
+      "Decimals:",
+      decimals
+    );
   }
 
   return (
