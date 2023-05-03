@@ -12,7 +12,17 @@ export default async function sendReceipt(req, res) {
   const txHash = JSON.parse(req.body).txHash;
   const elapsed_time = "12 s";
   const date = new Date();
-  const formattedDate = date.toLocaleString();
+  const options = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    timeZone: "America/Argentina/Buenos_Aires",
+    timeZoneName: "short",
+  };
+  const formattedDate = date.toLocaleString("en-GB", options);
 
   const payment_method = await supabase
     .from("payment_options")
