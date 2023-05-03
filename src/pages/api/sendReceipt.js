@@ -27,7 +27,7 @@ export default async function sendReceipt(req, res) {
   let phone = merchant_info?.data[0]?.phone_number;
 
   if (phone == undefined) {
-    phone = "+5491154865055";
+    phone = process.env.NEXT_PUBLIC_DEFAULT_PHONE_NUMBER;
   }
 
   /*
@@ -68,7 +68,7 @@ export default async function sendReceipt(req, res) {
   client.messages
     .create({
       body: message,
-      from: "whatsapp:+16319003288",
+      from: "whatsapp:" + process.env.NEXT_PUBLIC_TWILIO_PHONE_NUMBER,
       to: "whatsapp:" + phone,
     })
     .then((message) => {
