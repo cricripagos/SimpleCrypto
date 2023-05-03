@@ -6,6 +6,7 @@ import {
   setStepBackward,
   setToast,
 } from "@/store/reducers/interactions";
+import { setCryptoAmount } from "@/store/reducers/order";
 import { parseUnits } from "ethers/lib/utils.js";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -40,10 +41,18 @@ const PayButton = ({ text }) => {
   const { chain } = useNetwork();
   const { isLoading: isloadingNetwork, switchNetwork } = useSwitchNetwork();
   // Este Hook me mantiene actualizado lo que quiero hacer en el contrato
-  const formated_amount = crypto_amount
-  ? parseUnits(crypto_amount.toString().slice(0, selectedMethod?.decimals), selectedMethod?.decimals)
-  : 0;
-  console.log(selectedMethod, formated_amount.toString())
+  // Revisamos que amount no venga en notacion cientifica
+
+  const is_scientific_notation = /[eE]/.test(crypto_amount?.toString());
+
+  const formated_amount =
+    crypto_amount && !is_scientific_notation
+      ? parseUnits(
+          crypto_amount.toString().slice(0, selectedMethod?.decimals),
+          selectedMethod?.decimals
+        )
+      : 0;
+  console.log(selectedMethod, formated_amount.toString());
   const { config } = usePrepareContractWrite({
     address: selectedMethod?.contract_address,
     abi: erc20ABI,
@@ -198,7 +207,10 @@ const FooterPay = ({ btn_msg }) => {
         <Button
           text="Volver"
           filled={false}
-          onClick={() => dispatch(setStepBackward())}
+          onClick={() => {
+            dispatch(setCryptoAmount(null));
+            dispatch(setStepBackward());
+          }}
         />
         <PayButton filled={true} text={btn_msg} />
       </div>
