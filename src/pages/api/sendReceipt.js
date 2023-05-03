@@ -11,7 +11,8 @@ export default async function sendReceipt(req, res) {
   const payment_option = JSON.parse(req.body).payment_option;
   const txHash = JSON.parse(req.body).txHash;
   const elapsed_time = "12 s";
-  const date = new Date().toJSON();
+  const date = new Date();
+  const formattedDate = date.toLocaleString();
 
   const payment_method = await supabase
     .from("payment_options")
@@ -50,7 +51,7 @@ export default async function sendReceipt(req, res) {
     payment_method?.data[0]?.name +
     " 🥳!" +
     "\n____________________\n\n*Fecha:* " +
-    date +
+    formattedDate +
     "\n*Monto en Pesos:* " +
     fiat_amount +
     " $" +
