@@ -119,7 +119,6 @@ const Step2 = () => {
           {payment
             .filter((item) => item.evm === false)
             .map((item, index) => {
-              console.log("Item wil be, ", item);
               return <CryptoCard {...item} key={index} />;
             })}
         </div>
