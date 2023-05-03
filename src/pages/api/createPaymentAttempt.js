@@ -2,7 +2,6 @@ import { supabase } from "@/helpers/hooks/useSupabase";
 const { v4: uuidv4 } = require("uuid");
 
 export default async function createPaymentAttempt(req, res) {
-  console.log("Creating payment attempt....", req.body);
   const body = req.body;
   const merchant = body.merchant
     ? body.merchant
@@ -33,8 +32,6 @@ export default async function createPaymentAttempt(req, res) {
     merchant: merchant, // cambiar por el merchant de la url
     uuid: uuidv4(), // Universally unique identifier https://en.wikipedia.org/wiki/Universally_unique_identifier
   };
-
-  console.log("Attempt is...", attempt);
 
   /*
   Si se envia una fecha de expiracion, se agrega al intento.
