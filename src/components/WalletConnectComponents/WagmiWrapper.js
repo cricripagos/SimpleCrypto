@@ -4,8 +4,8 @@ import {
   WagmiConfig,
   configureChains, createClient
 } from "wagmi";
-import { arbitrum, bsc, mainnet, polygon, polygonMumbai } from "wagmi/chains";
-const chains = [arbitrum, mainnet, polygon, polygonMumbai, bsc];
+import { bsc, polygon, polygonMumbai } from "wagmi/chains";
+const chains = [polygon, polygonMumbai, bsc];
 const projectId = "8579dab459fd9bbe2b74a2a67b2ae920";
 const { provider } = configureChains(chains, [w3mProvider({ projectId })]);
 const wagmiClient = createClient({
