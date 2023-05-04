@@ -22,7 +22,6 @@ const CryptoCard = ({
   const { payment_method, fiat_amount } = useSelector((state) => state.order);
   const dispatch = useDispatch();
   const { networks } = useSelector((state) => state.options);
-  console.log("NETWORKS", networks);
   const [comingSoon, setComingSoon] = useState(false);
 
   const handleClick = () => {

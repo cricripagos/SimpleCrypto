@@ -15,6 +15,7 @@ const InputComponent = () => {
       } else {
         dispatch(setFiatAmount(parseFloat(e.target.value)));
       }
+
     }
   };
 
