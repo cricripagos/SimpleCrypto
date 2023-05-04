@@ -1,4 +1,9 @@
-import { setBtnDisabled, setBtnLoading } from "@/store/reducers/interactions";
+import {
+  resetToast,
+  setBtnDisabled,
+  setBtnLoading,
+} from "@/store/reducers/interactions";
+import { resetOrder } from "@/store/reducers/order";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../Buttons/Button";
@@ -21,6 +26,8 @@ const Footer = () => {
   useEffect(() => {
     if (step === 1) {
       setContinueText("Continuar");
+      dispatch(resetToast());
+      dispatch(resetOrder());
       dispatch(setBtnLoading(false));
     } else {
       if (payment_method) {
