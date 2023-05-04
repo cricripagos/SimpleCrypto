@@ -8,8 +8,7 @@ import {
   setStepForward,
   setToast,
 } from "@/store/reducers/interactions";
-import Header from "@components/Header/Header";
-import { CryptoCard, Footer, Layout } from "@components/components";
+import { CryptoCard, Footer, Header, Layout } from "@components/components";
 import { Web3Button } from "@web3modal/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
