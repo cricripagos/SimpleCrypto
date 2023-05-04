@@ -1,6 +1,7 @@
 import { asyncCallWithTimeout } from "@/helpers/helpers";
 import usePayBTC from "@/helpers/hooks/usePayBTC";
 import useSupabase from "@/helpers/hooks/useSupabase";
+import useVisibilityChange from "@/helpers/hooks/useVisibilityChange";
 import useWhatsApp from "@/helpers/hooks/useWhatsApp";
 import {
   setBtnDisabled,
@@ -26,6 +27,18 @@ const Step2 = () => {
   const { updatePayment } = useSupabase();
   const router = useRouter();
   const [autoRedirect, setAutoRedirect] = useState(false);
+  // Aqui se deben de cambiar los endpoints y lógica
+  // para que escuche la transacción en BTC y EVM
+  const handleVisibilityHidden = () => {
+    fetch("/api/visibility/hidden");
+  };
+
+  const handleVisibilityVisible = () => {
+    fetch("/api/visibility/visible");
+  };
+
+  useVisibilityChange(handleVisibilityHidden, handleVisibilityVisible);
+
   useEffect(() => {
     if (address == undefined) setAutoRedirect(true);
     if (address !== undefined) {
