@@ -1,4 +1,4 @@
-import { setBtnLoading } from "@/store/reducers/interactions";
+import { setBtnDisabled, setBtnLoading } from "@/store/reducers/interactions";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../Buttons/Button";
@@ -8,6 +8,15 @@ const Footer = () => {
   const { step, btn_loading } = useSelector((state) => state.interactions);
   const [continueText, setContinueText] = useState("Continuar");
   const dispatch = useDispatch();
+
+  // Revisa que el monto sea mayor a 0 para habilitar el boton o no venga vacío
+  useEffect(() => {
+    if (fiat_amount != "" && fiat_amount > 0) {
+      dispatch(setBtnDisabled(false));
+    } else {
+      dispatch(setBtnDisabled(true));
+    }
+  }, [fiat_amount]);
 
   useEffect(() => {
     if (step === 1) {
