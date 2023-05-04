@@ -40,7 +40,6 @@ const Pagar = ({ payment_options, merchant }) => {
     }
   };
 
-
   return (
     <WagmiWrapper>
       <PageWrapper>
