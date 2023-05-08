@@ -1,0 +1,11 @@
+const usePendingAttempts = () => {
+  const setPendingUuid = (currentState) => {
+    localStorage.set("uuid", currentState);
+  };
+
+  const getPendingUuids = () => {
+    return localStorage.get("uuids", false);
+  };
+
+  return { setPendingUuid, getPendingUuids };
+};
