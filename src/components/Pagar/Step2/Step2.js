@@ -1,4 +1,3 @@
-import { asyncCallWithTimeout } from "@/helpers/helpers";
 import usePayBTC from "@/helpers/hooks/usePayBTC";
 import useSupabase from "@/helpers/hooks/useSupabase";
 import useVisibilityChange from "@/helpers/hooks/useVisibilityChange";
@@ -58,13 +57,14 @@ const Step2 = () => {
     try {
       //MODIFICAR el numero en base al timepo que se quiere "esperar" una respuesta del usuario
       const uuid = invoice.uuid;
+      /*
       const i = await asyncCallWithTimeout(
         checkInvoice(invoice.invoice),
         20000
-      );
+      );*/
+      const i = await checkInvoice(invoice.invoice);
 
       // const i = await checkInvoice(invoice.invoice)
-      console.log("Invoice is, ", i);
       if (i) {
         //Successfully Paid
         console.log("Successfully paid", i);
