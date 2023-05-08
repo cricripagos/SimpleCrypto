@@ -1,5 +1,6 @@
 import { asyncCallWithTimeout } from "@/helpers/helpers";
 import usePayBTC from "@/helpers/hooks/usePayBTC";
+import { removeUUID } from "@/helpers/hooks/usePendingAttempts";
 import useSupabase from "@/helpers/hooks/useSupabase";
 import useVisibilityChange from "@/helpers/hooks/useVisibilityChange";
 import useWhatsApp from "@/helpers/hooks/useWhatsApp";
@@ -69,6 +70,8 @@ const Step2 = () => {
         //Successfully Paid
         console.log("Successfully paid", i);
         sendReceipt(i.address);
+        removeUUID(uuid);
+
         await updatePayment({
           attempt: uuid,
           status: "success",
