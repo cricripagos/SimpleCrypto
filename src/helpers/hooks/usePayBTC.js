@@ -11,6 +11,35 @@ export default function usePayBTC() {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  const isCustomProtocolSupported = (protocol, onSuccess, onFailure) => {
+    const iframe = document.createElement("iframe");
+    iframe.style.display = "none";
+    iframe.src = protocol;
+
+    const timeout = setTimeout(() => {
+      onFailure();
+      cleanUp();
+    }, 1000);
+
+    iframe.onload = () => {
+      clearTimeout(timeout);
+      onSuccess();
+      cleanUp();
+    };
+
+    iframe.onerror = () => {
+      clearTimeout(timeout);
+      onFailure();
+      cleanUp();
+    };
+
+    function cleanUp() {
+      document.body.removeChild(iframe);
+    }
+
+    document.body.appendChild(iframe);
+  };
+
   const generateInvoice = async () => {
     const promise = await fetch("/api/btcGenerateInvoice", {
       method: "POST",
@@ -69,8 +98,6 @@ export default function usePayBTC() {
       });
 
     if (dataInvoiceStream.settled === true) {
-      //setIsPaid(true);
-      //router.push(`/success/${dataInvoiceStream.address}`);
       return dataInvoiceStream;
     } else {
       return false;
@@ -136,8 +163,21 @@ export default function usePayBTC() {
           status: "pending",
           txHash: invoice.hash,
         });
-        //Open wallet
-        router.push("lightning://" + invoice.invoice);
+
+        const customProtocol = "lightning://";
+        const redirectTo = customProtocol + invoice.invoice;
+
+        isCustomProtocolSupported(
+          customProtocol,
+          () => {
+            // Redirect to the custom protocol URL
+            router.push(redirectTo);
+          },
+          () => {
+            // Stay on the same page (or take any other action if the protocol is not supported)
+            console.log("Custom protocol not supported");
+          }
+        );
         setBtnLoading(false);
       }
     }
