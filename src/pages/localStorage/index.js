@@ -1,10 +1,10 @@
 // pages/testLocalStorage.js
-import { useEffect, useState } from "react";
 import {
   getAllUUIDs,
   removeUUID,
   setUUID,
-} from "../helpers/hooks/usePendingAttempts";
+} from "@/helpers/hooks/usePendingAttempts";
+import { useEffect, useState } from "react";
 
 const TestLocalStorage = () => {
   const [uuids, setUUIDs] = useState([]);

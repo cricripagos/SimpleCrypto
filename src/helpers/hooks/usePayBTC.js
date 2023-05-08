@@ -1,3 +1,4 @@
+import { setUUID } from "@/helpers/hooks/usePendingAttempts";
 import { setBtnLoading, setInvoice } from "@/store/reducers/interactions";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -107,6 +108,7 @@ export default function usePayBTC() {
     }
 
     invoice.uuid = uuid;
+    setUUID(uuid);
 
     if (!invoice.invoice || !invoice.hash) {
       //ERROR: en la creaction de un invoice
@@ -134,7 +136,7 @@ export default function usePayBTC() {
         await updatePayment({
           attempt: uuid,
           status: "pending",
-          txHash: invoice.hash,
+          txHash: invoice.invoice,
         });
         //Open wallet
         router.push("lightning://" + invoice.invoice);
