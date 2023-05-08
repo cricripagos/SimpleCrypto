@@ -176,7 +176,9 @@ export default function usePayBTC() {
           },
           () => {
             // Stay on the same page (or take any other action if the protocol is not supported)
-            alert("No se pudo abrir la app de tu wallet.");
+            alert(
+              "Notamos que no tienes wallet de lightning. Intenta pagar con otro medio."
+            );
           }
         );
         setBtnLoading(false);
