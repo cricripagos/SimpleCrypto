@@ -168,10 +168,10 @@ export default function usePayBTC() {
         const redirectTo = customProtocol + invoice.invoice;
         console.log("Redirecting to", redirectTo);
         isCustomProtocolSupported(
-          redirectTo,
+          customProtocol,
           () => {
             // Redirect to the custom protocol URL
-            console.log;
+            console.log("redirectTo");
             router.push(redirectTo);
           },
           () => {
