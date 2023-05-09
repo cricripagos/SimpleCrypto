@@ -1,3 +1,4 @@
+import Stablecoins from "@/components/WalletConnectComponents/Stablecoins";
 import { asyncCallWithTimeout } from "@/helpers/helpers";
 import usePayBTC from "@/helpers/hooks/usePayBTC";
 import useSupabase from "@/helpers/hooks/useSupabase";
@@ -124,10 +125,11 @@ const Step2 = () => {
         <div className="flex bg-green-1 rounded-b-lg justify-center items-center flex-col pb-5 px-7">
           <Header />
         </div>
-        <div className="px-7 flex flex-col items-center w-full">
-          <p className="text-lg font-semibold py-3">Connect your wallet</p>
+        <div className="px-7 flex flex-col items-center w-full ">
+          <p className="text-lg font-semibold pt-3">Conecta tu wallet y paga con Stable coins</p>
+          <Stablecoins />
           <Web3Button balance="show" icon="show" />
-          <p className="text-lg font-semibold py-3">Or pay with</p>
+          <p className="text-lg font-semibold py-2">Or pay with</p>
           {payment
             .filter((item) => item.evm === false)
             .sort(function (a, b) {
