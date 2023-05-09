@@ -77,7 +77,6 @@ const Step2 = () => {
           status: "success",
           userAddress: i.address,
         });
-        router.push(`/success/${i.address}`);
         dispatch(
           setToast({
             message: "Successfully paid",
