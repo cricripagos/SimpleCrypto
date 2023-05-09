@@ -1,3 +1,4 @@
+import { numberWithCommas } from "@/helpers/helpers";
 import {
   setChosenNetwork,
   setCryptoAmount,
@@ -97,7 +98,7 @@ const CryptoCard = ({
           <div className="ml-3">
             <p>{name} ({symbol})</p>
             {symbol == 'BTC' && <p className="text-sm text-gray-400">Via Lightning Network</p>}
-            <p className="text-sm text-gray-400">1 ARS = {(1/price).toFixed(evm ? 4 : 10)} {symbol}</p>
+            <p className="text-sm text-gray-400">1 {symbol} = {numberWithCommas(price)} ARS</p>
           </div>
         </div>
         <div className="flex w-1/4 flex-col items-end">
