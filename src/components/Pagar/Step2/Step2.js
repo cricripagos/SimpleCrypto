@@ -130,6 +130,15 @@ const Step2 = () => {
           <p className="text-lg font-semibold py-3">Or pay with</p>
           {payment
             .filter((item) => item.evm === false)
+            .sort(function (a, b) {
+              if (a.name < b.name) {
+                return -1;
+              }
+              if (a.name > b.name) {
+                return 1;
+              }
+              return 0;
+            })
             .map((item, index) => {
               return <CryptoCard {...item} key={index} />;
             })}

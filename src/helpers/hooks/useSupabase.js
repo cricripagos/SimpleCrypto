@@ -84,7 +84,7 @@ export default function useSupabase() {
         fiat_amount: fiat_amount,
         merchant: id,
         payment_option: payment_option,
-        user_address: option.evm ? address : null,
+        user_address: option?.evm ? address : null,
         transaction_hash: transaction_hash,
       }),
     })
