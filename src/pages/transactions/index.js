@@ -85,7 +85,7 @@ const UserTransactions = () => {
 
   return (
     <div>
-      <h1>Test Local Storage Hooks</h1>
+      <h1>Intentos en este dispositivo</h1>
       <ul>
         {uuids.map((uuid, index) => (
           <li key={index}>
