@@ -1,19 +1,28 @@
-// pages/testLocalStorage.js
-import {
-  getAllUUIDs,
-  removeUUID,
-  setUUID,
-} from "@/helpers/hooks/usePendingAttempts";
+import usePendingAttempts from "@/helpers/hooks/usePendingAttempts";
 import { useEffect, useState } from "react";
 
 const TestLocalStorage = () => {
+  const { getAllUUIDs, removeUUID, setUUID, searchUUID } = usePendingAttempts();
   const [uuids, setUUIDs] = useState([]);
+  const [uuidStatus, setUuidStatus] = useState({});
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       setUUIDs(getAllUUIDs());
     }
   }, []);
+
+  useEffect(() => {
+    const updateStatus = async () => {
+      const newStatus = {};
+      for (const uuid of uuids) {
+        newStatus[uuid] = await searchUUID(uuid);
+      }
+      setUuidStatus(newStatus);
+    };
+
+    updateStatus();
+  }, [uuids]);
 
   const addUUID = () => {
     const newUUID = "123e4567-e89b-12d3-a456-426614174000";
@@ -34,6 +43,7 @@ const TestLocalStorage = () => {
         {uuids.map((uuid, index) => (
           <li key={index}>
             {uuid} <button onClick={() => deleteUUID(uuid)}>Remove UUID</button>
+            {uuidStatus[uuid] === true ? <p>pagado</p> : <p>pendiente</p>}
           </li>
         ))}
       </ul>

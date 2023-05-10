@@ -1,4 +1,4 @@
-import { setUUID } from "@/helpers/hooks/usePendingAttempts";
+import usePendingAttempts from "@/helpers/hooks/usePendingAttempts";
 import { setBtnLoading, setInvoice } from "@/store/reducers/interactions";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,7 @@ export default function usePayBTC() {
   const { name } = useSelector((state) => state.merchant);
   const router = useRouter();
   const dispatch = useDispatch();
+  const { setUUID } = usePendingAttempts();
 
   const generateInvoice = async () => {
     const promise = await fetch("/api/btcGenerateInvoice", {

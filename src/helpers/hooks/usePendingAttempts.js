@@ -1,13 +1,11 @@
 // localStorageHooks.js
-import usePayBTC from "@/helpers/hooks/usePayBTC";
-import { useRouter } from "next/router";
-import { supabase } from "./useSupabase";
+import { supabase } from "@/helpers/hooks/useSupabase";
 
 export default function usePendingAttempts() {
   const storageKey = "uuidList";
-  const { checkInvoice } = usePayBTC();
+  //const { checkInvoice } = usePayBTC();
 
-  const router = useRouter();
+  // const router = useRouter();
   const getAllUUIDs = () => {
     const storedData = localStorage.getItem(storageKey);
     return storedData ? JSON.parse(storedData) : [];
@@ -31,15 +29,19 @@ export default function usePendingAttempts() {
       .select("*")
       .eq("uuid", uuid);
 
-    const status = pendingAttempt?.data[0]?.status;
+    //console.log(pendingAttempt);
+
+    const status = pendingAttempt?.data[0]?.payment_status;
     const payment_option = pendingAttempt?.data[0]?.payment_option;
     const txHash = pendingAttempt?.data[0]?.txHash;
-
-    if (status === "success") {
-      removeUUID(uuid);
+    console.log(status);
+    if ((await status) == "success") {
+      //removeUUID(uuid);
       return true;
+    } else {
+      return false;
     }
-
+    /*
     if (status === "pending" && payment_option === 2) {
       const confirm = await checkInvoice(txHash);
       if (confirm.settled == true) {
@@ -47,9 +49,7 @@ export default function usePendingAttempts() {
       }
 
       return false;
-    }
-
-    return pendingAttempt;
+    }*/
   };
 
   return {
