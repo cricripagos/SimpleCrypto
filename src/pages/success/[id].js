@@ -42,7 +42,7 @@ const Success = () => {
   }
 
   const navigateToSurvey = () => {
-    router.push('https://us10.list-manage.com/survey?u=4674bdae73bef9d75729857e0&id=0cc1f6f521&attribution=false')
+    window.open('https://us10.list-manage.com/survey?u=4674bdae73bef9d75729857e0&id=0cc1f6f521&attribution=false', '_blank')
   }
 
 
@@ -62,7 +62,11 @@ const Success = () => {
             <button onClick={navigateToExplorer} className='bg-green-1 text-white p-2 rounded-md shadow-sm'  >
               Link al Scanner
             </button>
-            <button onClick={navigateToSurvey} className='bg-green-1 text-white p-2 rounded-md shadow-sm mt-4' >¡Ayudanos a mejorar!</button>
+            <a onClick={navigateToSurvey} className='p-2 mt-4 cursor-pointer' >
+              <p className='text-green-1 hover:text-gray-500 hover:underline font-semibold text-center'>
+              ¡Ayudanos a mejorar!
+              </p>
+            </a>
           </div>
         }
       </div>
