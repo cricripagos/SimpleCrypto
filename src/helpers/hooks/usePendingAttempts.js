@@ -15,6 +15,10 @@ export default function usePendingAttempts() {
     const currentUUIDs = getAllUUIDs();
     currentUUIDs.push(uuid);
     localStorage.setItem(storageKey, JSON.stringify(currentUUIDs));
+
+    // Dispatch a custom event when a new UUID is added
+    const event = new CustomEvent("newUUIDAdded", { detail: uuid });
+    window.dispatchEvent(event);
   };
 
   const removeUUID = (uuid) => {
@@ -24,32 +28,47 @@ export default function usePendingAttempts() {
   };
 
   const searchUUID = async (uuid) => {
-    const pendingAttempt = await supabase
+    const { data, error } = await supabase
       .from("payment_attempts")
       .select("*")
       .eq("uuid", uuid);
 
-    //console.log(pendingAttempt);
-
-    const status = pendingAttempt?.data[0]?.payment_status;
-    const payment_option = pendingAttempt?.data[0]?.payment_option;
-    const txHash = pendingAttempt?.data[0]?.txHash;
-    console.log(status);
-    if ((await status) == "success") {
-      //removeUUID(uuid);
-      return true;
-    } else {
-      return false;
+    if (error) {
+      console.error("Error fetching payment_attempt:", error);
+      return "error";
     }
-    /*
-    if (status === "pending" && payment_option === 2) {
-      const confirm = await checkInvoice(txHash);
-      if (confirm.settled == true) {
-        router.push(`/success/${confirm.address}`);
-      }
 
-      return false;
-    }*/
+    const status = data?.[0]?.payment_status;
+    return status;
+  };
+
+  const subscribeToStatusChanges = (uuid, onUpdate) => {
+    const channelName = `custom-filter-channel-${uuid}`;
+    const subscription = supabase
+      .channel(channelName)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "payment_attempts",
+          filter: `uuid=eq.${uuid}`,
+        },
+        (payload) => {
+          const oldStatus = payload.old.payment_status;
+          const newStatus = payload.new.payment_status;
+          if (oldStatus === "pending" && newStatus === "success") {
+            onUpdate(payload.new);
+          }
+        }
+      )
+      .subscribe();
+
+    return subscription;
+  };
+
+  const unsubscribeToStatusChanges = (subscription) => {
+    subscription.unsubscribe();
   };
 
   return {
@@ -57,5 +76,7 @@ export default function usePendingAttempts() {
     setUUID,
     removeUUID,
     searchUUID,
+    subscribeToStatusChanges,
+    unsubscribeToStatusChanges,
   };
 }
