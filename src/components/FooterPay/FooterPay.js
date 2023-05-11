@@ -1,5 +1,7 @@
+import usePendingAttempts from "@/helpers/hooks/usePendingAttempts";
 import useSupabase from "@/helpers/hooks/useSupabase";
 import useWhatsApp from "@/helpers/hooks/useWhatsApp";
+
 import {
   resetToast,
   setBtnDisabled,
@@ -22,11 +24,13 @@ import {
 import Button from "../Buttons/Button";
 
 const PayButton = ({ text }) => {
+  const { setUUID } = usePendingAttempts();
+
   const [chainOk, setChainOk] = useState(null);
   const { btn_disabled } = useSelector((state) => state.interactions);
-  useEffect(()=>{
-    console.log('BTN DISABLED', btn_disabled)
-  },[btn_disabled])
+  useEffect(() => {
+    console.log("BTN DISABLED", btn_disabled);
+  }, [btn_disabled]);
   //Payment method selected by user
   const { payment_method, crypto_amount } = useSelector((state) => state.order);
   //Existing payment options & merchant
@@ -105,6 +109,7 @@ const PayButton = ({ text }) => {
       });
       // Agregamos el identificador
       data.uuid = uuid;
+      setUUID(uuid);
       dispatch(
         setToast({
           message: "La transaccion esta en proceso",
@@ -117,8 +122,7 @@ const PayButton = ({ text }) => {
       // setStatus('La transaccion esta en proceso')
     },
   });
-  useEffect(() => {
-  }, [chain.id, selectedMethod?.chain_id, write]);
+  useEffect(() => {}, [chain.id, selectedMethod?.chain_id, write]);
   const handleNetworkChange = () => {
     if (!chainOk) {
       switchNetwork(selectedMethod?.chain_id);
