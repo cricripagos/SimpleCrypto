@@ -41,39 +41,50 @@ export default function usePayBTC() {
   };
 
   const checkInvoice = async (payment_request) => {
-    console.log("Running Check invoice");
-    const invoice = { invoice: payment_request };
+    try {
+      console.log("Running Check invoice");
+      const invoice = { invoice: payment_request };
 
-    const dataInvoiceStream = await fetch("/api/btcCheckInvoice", {
-      method: "POST",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        "Content-Type": "aplication/json",
-      },
-      body: JSON.stringify(invoice),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        try {
-          console.log("entro aca ", data);
-          const d = data;
-          const inv = {
-            settled: d.settled,
-            address: Buffer.from(d.payment_addr).toString("hex"),
-          };
-          return inv;
-        } catch (e) {
-          return console.log("There was an error", e);
-        }
+      const response = await fetch("/api/btcCheckInvoice", {
+        method: "POST",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+          "Content-Type": "aplication/json",
+        },
+        body: JSON.stringify(invoice),
       });
 
-    if (dataInvoiceStream.settled === true) {
-      //setIsPaid(true);
-      //router.push(`/success/${dataInvoiceStream.address}`);
-      return dataInvoiceStream;
-    } else {
+      const data = await response.json();
+      const inv = {
+        settled: data.settled,
+        address: Buffer.from(data.payment_addr).toString("hex"),
+      };
+
+      return inv;
+    } catch (e) {
+      console.log("There was an error", e);
       return false;
+    }
+  };
+
+  const checkPendingInvoices = async () => {
+    const pendingUUIDs = await getPendingUUIDs(); // Implement this function to get all UUIDs with a pending status
+
+    for (const uuid of pendingUUIDs) {
+      const payment_request = await getPaymentRequestByUUID(uuid); // Implement this function to get the payment_request for a given UUID
+
+      if (payment_request) {
+        const settled = await checkInvoice(payment_request);
+
+        if (settled) {
+          // Update the payment status in the database
+          await updatePayment({
+            attempt: uuid,
+            status: "success",
+          });
+        }
+      }
     }
   };
 
@@ -147,5 +158,6 @@ export default function usePayBTC() {
   return {
     generateAttempt,
     checkInvoice,
+    checkPendingInvoices,
   };
 }
