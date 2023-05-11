@@ -1,4 +1,4 @@
-import { setUUID } from "@/helpers/hooks/usePendingAttempts";
+import usePendingAttempts from "@/helpers/hooks/usePendingAttempts";
 import useSupabase from "@/helpers/hooks/useSupabase";
 import useWhatsApp from "@/helpers/hooks/useWhatsApp";
 
@@ -24,6 +24,8 @@ import {
 import Button from "../Buttons/Button";
 
 const PayButton = ({ text }) => {
+  const { setUUID } = usePendingAttempts();
+
   const [chainOk, setChainOk] = useState(null);
   const { btn_disabled } = useSelector((state) => state.interactions);
   useEffect(() => {

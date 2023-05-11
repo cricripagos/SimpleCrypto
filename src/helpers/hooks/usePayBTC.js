@@ -14,32 +14,30 @@ export default function usePayBTC() {
   const { setUUID } = usePendingAttempts();
 
   const generateInvoice = async () => {
-    const promise = await fetch("/api/btcGenerateInvoice", {
-      method: "POST",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        "Content-Type": "aplication/json",
-      },
-      body: JSON.stringify({
-        crypto_amount: crypto_amount,
-        merchant: name,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        try {
-          console.log(data);
-          const inv = {
-            invoice: data.payment_request,
-            hash: Buffer.from(data.r_hash).toString("hex"),
-          };
-          return inv;
-        } catch (e) {
-          return console.log(e);
-        }
+    try {
+      const response = await fetch("/api/btcGenerateInvoice", {
+        method: "POST",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+          "Content-Type": "aplication/json",
+        },
+        body: JSON.stringify({
+          crypto_amount: crypto_amount,
+          merchant: name,
+        }),
       });
-    return promise;
+
+      const data = await response.json();
+      const inv = {
+        invoice: data.payment_request,
+        hash: Buffer.from(data.r_hash).toString("hex"),
+      };
+      return inv;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
 
   const checkInvoice = async (payment_request) => {

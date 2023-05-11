@@ -5,7 +5,6 @@ const UserTransactions = () => {
   const {
     getAllUUIDs,
     removeUUID,
-    setUUID,
     searchUUID,
     subscribeToStatusChanges,
     unsubscribeToStatusChanges,
