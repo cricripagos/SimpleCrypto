@@ -119,11 +119,41 @@ export default function useSupabase() {
     return promise;
   };
 
+  const getPendingUUIDs = async () => {
+    const { data, error } = await supabase
+      .from("payments")
+      .select("uuid")
+      .eq("status", "pending");
+
+    if (error) {
+      console.log("Error getting pending UUIDs:", error);
+      return [];
+    }
+
+    return data.map((item) => item.uuid);
+  };
+
+  const getPaymentRequestByUUID = async (uuid) => {
+    const { data, error } = await supabase
+      .from("payments")
+      .select("payment_request")
+      .eq("uuid", uuid);
+
+    if (error || !data || data.length === 0) {
+      console.log("Error getting payment_request by UUID:", error);
+      return null;
+    }
+
+    return data[0].payment_request;
+  };
+
   return {
     getMerchant,
     getPaymentMethods,
     getNetworks,
     createPayment,
     updatePayment,
+    getPendingUUIDs,
+    getPaymentRequestByUUID,
   };
 }

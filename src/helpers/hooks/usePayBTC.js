@@ -6,7 +6,12 @@ import { requestProvider } from "webln";
 import useSupabase from "./useSupabase";
 
 export default function usePayBTC() {
-  const { createPayment, updatePayment } = useSupabase();
+  const {
+    createPayment,
+    updatePayment,
+    getPendingUUIDs,
+    getPaymentRequestByUUID,
+  } = useSupabase();
   const { crypto_amount, payment_method } = useSelector((state) => state.order);
   const { name } = useSelector((state) => state.merchant);
   const router = useRouter();
