@@ -1,3 +1,4 @@
+import { numberWithCommas } from "@/helpers/helpers";
 import {
   setChosenNetwork,
   setCryptoAmount,
@@ -88,15 +89,16 @@ const CryptoCard = ({
               <img
                 className="w-5 h-5"
                 src={
-                  network && networks.find((net) => net.id === network).logo_url
+                  network && networks?.find((net) => net.id === network).logo_url
                 }
                 alt="Network logo"
               />
             )}
           </div>
           <div className="ml-3">
-            <p>{name}</p>
-            <p className="text-sm text-gray-400">{symbol}</p>
+            <p>{name} ({symbol})</p>
+            {symbol == 'BTC' && <p className="text-sm text-gray-400">Via Lightning Network</p>}
+            <p className="text-sm text-gray-400">1 {symbol} = {numberWithCommas(price)} ARS</p>
           </div>
         </div>
         <div className="flex w-1/4 flex-col items-end">

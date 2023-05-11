@@ -22,3 +22,8 @@ export const asyncCallWithTimeout = async (asyncPromise, timeLimit) => {
     return result;
   });
 };
+
+export function numberWithCommas(x) {
+    x = x.toFixed(0)
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

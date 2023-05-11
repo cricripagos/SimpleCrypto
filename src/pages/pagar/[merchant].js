@@ -23,6 +23,7 @@ const Pagar = ({ payment_options, merchant }) => {
     getNetworks()
     setLoading(false)
   }, []);
+  
 
   const stepper = () => {
     switch (step) {

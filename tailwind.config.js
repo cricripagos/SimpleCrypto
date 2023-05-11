@@ -21,6 +21,7 @@ module.exports = {
         'green-1': 'rgb(57, 91, 100)',
         'green-2': 'rgb(76, 115, 113)',
         'transparent-dark': 'rgba(0, 0, 0, 0.5)',
+        'lightning': '#7C13F7'
       },
     },
   },
