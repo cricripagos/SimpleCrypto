@@ -82,7 +82,7 @@ export default function usePayBTC() {
       if (payment_request) {
         const settled = await checkInvoice(payment_request);
 
-        if (settled) {
+        if (settled.settled == true) {
           // Update the payment status in the database
           await updatePayment({
             attempt: uuid,
