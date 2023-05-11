@@ -1,13 +1,14 @@
+import Stablecoins from "@/components/WalletConnectComponents/Stablecoins";
 import { asyncCallWithTimeout } from "@/helpers/helpers";
 import usePayBTC from "@/helpers/hooks/usePayBTC";
 import useSupabase from "@/helpers/hooks/useSupabase";
 import useVisibilityChange from "@/helpers/hooks/useVisibilityChange";
 import useWhatsApp from "@/helpers/hooks/useWhatsApp";
 import {
-  setBtnDisabled,
-  setBtnLoading,
-  setStepForward,
-  setToast,
+    setBtnDisabled,
+    setBtnLoading,
+    setStepForward,
+    setToast,
 } from "@/store/reducers/interactions";
 import { CryptoCard, Footer, Header, Layout } from "@components/components";
 import { Web3Button } from "@web3modal/react";
@@ -124,12 +125,22 @@ const Step2 = () => {
         <div className="flex bg-green-1 rounded-b-lg justify-center items-center flex-col pb-5 px-7">
           <Header />
         </div>
-        <div className="px-7 flex flex-col items-center w-full">
-          <p className="text-lg font-semibold py-3">Connect your wallet</p>
+        <div className="px-7 flex flex-col items-center w-full ">
+          <p className="text-lg font-semibold pt-3">Conecta tu wallet y paga con Stable coins</p>
+          <Stablecoins />
           <Web3Button balance="show" icon="show" />
-          <p className="text-lg font-semibold py-3">Or pay with</p>
+          <p className="text-lg font-semibold py-2">O paga con</p>
           {payment
             .filter((item) => item.evm === false)
+            .sort(function (a, b) {
+              if (a.name < b.name) {
+                return -1;
+              }
+              if (a.name > b.name) {
+                return 1;
+              }
+              return 0;
+            })
             .map((item, index) => {
               return <CryptoCard {...item} key={index} />;
             })}

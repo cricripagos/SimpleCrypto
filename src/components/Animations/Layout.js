@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-
+// 
 const Layout = ({ children }) => (
   <motion.div
     className="h-screen w-full"
