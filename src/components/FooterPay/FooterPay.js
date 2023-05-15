@@ -25,6 +25,7 @@ import Button from "../Buttons/Button";
 
 const PayButton = ({ text }) => {
   const { setUUID } = usePendingAttempts();
+  const { fiat_amount } = useSelector((state) => state.order);
 
   const [chainOk, setChainOk] = useState(null);
   const { btn_disabled } = useSelector((state) => state.interactions);
@@ -160,6 +161,19 @@ const PayButton = ({ text }) => {
         attempt: data.uuid,
         status: "success",
       });
+
+      try {
+        const response = await fetch("/api/fudo", {
+          method: "POST",
+          body: JSON.stringify({ fiat_amount: fiat_amount }),
+        });
+
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error("Error while sending data to API:", error);
+      }
+
       sendReceipt(d.transactionHash);
 
       router.push(`/success/${d.transactionHash}`);
