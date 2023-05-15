@@ -6,10 +6,10 @@ import useSupabase from "@/helpers/hooks/useSupabase";
 import useVisibilityChange from "@/helpers/hooks/useVisibilityChange";
 import useWhatsApp from "@/helpers/hooks/useWhatsApp";
 import {
-    setBtnDisabled,
-    setBtnLoading,
-    setStepForward,
-    setToast,
+  setBtnDisabled,
+  setBtnLoading,
+  setStepForward,
+  setToast,
 } from "@/store/reducers/interactions";
 import { CryptoCard, Footer, Header, Layout } from "@components/components";
 import { Web3Button } from "@web3modal/react";
@@ -24,6 +24,8 @@ const Step2 = () => {
   const { payment } = useSelector((state) => state.options);
   const { payment_method } = useSelector((state) => state.order);
   const { invoice } = useSelector((state) => state.interactions);
+  const { fiat_amount } = useSelector((state) => state.order);
+
   const { checkInvoice } = usePayBTC();
   const { sendReceipt } = useWhatsApp();
   const { updatePayment } = useSupabase();
@@ -71,6 +73,18 @@ const Step2 = () => {
       if (i) {
         //Successfully Paid
         console.log("Successfully paid", i);
+        try {
+          const response = await fetch("/api/fudo", {
+            method: "POST",
+            body: JSON.stringify({ fiat_amount: fiat_amount }),
+          });
+
+          const data = await response.json();
+          console.log(data);
+        } catch (error) {
+          console.error("Error while sending data to API:", error);
+        }
+
         sendReceipt(i.address);
         removeUUID(uuid);
 
@@ -131,7 +145,9 @@ const Step2 = () => {
           <Header />
         </div>
         <div className="px-7 flex flex-col items-center w-full ">
-          <p className="text-lg font-semibold pt-3">Conecta tu wallet y paga con Stable coins</p>
+          <p className="text-lg font-semibold pt-3">
+            Conecta tu wallet y paga con Stable coins
+          </p>
           <Stablecoins />
           <Web3Button balance="show" icon="show" />
           <p className="text-lg font-semibold py-2">O paga con</p>
