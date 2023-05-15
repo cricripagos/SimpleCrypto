@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useAccount } from "wagmi";
 import { Step1, Step2, Step3 } from "@components/Pagar/pagar";
 
+
 const Pagar = ({ payment_options, merchant }) => {
   const { getNetworks } = useSupabase();
   const [loading, setLoading] = useState(true);
