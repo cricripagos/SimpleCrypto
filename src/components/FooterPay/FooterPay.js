@@ -54,7 +54,9 @@ const PayButton = ({ text }) => {
           selectedMethod?.decimals
         )
       : 0;
-  console.log(selectedMethod, formated_amount.toString());
+  // console.log(selectedMethod, formated_amount.toString());
+
+  //Prepare config
   const { config } = usePrepareContractWrite({
     address: selectedMethod?.contract_address,
     abi: erc20ABI,
