@@ -92,7 +92,7 @@ const PayButton = ({ text }) => {
   });
 
   const {
-    data,
+    daWta,
     isLoading: isLoadingPay,
     isSuccess: isSuccessPay,
     write,
@@ -119,6 +119,8 @@ const PayButton = ({ text }) => {
       // setStatus('La transaccion esta en proceso')
     },
   });
+
+
   useEffect(() => {
   }, [chain.id, selectedMethod?.chain_id, write]);
   const handleNetworkChange = () => {
@@ -131,6 +133,7 @@ const PayButton = ({ text }) => {
       write?.();
     }
   };
+
   useEffect(() => {
     if (isloadingNetwork) {
       dispatch(

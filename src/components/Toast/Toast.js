@@ -11,7 +11,7 @@ const Toast = () => {
     // }, [message])
 
     return (
-        <div className='absolute bottom-20 w-full my-5 '>
+        <div className='absolute top-0 w-full my-5 '>
             <div className={`shadow-sm rounded-md mx-3 p-3 flex items-center flex-row  ${chooseColor(status)}`}>
                 {loading &&
                     <svg
