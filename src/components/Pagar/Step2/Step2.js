@@ -1,16 +1,17 @@
 import Stablecoins from "@/components/WalletConnectComponents/Stablecoins";
+import StepWrapper from "@/components/Wrappers/StepWrapper";
 import { asyncCallWithTimeout } from "@/helpers/helpers";
 import usePayBTC from "@/helpers/hooks/usePayBTC";
 import useSupabase from "@/helpers/hooks/useSupabase";
 import useVisibilityChange from "@/helpers/hooks/useVisibilityChange";
 import useWhatsApp from "@/helpers/hooks/useWhatsApp";
 import {
-    setBtnDisabled,
-    setBtnLoading,
-    setStepForward,
-    setToast,
+  setBtnDisabled,
+  setBtnLoading,
+  setStepForward,
+  setToast,
 } from "@/store/reducers/interactions";
-import { CryptoCard, Footer, Header, Layout } from "@components/components";
+import { CryptoCard, Footer, Header } from "@components/components";
 import { Web3Button } from "@web3modal/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -119,14 +120,14 @@ const Step2 = () => {
   }, [invoice]);
 
   return (
-    <Layout>
-      <div className="flex flex-col h-screen relative">
+      <StepWrapper>
         {/*invoice && <Modal />*/}
-        <div className="flex bg-green-1 rounded-b-lg justify-center items-center flex-col pb-5 px-7">
+        <div className="flex bg-green-1 rounded-b-lg justify-center items-center flex-col pb-5 px-7 flex-1/3">
           <Header />
         </div>
-        <div className="px-7 flex flex-col items-center w-full ">
-          <p className="text-lg font-semibold pt-3">Conecta tu wallet y paga con Stable coins</p>
+        <div className="px-7 flex flex-col items-center w-full flex-1/4 overflow-scroll
+        overflow-x-hidden scrollbox">
+          <p className="text-lg font-semibold pt-3 text-center">Conecta tu wallet y paga con Stable coins</p>
           <Stablecoins />
           <Web3Button balance="show" icon="show" />
           <p className="text-lg font-semibold py-2">O paga con</p>
@@ -146,8 +147,7 @@ const Step2 = () => {
             })}
         </div>
         <Footer />
-      </div>
-    </Layout>
+        </StepWrapper>
   );
 };
 

@@ -1,8 +1,10 @@
-import { useSelector } from 'react-redux'
+import { resetToast } from '@/store/reducers/interactions'
+import { useDispatch, useSelector } from 'react-redux'
 import chooseColor from './toast_functions'
 
 const Toast = () => {
     const { message, loading, status } = useSelector(state => state.interactions.toast)
+    const dispatch = useDispatch()
 
     // useEffect(() => {
     //     setTimeout(() => {
@@ -11,8 +13,14 @@ const Toast = () => {
     // }, [message])
 
     return (
-        <div className='absolute top-0 w-full my-5 '>
-            <div className={`shadow-sm rounded-md mx-3 p-3 flex items-center flex-row  ${chooseColor(status)}`}>
+        <div className='absolute top-5 px-3'>
+            <div className={`shadow-md rounded-md p-3  ${chooseColor(status)}`}>
+                <div className='w-full flex justify-end pr-5'>
+                    <p className='text-xs' onClick={() => dispatch(resetToast())}>
+                    &#x2715;
+                    </p>
+                </div>
+                <div className='flex items-center flex-row'>
                 {loading &&
                     <svg
                         className={`animate-spin h-5 w-5 ${chooseColor(status)}`}
@@ -28,6 +36,7 @@ const Toast = () => {
                         />
                     </svg>}
                 <p className={`${chooseColor(status)} text-wrap ml-3 ${loading ? 'w-3/4' : 'w-full'}`}>{message}</p>
+                </div>
             </div>
         </div>
     )

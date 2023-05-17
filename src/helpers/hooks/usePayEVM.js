@@ -1,8 +1,11 @@
-import { resetToast, setBtnDisabled, setToast } from "@/store/reducers/interactions";
-import { useEffect } from "react";
+import sendReceipt from "@/pages/api/sendReceipt";
+import { resetToast, setBtnDisabled, setBtnText, setToast } from "@/store/reducers/interactions";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { erc20ABI, useNetwork, usePrepareContractWrite } from "wagmi";
+import { erc20ABI, useContractWrite, useNetwork, usePrepareContractWrite, useSwitchNetwork, useWaitForTransaction } from "wagmi";
 import { formatAmountParse } from "../helpers";
+import useSupabase from "./useSupabase";
 
 //Constant Variables = Testing
 
@@ -27,6 +30,11 @@ export default function usePayEVM() {
     const dispatch = useDispatch()
     //Wagmi
     const { chain } = useNetwork();
+    const { isLoading: isloadingNetwork, switchNetwork } = useSwitchNetwork();
+    //Supabase
+    const { createPayment, updatePayment } = useSupabase(); 
+    //Navigation
+    const router = useRouter();
 
 
 
@@ -45,9 +53,10 @@ export default function usePayEVM() {
           if (e.includes(chainError)) {
 
             //If chains do not match run an alert message
-            
+            console.log('Chain mismatch')
             setChainOk(false);
             dispatch(setBtnDisabled(true));
+            dispatch(setBtnText('Chain Mismatch'))
             dispatch(
               setToast({
                 message: `Estas en la network ${
@@ -65,10 +74,15 @@ export default function usePayEVM() {
         },
         onSuccess() {
           setChainOk(selectedMethod?.chain_id == chain.id);
+          dispatch(setBtnText('Pagar'))
           dispatch(setBtnDisabled(false));
           dispatch(resetToast());
         },
       });
+
+      useEffect(() => {
+        console.log('This use effect is running')
+      }, [])
 
 
       const {
@@ -92,7 +106,7 @@ export default function usePayEVM() {
           dispatch(
             setToast({
               message: "La transaccion esta en proceso",
-              status: "",
+              status: "warning",
               loading: true,
               show: true,
             })
@@ -101,13 +115,61 @@ export default function usePayEVM() {
         },
       });
 
-    useEffect(() => {
+      const handleNetworkChange = () => {
+        if (!chainOk) {
+          switchNetwork(selectedMethod?.chain_id);
+        }
+      };
 
-    })
+      const { dataWait } = useWaitForTransaction({
+        hash: data?.hash,
+        async onSuccess(d) {
+          await updatePayment({
+            attempt: data.uuid,
+            status: "success",
+          });
+          sendReceipt(d.transactionHash);
+    
+          router.push(`/success/${d.transactionHash}`);
+          // setStatus('La transaccion fue correctamente procesada con hash:' + d.transactionHash)
+        },
+      });
 
     const payEVM = () => {
+        //Check if chain is ok
         console.log('Pay EVM')
+        if(chainOk){
+          write();
+        }
     }
+
+    useEffect(() => {
+      if (isloadingNetwork) {
+        dispatch(
+          setToast({
+            message:
+              "Estamos esperando que aceptes la solicitud de cambio de Network en tu wallet",
+            status: "",
+            loading: true,
+            show: true,
+          })
+        );
+      }
+    }, [isloadingNetwork]);
+
+    useEffect(() => {
+      if (isLoadingPay) {
+        dispatch(
+          setToast({
+            message:
+              "Estamos esperando que firmes la transaccion en tu wallet",
+            status: "",
+            loading: true,
+            show: true,
+          })
+        );
+      }
+    }, [isLoadingPay]);
 
     return {
         payEVM,

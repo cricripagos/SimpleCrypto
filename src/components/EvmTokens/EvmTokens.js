@@ -20,7 +20,7 @@ const EvmTokens = () => {
 
   useEffect(() => {
     console.log("BALANCE DATA", balanceData);
-    if (balanceData.dataWithId !== undefined) {
+    if (balanceData?.dataWithId !== undefined) {
       let temp_payments = payment.map((item) => {
         const balance = balanceData.dataWithId.filter(
           (balanceItem) => balanceItem[1] === item.id

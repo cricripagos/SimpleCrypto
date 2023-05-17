@@ -1,7 +1,9 @@
 import {
+  resetBtnText,
   resetToast,
   setBtnDisabled,
   setBtnLoading,
+  setBtnText,
 } from "@/store/reducers/interactions";
 import { resetOrder } from "@/store/reducers/order";
 import { useEffect, useState } from "react";
@@ -12,6 +14,7 @@ const Footer = () => {
   const { fiat_amount, payment_method } = useSelector((state) => state.order);
   const { step, btn_loading } = useSelector((state) => state.interactions);
   const [continueText, setContinueText] = useState("Continuar");
+  const {btn_text} = useSelector((state) => state.interactions);
   const dispatch = useDispatch();
 
   // Revisa que el monto sea mayor a 0 para habilitar el boton o no venga vacío
@@ -25,40 +28,37 @@ const Footer = () => {
 
   useEffect(() => {
     if (step === 1) {
-      setContinueText("Continuar");
+      dispatch(resetBtnText())
       dispatch(resetToast());
       dispatch(resetOrder());
       dispatch(setBtnLoading(false));
     } else {
-      if (payment_method) {
+      if (payment_method || step === 3) {
         if (btn_loading) {
-          setContinueText("Cargando...");
+          dispatch(setBtnText("Cargando..."))
         } else {
-          setContinueText("Pagar");
+          dispatch(setBtnText("Pagar"))
         }
+      } else {
+        dispatch(resetBtnText())
       }
+    }
+
+    if(!payment_method){
+      dispatch(setBtnDisabled(true))
     }
   }, [payment_method, btn_loading]);
 
-  /* Fix temporal: si el payment method es BTC, el texto del boton es pagar, sino es continuar */
-  /// El fix esta mal pq no debería estar hardcodeado BTC
-  useEffect(() => {
-    if (step >= 2 && payment_method == 2) {
-      setContinueText("Pagar");
-    } else {
-      setContinueText("Continuar");
-    }
-  }, [step]);
 
   return (
-    <div className="bg-stone-100 py-5 px-7 flex flex-row justify-between fixed bottom-0 w-full max-w-md">
+    <div className="bg-stone-100 py-5 px-7 flex flex-row justify-between w-full max-w-md flex-1/3 ">
       <div>
         <p className="font-bold">Orden: #001</p>
         <p>{fiat_amount} ARS($)</p>
       </div>
-      <div className="flex">
-        {step === 2 && <Button filled={false} text="Volver" action="back" />}
-        <Button filled={true} text={continueText} action="forward" />
+      <div className="flex flex-row">
+        {step >= 2 && <Button filled={false} text="Volver" action="back" />}
+        <Button filled={true} text={btn_text} action="forward" />
       </div>
     </div>
   );

@@ -92,7 +92,7 @@ const PayButton = ({ text }) => {
   });
 
   const {
-    daWta,
+    data,
     isLoading: isLoadingPay,
     isSuccess: isSuccessPay,
     write,
