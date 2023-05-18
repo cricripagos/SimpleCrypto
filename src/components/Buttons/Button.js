@@ -1,6 +1,6 @@
 import usePayBTC from "@/helpers/hooks/usePayBTC"
 import usePayEVM from "@/helpers/hooks/usePayEVM"
-import { setStepForward } from "@/store/reducers/interactions"
+import { setStepBackward, setStepForward } from "@/store/reducers/interactions"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 

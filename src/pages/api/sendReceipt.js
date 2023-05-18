@@ -10,6 +10,7 @@ export default async function sendReceipt(req, res) {
   //const blockscan = JSON.parse(req.body).blockscan;
   const payment_option = JSON.parse(req.body).payment_option;
   const txHash = JSON.parse(req.body).txHash;
+  console.log("txHash", txHash)
   const elapsed_time = "12 s";
   const date = new Date();
   const options = {

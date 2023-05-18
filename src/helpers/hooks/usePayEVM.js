@@ -1,4 +1,3 @@
-import sendReceipt from "@/pages/api/sendReceipt";
 import { resetToast, setBtnDisabled, setBtnText, setToast } from "@/store/reducers/interactions";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -6,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { erc20ABI, useContractWrite, useNetwork, usePrepareContractWrite, useSwitchNetwork, useWaitForTransaction } from "wagmi";
 import { formatAmountParse } from "../helpers";
 import useSupabase from "./useSupabase";
+import useWhatsApp from "./useWhatsApp";
 
 //Constant Variables = Testing
 
@@ -35,7 +35,8 @@ export default function usePayEVM() {
     const { createPayment, updatePayment } = useSupabase(); 
     //Navigation
     const router = useRouter();
-    //configuration
+    //Whatsap
+    const { sendReceipt } = useWhatsApp();
 
 
 
@@ -82,6 +83,7 @@ export default function usePayEVM() {
 
       if (error){
         console.log('error', error)
+        
       }
 
       const {
@@ -110,8 +112,13 @@ export default function usePayEVM() {
               show: true,
             })
           );
+          dispatch(setBtnDisabled(true));
           // setStatus('La transaccion esta en proceso')
         },
+        async onError(error) {
+          dispatch(setBtnDisabled(false));
+          console.log("error was", error);
+        }
       });
 
       const handleNetworkChange = () => {
@@ -120,18 +127,23 @@ export default function usePayEVM() {
         }
       };
 
-      const { dataWait } = useWaitForTransaction({
+      const { dataWait, } = useWaitForTransaction({
         hash: data?.hash,
         async onSuccess(d) {
           await updatePayment({
             attempt: data.uuid,
             status: "success",
           });
+          console.log('Hash', d.transactionHash)
           sendReceipt(d.transactionHash);
     
           router.push(`/success/${d.transactionHash}`);
           // setStatus('La transaccion fue correctamente procesada con hash:' + d.transactionHash)
         },
+        async onError(e) {
+          dispatch(setBtnDisabled(false));
+          console.log('error was', e)
+        }
       });
 
     const payEVM = () => {
@@ -166,6 +178,7 @@ export default function usePayEVM() {
             show: true,
           })
         );
+        dispatch(setBtnDisabled(true))
       }
     }, [isLoadingPay]);
 
