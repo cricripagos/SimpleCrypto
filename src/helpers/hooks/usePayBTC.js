@@ -137,7 +137,11 @@ export default function usePayBTC() {
           txHash: invoice.hash,
         });
         //Open wallet
-        router.push("lightning://" + invoice.invoice);
+        try {
+          router.push("lightning://" + invoice.invoice);
+        } catch (e) {
+          console.log('error is', e);
+        }
         setBtnLoading(false);
       }
     }

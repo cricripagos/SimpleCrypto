@@ -1,3 +1,4 @@
+import Toast from "@/components/Toast/Toast";
 import Stablecoins from "@/components/WalletConnectComponents/Stablecoins";
 import StepWrapper from "@/components/Wrappers/StepWrapper";
 import { asyncCallWithTimeout } from "@/helpers/helpers";
@@ -23,7 +24,7 @@ const Step2 = () => {
   const dispatch = useDispatch();
   const { payment } = useSelector((state) => state.options);
   const { payment_method } = useSelector((state) => state.order);
-  const { invoice } = useSelector((state) => state.interactions);
+  const { invoice, toast } = useSelector((state) => state.interactions);
   const { checkInvoice } = usePayBTC();
   const { sendReceipt } = useWhatsApp();
   const { updatePayment } = useSupabase();
@@ -146,6 +147,7 @@ const Step2 = () => {
               return <CryptoCard {...item} key={index} />;
             })}
         </div>
+        {toast.show && <Toast />}
         <Footer />
         </StepWrapper>
   );

@@ -1,6 +1,6 @@
 import usePayBTC from "@/helpers/hooks/usePayBTC"
 import usePayEVM from "@/helpers/hooks/usePayEVM"
-import { setStepBackward, setStepForward } from "@/store/reducers/interactions"
+import { setStepForward } from "@/store/reducers/interactions"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
@@ -11,7 +11,7 @@ const Button = ({ text, filled, action }) => {
   const payment_selected = payment[payment_method]
   const [paymentSelected, setPaymentSelected] = useState(null)
   const {generateAttempt} = usePayBTC()
-  const {payEVM} = usePayEVM()
+  const {payEVM, chainOk, handleNetworkChange} = usePayEVM()
 
   const dispatch = useDispatch()
 
@@ -22,21 +22,24 @@ const Button = ({ text, filled, action }) => {
   }, [payment_method])
 
   const handleClick = () => {
-    console.log('Clicked on button')
+    console.log('Clicked on button', action, text)
     if (action === 'forward') {
-      if (text !== 'Pagar') {
+      if (text === 'Continuar') {
+
         dispatch(setStepForward())
       } else {
         console.log('Pagar con,', paymentSelected)
         //Run PAGAR functions - para que diga pagar tiene que haber una payment option seleccionada
         if (paymentSelected.evm){
           //RUN EVM functions
-          console.log('Running evm flow')
-          payEVM()
+          if(chainOk){
+            payEVM()
+          } else {
+            handleNetworkChange()
+          }
         } else {
           //RUN NON-EVM functions
           if(paymentSelected.symbol === 'BTC') {
-            console.log('Its BTC')
             generateAttempt()
           }
           

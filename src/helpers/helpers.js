@@ -29,13 +29,17 @@ export function numberWithCommas(x) {
 }
 
 export function formatAmountParse (amount, decimals) {
+  if (decimals){
+    const is_scientific_notation = /[eE]/.test(amount?.toString());
+  
+    const formated_amount = amount && !is_scientific_notation ? parseUnits(
+      amount.toString().slice(0, decimals),
+      decimals
+    ) : 0
+  
+    return formated_amount
+  } else {
+    return amount
+  }
 
-  const is_scientific_notation = /[eE]/.test(amount?.toString());
-
-  const formated_amount = amount && !is_scientific_notation ? parseUnits(
-    amount.toString().slice(0, decimals),
-    decimals
-  ) : 0
-
-  return formated_amount
 }

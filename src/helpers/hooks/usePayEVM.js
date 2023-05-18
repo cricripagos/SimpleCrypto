@@ -35,13 +35,14 @@ export default function usePayEVM() {
     const { createPayment, updatePayment } = useSupabase(); 
     //Navigation
     const router = useRouter();
+    //configuration
 
 
 
     //Pay EVM funct
 
     //Prepare config for contract
-    const { config } = usePrepareContractWrite({
+    const { config, error } = usePrepareContractWrite({
         address: selectedMethod?.contract_address,
         abi: erc20ABI,
         functionName: "transfer",
@@ -53,10 +54,9 @@ export default function usePayEVM() {
           if (e.includes(chainError)) {
 
             //If chains do not match run an alert message
-            console.log('Chain mismatch')
             setChainOk(false);
-            dispatch(setBtnDisabled(true));
-            dispatch(setBtnText('Chain Mismatch'))
+            dispatch(setBtnDisabled(false));
+            dispatch(setBtnText('Cambiar network'))
             dispatch(
               setToast({
                 message: `Estas en la network ${
@@ -80,10 +80,9 @@ export default function usePayEVM() {
         },
       });
 
-      useEffect(() => {
-        console.log('This use effect is running')
-      }, [])
-
+      if (error){
+        console.log('error', error)
+      }
 
       const {
         data,
@@ -137,7 +136,6 @@ export default function usePayEVM() {
 
     const payEVM = () => {
         //Check if chain is ok
-        console.log('Pay EVM')
         if(chainOk){
           write();
         }
@@ -171,8 +169,15 @@ export default function usePayEVM() {
       }
     }, [isLoadingPay]);
 
+    useEffect(() => {
+      if(payment_method === null){
+        dispatch(resetToast())
+      }
+    }, [payment_method])
+
     return {
         payEVM,
-        chainOk
+        chainOk,
+        handleNetworkChange
     }
 }
