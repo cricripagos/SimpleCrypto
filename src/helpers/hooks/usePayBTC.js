@@ -1,3 +1,4 @@
+import usePendingAttempts from "@/helpers/hooks/usePendingAttempts";
 import { setBtnLoading, setInvoice } from "@/store/reducers/interactions";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -5,75 +6,90 @@ import { requestProvider } from "webln";
 import useSupabase from "./useSupabase";
 
 export default function usePayBTC() {
-  const { createPayment, updatePayment } = useSupabase();
+  const {
+    createPayment,
+    updatePayment,
+    getPendingUUIDs,
+    getPaymentRequestByUUID,
+  } = useSupabase();
   const { crypto_amount, payment_method } = useSelector((state) => state.order);
   const { name } = useSelector((state) => state.merchant);
   const router = useRouter();
   const dispatch = useDispatch();
+  const { setUUID } = usePendingAttempts();
 
   const generateInvoice = async () => {
-    const promise = await fetch("/api/btcGenerateInvoice", {
-      method: "POST",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        "Content-Type": "aplication/json",
-      },
-      body: JSON.stringify({
-        crypto_amount: crypto_amount,
-        merchant: name,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        try {
-          console.log(data);
-          const inv = {
-            invoice: data.payment_request,
-            hash: Buffer.from(data.r_hash).toString("hex"),
-          };
-          return inv;
-        } catch (e) {
-          return console.log(e);
-        }
+    try {
+      const response = await fetch("/api/btcGenerateInvoice", {
+        method: "POST",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+          "Content-Type": "aplication/json",
+        },
+        body: JSON.stringify({
+          crypto_amount: crypto_amount,
+          merchant: name,
+        }),
       });
-    return promise;
+
+      const data = await response.json();
+      const inv = {
+        invoice: data.payment_request,
+        hash: Buffer.from(data.r_hash).toString("hex"),
+      };
+      return inv;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   };
 
   const checkInvoice = async (payment_request) => {
-    console.log("Running Check invoice");
-    const invoice = { invoice: payment_request };
+    try {
+      console.log("Running Check invoice");
+      const invoice = { invoice: payment_request };
 
-    const dataInvoiceStream = await fetch("/api/btcCheckInvoice", {
-      method: "POST",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        "Content-Type": "aplication/json",
-      },
-      body: JSON.stringify(invoice),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        try {
-          console.log("entro aca ", data);
-          const d = data;
-          const inv = {
-            settled: d.settled,
-            address: Buffer.from(d.payment_addr).toString("hex"),
-          };
-          return inv;
-        } catch (e) {
-          return console.log("There was an error", e);
-        }
+      const response = await fetch("/api/btcCheckInvoice", {
+        method: "POST",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+          "Content-Type": "aplication/json",
+        },
+        body: JSON.stringify(invoice),
       });
 
-    if (dataInvoiceStream.settled === true) {
-      //setIsPaid(true);
-      //router.push(`/success/${dataInvoiceStream.address}`);
-      return dataInvoiceStream;
-    } else {
+      const data = await response.json();
+      const inv = {
+        settled: data.settled,
+        address: Buffer.from(data.payment_addr).toString("hex"),
+      };
+
+      return inv;
+    } catch (e) {
+      console.log("There was an error", e);
       return false;
+    }
+  };
+
+  const checkPendingInvoices = async () => {
+    const pendingUUIDs = await getPendingUUIDs(); // Implement this function to get all UUIDs with a pending status
+
+    for (const uuid of pendingUUIDs) {
+      const payment_request = await getPaymentRequestByUUID(uuid); // Implement this function to get the payment_request for a given UUID
+
+      if (payment_request) {
+        const settled = await checkInvoice(payment_request);
+
+        if (settled) {
+          // Update the payment status in the database
+          await updatePayment({
+            attempt: uuid,
+            status: "success",
+          });
+        }
+      }
     }
   };
 
@@ -107,6 +123,7 @@ export default function usePayBTC() {
     }
 
     invoice.uuid = uuid;
+    setUUID(uuid);
 
     if (!invoice.invoice || !invoice.hash) {
       //ERROR: en la creaction de un invoice
@@ -134,7 +151,7 @@ export default function usePayBTC() {
         await updatePayment({
           attempt: uuid,
           status: "pending",
-          txHash: invoice.hash,
+          txHash: invoice.invoice,
         });
         //Open wallet
         try {
@@ -150,5 +167,6 @@ export default function usePayBTC() {
   return {
     generateAttempt,
     checkInvoice,
+    checkPendingInvoices,
   };
 }

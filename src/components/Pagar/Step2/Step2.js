@@ -3,6 +3,7 @@ import Stablecoins from "@/components/WalletConnectComponents/Stablecoins";
 import StepWrapper from "@/components/Wrappers/StepWrapper";
 import { asyncCallWithTimeout } from "@/helpers/helpers";
 import usePayBTC from "@/helpers/hooks/usePayBTC";
+import usePendingAttempts from "@/helpers/hooks/usePendingAttempts";
 import useSupabase from "@/helpers/hooks/useSupabase";
 import useVisibilityChange from "@/helpers/hooks/useVisibilityChange";
 import useWhatsApp from "@/helpers/hooks/useWhatsApp";
@@ -30,6 +31,7 @@ const Step2 = () => {
   const { updatePayment } = useSupabase();
   const router = useRouter();
   const [autoRedirect, setAutoRedirect] = useState(false);
+  const { setUUID, removeUUID } = usePendingAttempts();
   // Aqui se deben de cambiar los endpoints y lógica
   // para que escuche la transacción en BTC y EVM
   const handleVisibilityHidden = () => {
@@ -72,11 +74,14 @@ const Step2 = () => {
         //Successfully Paid
         console.log("Successfully paid", i);
         sendReceipt(i.address);
+        removeUUID(uuid);
+
         await updatePayment({
           attempt: uuid,
           status: "success",
           userAddress: i.address,
         });
+
         router.push(`/success/${i.address}`);
         dispatch(
           setToast({
