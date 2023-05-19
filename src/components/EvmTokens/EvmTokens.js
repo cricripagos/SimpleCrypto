@@ -22,6 +22,8 @@ const EvmTokens = () => {
     console.log("BALANCE DATA", balanceData);
     if (balanceData.dataWithId !== undefined) {
       let temp_payments = payment.map((item) => {
+        console.log("ITEM", item);
+        console.log("BALANCE DATA", balanceData.dataWithId);
         const balance = balanceData.dataWithId.filter(
           (balanceItem) => balanceItem[1] === item.id
         )[0][0];
