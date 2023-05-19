@@ -103,6 +103,8 @@ const Step2 = () => {
             show: true,
           })
         );
+        dispatch(setBtnLoading(false))
+        dispatch(setBtnDisabled(false))
       }
     } catch (e) {
       dispatch(
