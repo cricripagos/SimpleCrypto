@@ -13,7 +13,7 @@ const Success = () => {
   const { networks } = useSelector((state) => state.options)
   const { crypto_amount, fiat_amount, payment_method } = useSelector((state) => state.order);
   const { payment } = useSelector((state) => state.options);
-  const selectedMethod = payment ? payment?.find((item) => item.id === payment_method) : false
+  const selectedMethod = payment ? payment?.find((item) => { return item.id === payment_method}) : false
 
 
   const defaultOptions = {
