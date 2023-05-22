@@ -1,5 +1,9 @@
+import Stablecoins from "@/components/WalletConnectComponents/Stablecoins";
 import usePendingAttempts from "@/helpers/hooks/usePendingAttempts";
+import WagmiWrapper from "@components/WalletConnectComponents/WagmiWrapper";
+import { Web3Button } from "@web3modal/react";
 import { useEffect, useState } from "react";
+import { useAccount } from "wagmi";
 
 const UserTransactions = () => {
   const {
@@ -12,6 +16,9 @@ const UserTransactions = () => {
   const [uuids, setUUIDs] = useState([]);
   const [uuidStatus, setUuidStatus] = useState({});
   const [subscriptions, setSubscriptions] = useState({});
+  const { address } = useAccount();
+
+  console.log("address", address);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -83,17 +90,41 @@ const UserTransactions = () => {
   };
 
   return (
-    <div>
-      <h1>Intentos en este dispositivo</h1>
-      <ul>
-        {uuids.map((uuid, index) => (
-          <li key={index}>
-            {uuid} <button onClick={() => deleteUUID(uuid)}>Remove UUID</button>
-            {uuidStatus[uuid] === "success" ? <p>pagado</p> : <p>pendiente</p>}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <WagmiWrapper>
+      <div
+        className="px-7 flex flex-col items-center w-full flex-1/4 overflow-scroll
+    overflow-x-hidden scrollbox"
+      >
+        <p className="text-lg font-semibold pt-3 text-center">
+          Conecta tu wallet para ver tu historial de transacciones
+        </p>
+        <Stablecoins />
+        {/* AQUI NO MOSTRAMOS EL BALANCE PARA NO CONFUNDIR CON EL TOTAL DE LAS TRANSACCIONES */}
+        <Web3Button balance="hide" icon="show" />
+      </div>
+      {address && (
+        <div
+          className="px-7 flex flex-col items-center w-full flex-1/4 overflow-scroll
+    overflow-x-hidden scrollbox"
+        >
+          <br />
+          <br />
+          <ul>
+            {uuids.map((uuid, index) => (
+              <li key={index}>
+                {uuid}{" "}
+                <button onClick={() => deleteUUID(uuid)}>Remove UUID</button>
+                {uuidStatus[uuid] === "success" ? (
+                  <p>pagado</p>
+                ) : (
+                  <p>pendiente</p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </WagmiWrapper>
   );
 };
 
