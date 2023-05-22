@@ -1,5 +1,6 @@
+import StepWrapper from "@/components/Wrappers/StepWrapper"
 import { setBtnDisabled } from "@/store/reducers/interactions"
-import { Footer, InputComponent, Layout } from "@components/components"
+import { Footer, InputComponent } from "@components/components"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
@@ -17,12 +18,10 @@ function Step1() {
 
 
   return (
-    <Layout>
-      <div className="flex flex-col h-screen relative">
+    <StepWrapper>
         <InputComponent />
         <Footer />
-      </div>
-    </Layout>
+    </StepWrapper>
   )
 }
 

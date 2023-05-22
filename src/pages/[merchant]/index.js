@@ -3,13 +3,12 @@ import { avgPrice } from "@/helpers/quotes";
 import { setStepBackward } from "@/store/reducers/interactions";
 import { setMerchant } from "@/store/reducers/merchant";
 import { setPaymentOptions } from "@/store/reducers/options";
-import Toast from "@components/Toast/Toast";
+import { Step1, Step2, Step3 } from "@components/Pagar/pagar";
 import WagmiWrapper from "@components/WalletConnectComponents/WagmiWrapper";
 import { PageWrapper, Spinner } from "@components/components";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAccount } from "wagmi";
-import { Step1, Step2, Step3 } from "@components/Pagar/pagar";
 
 const Pagar = ({ payment_options, merchant }) => {
   const { getNetworks } = useSupabase();
@@ -47,9 +46,9 @@ const Pagar = ({ payment_options, merchant }) => {
         {loading ? (
           <Spinner size={2} color="text-green-1" />
         ) : (
-          <div className="relative flex w-full overflow-x-hidden">
+          <div className="flex">
             {stepper()}
-            {toast.show && <Toast />}
+            {/* {toast.show && <Toast />} */}
           </div>
         )}
       </PageWrapper>

@@ -11,6 +11,9 @@ const Success = () => {
   const { id } = router.query
   const order = useSelector((state) => state.order)
   const { networks } = useSelector((state) => state.options)
+  const { crypto_amount, fiat_amount, payment_method } = useSelector((state) => state.order);
+  const { payment } = useSelector((state) => state.options);
+  const selectedMethod = payment ? payment?.find((item) => { return item.id === payment_method}) : false
 
 
   const defaultOptions = {
@@ -41,6 +44,8 @@ const Success = () => {
   }
   }
 
+  console.log(selectedMethod, 'method')
+
   const navigateToSurvey = () => {
     window.open('https://us10.list-manage.com/survey?u=4674bdae73bef9d75729857e0&id=0cc1f6f521&attribution=false', '_blank')
   }
@@ -57,7 +62,8 @@ const Success = () => {
               height={160}
               width={160}
             />
-            <p className='font-bold text-center'>Gracias por tu pago!</p>
+            <p className='font-bold text-center text-lg'>Gracias por tu pago!</p>
+            <p className='mb-4 text-center'>Pagaste {String(crypto_amount).slice(0,4)} {selectedMethod?.symbol}, es decir {fiat_amount} ARS</p>
             <p className='text-center mb-2'>Puedes ver tu transaccion en el escaner de la blockchain  </p>
             <button onClick={navigateToExplorer} className='bg-green-1 text-white p-2 rounded-md shadow-sm'  >
               Link al Scanner
