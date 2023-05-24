@@ -1,18 +1,26 @@
 import AdminConsole from "@/components/AdminConsole/AdminConsole";
 import WagmiWrapper from "@/components/WalletConnectComponents/WagmiWrapper";
 import { PageWrapper } from "@/components/components";
-import { supabase } from "@/helpers/hooks/useSupabase";
+import useSupabase, { supabase } from "@/helpers/hooks/useSupabase";
+import { avgPrice } from "@/helpers/quotes";
 import { setMerchant } from "@/store/reducers/merchant";
+import { setPaymentOptions } from "@/store/reducers/options";
 import { Web3Button } from "@web3modal/react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useAccount, useDisconnect } from "wagmi";
 
-const AdminScreens = ({merchants}) => {
+const AdminScreens = ({merchants, payment_options}) => {
     const { address } = useAccount();
     const { disconnect } = useDisconnect()
     const [activeMerchant, setActiveMerchant] = useState(null)
     const dispatch = useDispatch()
+    const { getNetworks } = useSupabase();
+
+    useEffect(() => {
+        dispatch(setPaymentOptions(payment_options));
+        getNetworks()
+      }, []);
 
 
     useEffect(() => {
@@ -62,10 +70,16 @@ export default AdminContent
 
 export async function getServerSideProps(context) {
     let merchants = await supabase.from("merchants").select()
+    let payment_options = await supabase.from("payment_options").select();
+
+    for (const [idx, coin] of payment_options.data.entries()) {
+        payment_options.data[idx].price = await avgPrice(coin.symbol);
+      } 
 
     return {
       props: {
         merchants: merchants.data,
+        payment_options: payment_options.data
       },
     };
   }

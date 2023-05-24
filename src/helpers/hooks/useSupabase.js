@@ -146,6 +146,7 @@ export default function useSupabase() {
 
     return data[0].payment_request;
   };
+  
 
   return {
     getMerchant,

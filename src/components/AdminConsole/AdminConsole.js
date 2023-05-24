@@ -1,5 +1,6 @@
 import { Web3Button, Web3NetworkSwitch } from "@web3modal/react";
 import { useSelector } from "react-redux";
+import IncomingCard from "../IncomingCard/IncomingCard";
 import StepWrapper from "../Wrappers/StepWrapper";
 
 const AdminConsole = () => {
@@ -18,7 +19,7 @@ const AdminConsole = () => {
         </div>
         </div>
         <div className="flex-2/3">
-
+          <IncomingCard />
         </div>
  
     </StepWrapper>
