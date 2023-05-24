@@ -13,6 +13,7 @@ export default function useMerchantTransactions(merchantId) {
       .from("payment_attempts")
       .select("*")
       .eq("merchant", merchantId)
+      .eq("payment_status", "success") // only fetch successful transactions
       .gte(
         "created_at",
         new Date().toISOString().slice(0, 10) + "T00:00:00.000Z"
@@ -27,12 +28,14 @@ export default function useMerchantTransactions(merchantId) {
       return;
     }
 
-    setTransactions(data || []);
+    const successfulTransactions = data || [];
+
+    setTransactions(successfulTransactions);
 
     // Calculate total fiat and crypto amounts
     let fiatAmount = 0;
     let cryptoAmount = 0;
-    data.forEach((transaction) => {
+    successfulTransactions.forEach((transaction) => {
       fiatAmount += transaction.fiat_total_amount;
       cryptoAmount += transaction.crypto_total_amount;
     });
@@ -53,7 +56,9 @@ export default function useMerchantTransactions(merchantId) {
           filter: `merchant=eq.${merchantId}`,
         },
         (payload) => {
-          fetchAndUpdateTransactions();
+          if (payload.new.payment_status === "success") {
+            fetchAndUpdateTransactions();
+          }
         }
       )
       .subscribe();
