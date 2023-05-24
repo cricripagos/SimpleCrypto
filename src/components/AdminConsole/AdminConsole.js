@@ -7,9 +7,9 @@ import StepWrapper from "../Wrappers/StepWrapper";
 const AdminConsole = () => {
     const {name} = useSelector(state => state.merchant)
     const merchantId = 3; // replace with the ID of the merchant you want to query
-    const { transactions } = useMerchantTransactions(merchantId);
+    const {id} = useSelector(state => state.merchant)
+    const { transactions } = useMerchantTransactions(id);
 
-    console.log('Transactions are...', transactions.length)
     
   return (
     <StepWrapper style={{width: '100%', height: '100%',}}>

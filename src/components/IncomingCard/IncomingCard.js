@@ -2,9 +2,9 @@ import { useSelector } from "react-redux"
 
 const IncomingCard = ({transaction}) => {
   const {payment} = useSelector(state => state.options)
-  console.log('transaction', transaction, payment)
   const method = payment?.find((method) => method.id === transaction?.payment_option)
   const transaction_date = new Date(transaction?.created_at)
+  console.log('transaction date', transaction)
 
   return (
         <div className="flex m-5 p-5 rounded-md drop-shadow-sm ring-2 ring-gray-100 justify-between">
@@ -21,8 +21,10 @@ const IncomingCard = ({transaction}) => {
               <p className="text-sm text-gray-400">{transaction_date.toLocaleDateString()}</p>
             </div>
             </div>
+            <div className="flex flex-col items-end">
               <p className="text-base">{transaction?.fiat_total_amount
 } {transaction?.fiat_currency}</p>
+</div>
         </div>
   )
 }
