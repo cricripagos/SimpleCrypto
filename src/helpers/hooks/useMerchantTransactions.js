@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 export default function useMerchantTransactions(merchantId) {
   const [transactions, setTransactions] = useState([]);
+  const [totalFiatAmount, setTotalFiatAmount] = useState(0);
+  const [totalCryptoAmount, setTotalCryptoAmount] = useState(0);
   const [subscription, setSubscription] = useState(null);
 
   const fetchAndUpdateTransactions = async () => {
@@ -26,6 +28,16 @@ export default function useMerchantTransactions(merchantId) {
     }
 
     setTransactions(data || []);
+
+    // Calculate total fiat and crypto amounts
+    let fiatAmount = 0;
+    let cryptoAmount = 0;
+    data.forEach((transaction) => {
+      fiatAmount += transaction.fiat_total_amount;
+      cryptoAmount += transaction.crypto_total_amount;
+    });
+    setTotalFiatAmount(fiatAmount);
+    setTotalCryptoAmount(cryptoAmount);
   };
 
   const subscribeToNewTransactions = () => {
@@ -60,5 +72,7 @@ export default function useMerchantTransactions(merchantId) {
 
   return {
     transactions,
+    totalFiatAmount,
+    totalCryptoAmount,
   };
 }
