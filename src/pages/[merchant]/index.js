@@ -16,6 +16,7 @@ const Pagar = ({ payment_options, merchant }) => {
   const { step, toast } = useSelector((state) => state.interactions);
   const { address } = useAccount();
   const dispatch = useDispatch();
+  
   useEffect(() => {
     dispatch(setPaymentOptions(payment_options));
     dispatch(setMerchant(merchant));

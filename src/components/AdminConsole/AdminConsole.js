@@ -1,3 +1,4 @@
+import useMerchantTransactions from "@/helpers/hooks/useMerchantTransactions";
 import { Web3Button, Web3NetworkSwitch } from "@web3modal/react";
 import { useSelector } from "react-redux";
 import IncomingCard from "../IncomingCard/IncomingCard";
@@ -5,6 +6,11 @@ import StepWrapper from "../Wrappers/StepWrapper";
 
 const AdminConsole = () => {
     const {name} = useSelector(state => state.merchant)
+    const merchantId = 3; // replace with the ID of the merchant you want to query
+    const { transactions } = useMerchantTransactions(merchantId);
+
+    console.log('Transactions are...', transactions)
+    
   return (
     <StepWrapper style={{width: '100%', height: '100%',}}>
         <div className="bg-walletconnect-blue py-10 px-5 rounded-b-lg flex-1/3">
@@ -18,8 +24,11 @@ const AdminConsole = () => {
         <p className="text-2xl text-white">300 USD</p>
         </div>
         </div>
-        <div className="flex-2/3">
-          <IncomingCard />
+        <div className="flex-2/3 overflow-scroll
+        overflow-x-hidden scrollbox">
+          {transactions.map((transaction, index) => (
+            <IncomingCard transaction={transaction} key={index} />
+        ))}
         </div>
  
     </StepWrapper>

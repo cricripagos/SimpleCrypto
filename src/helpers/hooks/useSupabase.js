@@ -146,6 +146,21 @@ export default function useSupabase() {
 
     return data[0].payment_request;
   };
+
+  const getPaymentOptions = async () => {
+    const promise = await supabase
+    .from("payment_options")
+    .select()
+    .then(({ data, error }) => {
+      if (data) {
+        dispatch(setPaymentOptions(data));
+        return data;
+      } else {
+        return error;
+      }
+    });
+  return promise;
+  }
   
 
   return {
@@ -156,5 +171,6 @@ export default function useSupabase() {
     updatePayment,
     getPendingUUIDs,
     getPaymentRequestByUUID,
+    getPaymentOptions
   };
 }
