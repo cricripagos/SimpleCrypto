@@ -9,7 +9,7 @@ const AdminConsole = () => {
     const merchantId = 3; // replace with the ID of the merchant you want to query
     const { transactions } = useMerchantTransactions(merchantId);
 
-    console.log('Transactions are...', transactions)
+    console.log('Transactions are...', transactions.length)
     
   return (
     <StepWrapper style={{width: '100%', height: '100%',}}>
@@ -25,10 +25,13 @@ const AdminConsole = () => {
         </div>
         </div>
         <div className="flex-2/3 overflow-scroll
-        overflow-x-hidden scrollbox">
-          {transactions.map((transaction, index) => (
+        overflow-x-hidden scrollbox h-full">
+          {transactions.length > 0 ? transactions?.map((transaction, index) => (
             <IncomingCard transaction={transaction} key={index} />
-        ))}
+        )) : <div className="py-10" >
+          <p className="text-center">No has recibido dinero aun</p>
+          </div>
+      }
         </div>
  
     </StepWrapper>
