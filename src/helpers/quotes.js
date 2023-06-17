@@ -17,6 +17,8 @@ export const avgPrice = async (symbol) => {
         "binance",
         "lemoncash",
         "belo",
+        "letsbit",
+        "kriptonmarket",
       ];
       let sumAsk = 0;
       let trustedExchanges = 0;
