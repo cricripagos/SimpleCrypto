@@ -10,7 +10,10 @@ const EvmTokens = () => {
       process.env.NEXT_PUBLIC_ENV !== "prod"
         ? state.options.payment.filter((item) => item.evm === true)
         : state.options.payment.filter(
-            (item) => item.evm === true && item.name !== "MATIC (Testing)"
+            (item) =>
+              item.evm === true &&
+              item.name !== "MATIC (Testing)" &&
+              item.name !== "DOC (Dollar on Chain)"
           ),
   }));
   const { fiat_amount } = useSelector((state) => state.order);
@@ -23,14 +26,14 @@ const EvmTokens = () => {
     if (balanceData?.dataWithId !== undefined) {
       let balance;
       let temp_payments = payment.map((item) => {
-        try{
-        balance = balanceData.dataWithId.filter(
-          (balanceItem) => balanceItem[1] === item.id
-        )[0][0];
-      }catch(err){
-        console.log(err)
-        balance = 0
-      }
+        try {
+          balance = balanceData.dataWithId.filter(
+            (balanceItem) => balanceItem[1] === item.id
+          )[0][0];
+        } catch (err) {
+          console.log(err);
+          balance = 0;
+        }
         const balance_toNum = balance ? formatUnits(balance, item.decimals) : 0;
         const amount = (fiat_amount / item.price).toPrecision(6);
         // const amount_in_fn = FixedNumber.from((fiat_amount / item.price).toPrecision(6))
