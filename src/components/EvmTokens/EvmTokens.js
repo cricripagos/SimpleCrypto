@@ -13,7 +13,7 @@ const EvmTokens = () => {
             (item) =>
               item.evm === true &&
               item.name !== "MATIC (Testing)" &&
-              item.name !== "DOC (Dollar on Chain)"
+              item.name !== "DOC Testnet (Dollar on Chain)"
           ),
   }));
   const { fiat_amount } = useSelector((state) => state.order);

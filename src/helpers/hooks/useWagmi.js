@@ -8,7 +8,7 @@ import { publicProvider } from "wagmi/providers/public";
 
 import { bsc, polygon, polygonMumbai } from "wagmi/chains";
 
-const rsk = {
+const rskTestnet = {
   id: 31,
   name: "RSK Testnet",
   network: "rsk",
@@ -27,8 +27,27 @@ const rsk = {
   },
 };
 
+const rsk = {
+  id: 30,
+  name: "RSK",
+  network: "rsk",
+  nativeCurrency: {
+    decimals: 18,
+    name: "RBTC",
+    symbol: "RBTC",
+  },
+  rpcUrls: {
+    public: { http: ["https://public-node.rsk.co"] },
+    default: { http: ["https://public-node.rsk.co"] },
+  },
+  blockExplorers: {
+    etherscan: { name: "RSKexplorer", url: "https://explorer.rsk.co/" },
+    default: { name: "RSKexplorer", url: "https://explorer.rsk.co/" },
+  },
+};
+
 export default function useWagmiClient() {
-  const chains = [polygon, polygonMumbai, bsc, rsk];
+  const chains = [polygon, polygonMumbai, bsc, rskTestnet, rsk];
   const projectId = "8579dab459fd9bbe2b74a2a67b2ae920";
   const { provider } = configureChains(chains, [
     w3mProvider({ projectId }),
