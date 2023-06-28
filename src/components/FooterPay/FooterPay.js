@@ -127,7 +127,7 @@ const PayButton = ({ text }) => {
   useEffect(() => {}, [chain.id, selectedMethod?.chain_id, write]);
   const handleNetworkChange = () => {
     if (!chainOk) {
-      switchNetwork(selectedMethod?.chain_id);
+      switchNetwork?.(selectedMethod?.chain_id);
     }
   };
   const handleClick = async () => {

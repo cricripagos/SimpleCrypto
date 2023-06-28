@@ -13,14 +13,15 @@ const EvmTokens = () => {
             (item) =>
               item.evm === true &&
               item.name !== "MATIC (Testing)" &&
-              item.name !== "DOC (Dollar on Chain)"
+              item.name !== "DOC Testnet (Dollar on Chain)"
           ),
   }));
   const { fiat_amount } = useSelector((state) => state.order);
   const balanceData = useGetBalances(payment);
   const [loading, setLoading] = useState(true);
   const [paymentInfo, setPaymentInfo] = useState(null);
-
+  console.log(balanceData);
+  console.log("pay", payment);
   useEffect(() => {
     console.log("BALANCE DATA", balanceData);
     if (balanceData?.dataWithId !== undefined) {
