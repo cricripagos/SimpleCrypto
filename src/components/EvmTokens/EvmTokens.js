@@ -20,7 +20,8 @@ const EvmTokens = () => {
   const balanceData = useGetBalances(payment);
   const [loading, setLoading] = useState(true);
   const [paymentInfo, setPaymentInfo] = useState(null);
-
+  console.log(balanceData);
+  console.log("pay", payment);
   useEffect(() => {
     console.log("BALANCE DATA", balanceData);
     if (balanceData?.dataWithId !== undefined) {
