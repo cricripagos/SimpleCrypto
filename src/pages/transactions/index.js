@@ -1,4 +1,6 @@
+import usePayBTC from "@/helpers/hooks/usePayBTC";
 import usePendingAttempts from "@/helpers/hooks/usePendingAttempts";
+import WagmiWrapper from "@components/WalletConnectComponents/WagmiWrapper";
 import { useEffect, useState } from "react";
 
 const UserTransactions = () => {
@@ -8,15 +10,20 @@ const UserTransactions = () => {
     searchUUID,
     subscribeToStatusChanges,
     unsubscribeToStatusChanges,
+    U,
   } = usePendingAttempts();
   const [uuids, setUUIDs] = useState([]);
   const [uuidStatus, setUuidStatus] = useState({});
   const [subscriptions, setSubscriptions] = useState({});
-
+  const { checkPendingInvoices } = usePayBTC();
   useEffect(() => {
     if (typeof window !== "undefined") {
       setUUIDs(getAllUUIDs());
     }
+  }, []);
+
+  useEffect(() => {
+    checkPendingInvoices(); // Run checkPendingInvoices when the component mounts
   }, []);
 
   const fetchAndUpdateUUIDs = async () => {
@@ -83,17 +90,24 @@ const UserTransactions = () => {
   };
 
   return (
-    <div>
-      <h1>Intentos en este dispositivo</h1>
-      <ul>
-        {uuids.map((uuid, index) => (
-          <li key={index}>
-            {uuid} <button onClick={() => deleteUUID(uuid)}>Remove UUID</button>
-            {uuidStatus[uuid] === "success" ? <p>pagado</p> : <p>pendiente</p>}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <WagmiWrapper>
+      <div>
+        <h1>Intentos en este dispositivo</h1>
+        <ul>
+          {uuids.map((uuid, index) => (
+            <li key={index}>
+              {uuid}{" "}
+              <button onClick={() => deleteUUID(uuid)}>Remove UUID</button>
+              {uuidStatus[uuid] === "success" ? (
+                <p>pagado</p>
+              ) : (
+                <p>pendiente</p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </WagmiWrapper>
   );
 };
 

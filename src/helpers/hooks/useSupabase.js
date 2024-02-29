@@ -121,9 +121,9 @@ export default function useSupabase() {
 
   const getPendingUUIDs = async () => {
     const { data, error } = await supabase
-      .from("payments")
+      .from("payment_attempts")
       .select("uuid")
-      .eq("status", "pending");
+      .eq("payment_status", "pending");
 
     if (error) {
       console.log("Error getting pending UUIDs:", error);
@@ -135,8 +135,8 @@ export default function useSupabase() {
 
   const getPaymentRequestByUUID = async (uuid) => {
     const { data, error } = await supabase
-      .from("payments")
-      .select("payment_request")
+      .from("payment_attempts")
+      .select("transaction_hash")
       .eq("uuid", uuid);
 
     if (error || !data || data.length === 0) {
@@ -144,7 +144,7 @@ export default function useSupabase() {
       return null;
     }
 
-    return data[0].payment_request;
+    return data[0].transaction_hash;
   };
 
   return {
